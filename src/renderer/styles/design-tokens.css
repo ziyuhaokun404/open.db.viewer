@@ -1,0 +1,45 @@
+:root {
+  --mica-base: #eceff3;
+  --mica-base-alt: #e7ebf0;
+  --acrylic-panel: rgba(255, 255, 255, 0.72);
+  --acrylic-panel-strong: rgba(255, 255, 255, 0.84);
+  --acrylic-sidebar: rgba(248, 250, 252, 0.74);
+  --stroke-soft: rgba(255, 255, 255, 0.72);
+  --stroke-neutral: rgba(98, 108, 125, 0.18);
+  --stroke-strong: rgba(76, 86, 102, 0.28);
+  --text-strong: #1b1f24;
+  --text-body: #4a5565;
+  --text-muted: #687588;
+  --accent: #0f6cbd;
+  --accent-strong: #0b5aa1;
+  --accent-soft: rgba(15, 108, 189, 0.12);
+  --accent-tint: rgba(15, 108, 189, 0.08);
+  --success-bg: #eaf8ef;
+  --success-text: #1f6b45;
+  --error-bg: #fff1f1;
+  --error-text: #8c2f39;
+  --shadow-soft: 0 16px 40px rgba(27, 31, 36, 0.08);
+  --shadow-card: 0 8px 24px rgba(27, 31, 36, 0.06);
+
+  --app-bg: var(--mica-base);
+  --surface-1: rgba(255, 255, 255, 0.58);
+  --surface-2: var(--acrylic-panel);
+  --surface-3: rgba(243, 246, 250, 0.78);
+  --surface-4: rgba(235, 240, 246, 0.88);
+  --border-subtle: var(--stroke-neutral);
+  --border-strong: var(--stroke-strong);
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 26px;
+  --radius-xl: 32px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --font-sans: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-mono: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+}
