@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, nativeTheme, systemPreferences } from "electron";
 import { join } from "node:path";
 import { registerConnectionIpc } from "./ipc/connection-ipc";
 import { registerExportIpc } from "./ipc/export-ipc";
@@ -6,8 +6,17 @@ import { registerExplorerIpc } from "./ipc/explorer-ipc";
 import { registerQueryIpc } from "./ipc/query-ipc";
 import { registerSchemaIpc } from "./ipc/schema-ipc";
 import { registerTableDataIpc } from "./ipc/table-data-ipc";
+import { registerThemeIpc } from "./ipc/theme-ipc";
+import { SystemThemeService } from "./services/system-theme-service";
+
+const themeService = new SystemThemeService({
+  platform: process.platform,
+  nativeTheme,
+  systemPreferences
+});
 
 function createWindow() {
+  const snapshot = themeService.getSnapshot();
   const win = new BrowserWindow({
     autoHideMenuBar: true,
     width: 1280,
@@ -16,8 +25,8 @@ function createWindow() {
     minHeight: 720,
     titleBarStyle: "hidden",
     titleBarOverlay: {
-      color: "#eef2f5",
-      symbolColor: "#41505d",
+      color: snapshot.titleBarColor,
+      symbolColor: snapshot.titleBarSymbolColor,
       height: 34
     },
     webPreferences: {
@@ -25,6 +34,8 @@ function createWindow() {
       preload: join(__dirname, "../preload/preload.mjs")
     }
   });
+
+  themeService.attachWindow(win);
 
   const devServerUrl = process.env.ELECTRON_RENDERER_URL;
   if (devServerUrl) {
@@ -36,12 +47,14 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  themeService.start();
   registerConnectionIpc();
   registerExportIpc();
   registerExplorerIpc();
   registerQueryIpc();
   registerSchemaIpc();
   registerTableDataIpc();
+  registerThemeIpc(themeService);
   createWindow();
 
   app.on("activate", () => {

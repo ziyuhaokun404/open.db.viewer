@@ -3,6 +3,7 @@ import type { DatabaseObjectNode } from "../../shared/models/database-object";
 import type { ExportCsvPayload, ExportCsvResult } from "../../main/services/export-service";
 import type { QueryRequest, QueryResult } from "../../shared/models/query";
 import type { TableSchema } from "../../shared/models/schema";
+import type { SystemThemeSnapshot } from "../../shared/models/system-theme";
 import type { TableDataPage } from "../../main/database/adapters/database-adapter";
 
 declare global {
@@ -38,7 +39,12 @@ declare global {
           }
         ): Promise<QueryResult>;
         invoke(channel: "export:csv", payload: ExportCsvPayload): Promise<ExportCsvResult>;
+        invoke(channel: "theme:get-snapshot"): Promise<SystemThemeSnapshot>;
         invoke(channel: string, payload?: unknown): Promise<unknown>;
+      };
+      theme: {
+        getThemeSnapshot(): Promise<SystemThemeSnapshot>;
+        onThemeChange(listener: (snapshot: SystemThemeSnapshot) => void): () => void;
       };
     };
   }

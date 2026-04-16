@@ -18,6 +18,9 @@ describe("window frame config", () => {
     const source = readFileSync(sourcePath, "utf8");
 
     expect(source).toContain("height: 34");
-    expect(source).toContain('color: "#eef2f5"');
+    expect(source).toContain("const snapshot = themeService.getSnapshot();");
+    expect(source).toContain("color: snapshot.titleBarColor");
+    expect(source).toContain("symbolColor: snapshot.titleBarSymbolColor");
+    expect(source).toContain("themeService.attachWindow(win);");
   });
 });
