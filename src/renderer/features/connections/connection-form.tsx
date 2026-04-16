@@ -1,72 +1,48 @@
-import { SegmentedControl } from "../../components/segmented-control";
+import { connectionApi } from "./connection-api";
 import { StatusPanel } from "../../components/status-panel";
 import { useConnectionStore } from "../../stores/connection-store";
 
-function DatabaseFields() {
+function inferConnectionNameFromFilePath(filePath: string) {
+  const fileName = filePath.split(/[/\\]/).pop() ?? "";
+  return fileName.replace(/\.(db|sqlite|sqlite3)$/i, "") || fileName;
+}
+
+function SQLiteFields() {
   const formValues = useConnectionStore((state) => state.formValues);
   const updateForm = useConnectionStore((state) => state.updateForm);
 
-  if (formValues.type === "sqlite") {
-    return (
-      <label className="connection-form__field">
-        数据库文件
+  const browseSQLiteFile = async () => {
+    const selectedFile = await connectionApi.selectSQLiteFile();
+    if (selectedFile) {
+      const nextSuggestedName = inferConnectionNameFromFilePath(selectedFile);
+      const currentSuggestedName = inferConnectionNameFromFilePath(formValues.filePath);
+
+      updateForm("filePath", selectedFile);
+
+      if (!formValues.name || formValues.name === currentSuggestedName) {
+        updateForm("name", nextSuggestedName);
+      }
+    }
+  };
+
+  return (
+    <label className="connection-form__field">
+      数据库文件
+      <div className="connection-form__file-picker">
         <input
           aria-label="数据库文件"
           value={formValues.filePath}
           onChange={(event) => updateForm("filePath", event.target.value)}
         />
-      </label>
-    );
-  }
-
-  return (
-    <>
-      <label className="connection-form__field">
-        主机地址
-        <input
-          aria-label="主机地址"
-          value={formValues.host}
-          onChange={(event) => updateForm("host", event.target.value)}
-        />
-      </label>
-      <label className="connection-form__field">
-        端口
-        <input
-          aria-label="端口"
-          value={formValues.port}
-          onChange={(event) => updateForm("port", event.target.value)}
-        />
-      </label>
-      <label className="connection-form__field">
-        用户名
-        <input
-          aria-label="用户名"
-          value={formValues.username}
-          onChange={(event) => updateForm("username", event.target.value)}
-        />
-      </label>
-      <label className="connection-form__field">
-        密码
-        <input
-          aria-label="密码"
-          type="password"
-          value={formValues.password}
-          onChange={(event) => updateForm("password", event.target.value)}
-        />
-      </label>
-      <label className="connection-form__field">
-        数据库名
-        <input
-          aria-label="数据库名"
-          value={formValues.database}
-          onChange={(event) => updateForm("database", event.target.value)}
-        />
-      </label>
-    </>
+        <button className="connection-form__browse" onClick={() => void browseSQLiteFile()} type="button">
+          选择数据库文件
+        </button>
+      </div>
+    </label>
   );
 }
 
-export function ConnectionForm() {
+export function ConnectionForm({ variant = "page" }: { variant?: "page" | "dialog" }) {
   const {
     formValues,
     isTestingConnection,
@@ -76,36 +52,46 @@ export function ConnectionForm() {
     saveConnection,
     goHome
   } = useConnectionStore();
+  const isDialog = variant === "dialog";
 
   return (
-    <section className="connection-form" data-testid="connection-form-shell">
+    <section
+      className={`connection-form ${isDialog ? "connection-form--dialog" : ""}`}
+      data-testid="connection-form-shell"
+    >
       <div className="connection-form__intro">
-        <button className="connection-form__back" onClick={goHome} type="button">
-          返回
-        </button>
-        <div>
-          <h1>新建连接</h1>
-          <p>填写必要信息，然后测试并保存。</p>
-        </div>
+        {isDialog ? (
+          <div className="connection-form__dialog-head" data-testid="connection-form-dialog-head">
+            <div className="connection-form__dialog-copy">
+              <p className="connection-form__eyebrow">SQLite</p>
+              <h1 id="new-connection-dialog-title">打开一个 SQLite 数据库</h1>
+              <p>选择数据库文件，测试通过后保存到常用入口。</p>
+            </div>
+            <button aria-label="关闭新建连接" className="connection-form__close" onClick={goHome} type="button">
+              ×
+            </button>
+          </div>
+        ) : (
+          <>
+            <button className="connection-form__back" onClick={goHome} type="button">
+              返回
+            </button>
+            <div>
+              <h1>打开一个 SQLite 数据库</h1>
+              <p>选择数据库文件，然后测试并保存。</p>
+            </div>
+          </>
+        )}
       </div>
 
       <section className="connection-form__panel">
-        <h2>基础信息</h2>
-        <p className="connection-form__label">数据库类型</p>
-        <SegmentedControl
-          value={formValues.type}
-          options={[
-            { label: "SQLite", value: "sqlite" },
-            { label: "MySQL", value: "mysql" },
-            { label: "PostgreSQL", value: "postgresql" }
-          ]}
-          onChange={(value) => updateForm("type", value)}
-        />
+        <h2>SQLite 数据库</h2>
+        <p className="connection-form__label">当前版本仅提供 SQLite 工作流。</p>
 
         <label className="connection-form__field">
-          连接名称
+          数据库名称
           <input
-            aria-label="连接名称"
+            aria-label="数据库名称"
             value={formValues.name}
             onChange={(event) => updateForm("name", event.target.value)}
           />
@@ -113,17 +99,17 @@ export function ConnectionForm() {
       </section>
 
       <section className="connection-form__panel">
-        <h2>连接信息</h2>
+        <h2>文件位置</h2>
         <div className="connection-form__grid">
-          <DatabaseFields />
+          <SQLiteFields />
         </div>
       </section>
 
       <div className="connection-form__actions" data-testid="connection-form-actions">
-        <button onClick={() => void testConnection()} type="button">
+        <button className="connection-form__secondary-action" onClick={() => void testConnection()} type="button">
           {isTestingConnection ? "测试中..." : "测试连接"}
         </button>
-        <button onClick={() => void saveConnection()} type="button">
+        <button className="connection-form__primary-action" onClick={() => void saveConnection()} type="button">
           保存连接
         </button>
       </div>

@@ -1,12 +1,12 @@
 # Open DB Viewer
 
-Open DB Viewer 是一个偏轻量、易上手的个人数据库浏览工具，面向需要快速查看结构、跑查询、导出结果的开发者和数据使用者。产品定位参考 Navicat、DBeaver、DataGrip，但首版更强调本地可用、学习成本低、主流程干净。
+Open DB Viewer 是一个偏轻量、易上手的 SQLite 数据库浏览工具，面向需要快速查看结构、跑查询、导出结果的开发者和数据使用者。产品定位参考 Navicat、DBeaver、DataGrip，但当前阶段更强调本地可用、学习成本低、主流程干净。
 
-## 当前 MVP 范围
+## 当前阶段范围
 
-- 已完成 SQLite 主链路：连接管理、对象树、表结构、表数据、SQL 查询、CSV 导出
-- 已提供 MySQL / PostgreSQL 适配器入口与统一分发层
-- 当前 MySQL / PostgreSQL 仍是占位实现，适合先推进 UI、服务边界和后续驱动接入
+- 当前短期目标聚焦 SQLite：连接管理、对象树、表结构、表数据、SQL 查询、CSV 导出
+- MySQL / PostgreSQL 适配器保留在架构层，但不作为当前产品 UI 的活跃范围
+- 当前重点是把 SQLite 浏览体验和桌面端 UI 质量打磨到可持续迭代的水平
 
 ## 本地启动
 

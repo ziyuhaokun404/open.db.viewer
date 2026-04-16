@@ -142,22 +142,20 @@ export function BrowserPage() {
         )
       }
     >
-      <section className="workspace-shell">
-      <PageHeader
-        title={selectedNode?.name ?? "请选择一个表"}
-        description={
-          selectedNode?.kind === "table"
-            ? `${selectedNode.name} 工作区`
-            : "从左侧选择一个表"
-        }
-        action={
-          <button className="workspace-header__back" onClick={goHome} type="button">
-            返回首页
-          </button>
-        }
-      />
-      <TabBar tabs={["结构", "数据", "查询"]} activeTab={activeTab} onChange={setActiveTab} />
-      {renderActiveTab()}
+      <section className="workspace-shell" data-testid="browser-workspace-shell">
+        <PageHeader
+          title={selectedNode?.name ?? "请选择一个表"}
+          description={selectedNode?.kind === "table" ? "SQLite 工作区" : "从左侧选择一个表"}
+          action={
+            <button className="workspace-header__back" onClick={goHome} type="button">
+              返回数据库列表
+            </button>
+          }
+        />
+        <div data-testid="browser-workspace-tabs">
+          <TabBar tabs={["结构", "数据", "查询"]} activeTab={activeTab} onChange={setActiveTab} />
+        </div>
+        {renderActiveTab()}
       </section>
     </AppShell>
   );

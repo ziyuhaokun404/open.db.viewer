@@ -15,6 +15,7 @@ beforeEach(() => {
   useExplorerStore.getState().reset();
   useSchemaStore.getState().reset();
   window.electron = {
+    ...window.electron,
     ipcRenderer: { invoke: invokeMock }
   };
 });
@@ -66,7 +67,7 @@ describe("Browser workspace", () => {
     expect(await screen.findByText("表数据")).toBeInTheDocument();
   });
 
-  it("renders a dedicated workspace header shell", async () => {
+  it("renders a compact browser workspace shell", async () => {
     invokeMock.mockImplementation(async (channel: string) => {
       if (channel === "connection:list") {
         return [{ id: "sqlite-1", type: "sqlite", name: "Local SQLite", filePath: "demo.db" }];
@@ -99,7 +100,7 @@ describe("Browser workspace", () => {
     render(<App />);
     fireEvent.click(await screen.findByRole("button", { name: "打开 Local SQLite" }));
 
-    expect(await screen.findByTestId("workspace-header")).toBeInTheDocument();
-    expect(screen.getByTestId("workspace-tabs")).toBeInTheDocument();
+    expect(await screen.findByTestId("browser-workspace-shell")).toBeInTheDocument();
+    expect(screen.getByTestId("browser-workspace-tabs")).toBeInTheDocument();
   });
 });
