@@ -55,6 +55,8 @@ public class HomeViewModelTests
         }
 
         public string? PickSqliteFile() => _filePath;
+
+        public string? PickCsvSavePath(string suggestedFileName) => null;
     }
 
     private sealed class InMemoryDatabaseEntryRepository : IDatabaseEntryRepository

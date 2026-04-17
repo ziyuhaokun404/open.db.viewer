@@ -15,11 +15,13 @@ public partial class DatabaseWorkspaceViewModel : ObservableObject
     public DatabaseWorkspaceViewModel(
         ObjectExplorerViewModel objectExplorer,
         SchemaViewModel schema,
-        DataViewModel data)
+        DataViewModel data,
+        QueryViewModel query)
     {
         ObjectExplorer = objectExplorer;
         Schema = schema;
         Data = data;
+        Query = query;
     }
 
     public ObjectExplorerViewModel ObjectExplorer { get; }
@@ -28,10 +30,13 @@ public partial class DatabaseWorkspaceViewModel : ObservableObject
 
     public DataViewModel Data { get; }
 
+    public QueryViewModel Query { get; }
+
     public virtual async Task LoadAsync(string databasePath, CancellationToken cancellationToken = default)
     {
         DatabasePath = databasePath;
         Title = Path.GetFileNameWithoutExtension(databasePath);
+        Query.Configure(databasePath);
 
         await ObjectExplorer.LoadAsync(databasePath, cancellationToken);
 
@@ -54,10 +59,12 @@ public partial class DatabaseWorkspaceViewModel : ObservableObject
         {
             Schema.Clear();
             Data.Clear();
+            Query.Configure(DatabasePath);
             return;
         }
 
         await Schema.LoadAsync(DatabasePath, node.Name, cancellationToken);
         await Data.LoadFirstPageAsync(DatabasePath, node.Name, cancellationToken);
+        Query.Configure(DatabasePath, node.Name);
     }
 }

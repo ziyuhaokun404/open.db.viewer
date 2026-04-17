@@ -4,6 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="clr-namespace:Wpf.Ui.Controls;assembly=Wpf.Ui"
+             xmlns:mw="clr-namespace:Wpf.Ui.Markup;assembly=Wpf.Ui"
              mc:Ignorable="d">
     <Grid Margin="24">
         <Grid.ColumnDefinitions>
@@ -103,6 +104,48 @@
                               CanUserAddRows="False"
                               IsReadOnly="True"
                               ItemsSource="{Binding Data.TableView}" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="查询">
+                <Grid Margin="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="12" />
+                        <RowDefinition Height="140" />
+                        <RowDefinition Height="12" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="12" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <ui:Button Content="执行"
+                                   Command="{Binding Query.ExecuteQueryCommand}"
+                                   Icon="{mw:SymbolIcon Play24}" />
+                        <ui:Button Margin="8,0,0,0"
+                                   Content="导出 CSV"
+                                   Command="{Binding Query.ExportResultsCommand}"
+                                   Icon="{mw:SymbolIcon ArrowExportLtr24}" />
+                    </StackPanel>
+
+                    <TextBox Grid.Row="2"
+                             AcceptsReturn="True"
+                             HorizontalScrollBarVisibility="Auto"
+                             Text="{Binding Query.QueryText, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalScrollBarVisibility="Auto"
+                             FontFamily="Consolas"
+                             FontSize="14"
+                             TextWrapping="NoWrap" />
+
+                    <TextBlock Grid.Row="4"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               Text="{Binding Query.StatusMessage}" />
+
+                    <DataGrid Grid.Row="6"
+                              AutoGenerateColumns="True"
+                              CanUserAddRows="False"
+                              IsReadOnly="True"
+                              ItemsSource="{Binding Query.ResultView}" />
                 </Grid>
             </TabItem>
         </TabControl>

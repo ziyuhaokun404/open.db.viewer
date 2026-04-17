@@ -15,7 +15,11 @@ public class DatabaseWorkspaceViewModelTests
         var objectExplorer = new ObjectExplorerViewModel(new SqliteDatabaseInspector(connectionFactory));
         var schema = new SchemaViewModel(new SqliteDatabaseInspector(connectionFactory));
         var data = new DataViewModel(new SqliteTableDataReader(connectionFactory));
-        var viewModel = new DatabaseWorkspaceViewModel(objectExplorer, schema, data);
+        var query = new QueryViewModel(
+            new OpenDbViewer.Application.Services.QueryService(new SqliteQueryExecutor(connectionFactory)),
+            new OpenDbViewer.Application.Services.ExportService(new OpenDbViewer.Infrastructure.Sqlite.Export.CsvExportWriter()),
+            new FakeFileDialogService());
+        var viewModel = new DatabaseWorkspaceViewModel(objectExplorer, schema, data, query);
 
         await viewModel.LoadAsync(db.FilePath);
 
@@ -40,7 +44,11 @@ public class DatabaseWorkspaceViewModelTests
         var viewModel = new DatabaseWorkspaceViewModel(
             new ObjectExplorerViewModel(inspector),
             new SchemaViewModel(inspector),
-            new DataViewModel(new SqliteTableDataReader(connectionFactory)));
+            new DataViewModel(new SqliteTableDataReader(connectionFactory)),
+            new QueryViewModel(
+                new OpenDbViewer.Application.Services.QueryService(new SqliteQueryExecutor(connectionFactory)),
+                new OpenDbViewer.Application.Services.ExportService(new OpenDbViewer.Infrastructure.Sqlite.Export.CsvExportWriter()),
+                new FakeFileDialogService()));
 
         await viewModel.LoadAsync(db.FilePath);
 
@@ -56,5 +64,12 @@ public class DatabaseWorkspaceViewModelTests
         viewModel.Data.Columns.Should().Equal("id", "name", "email");
         viewModel.Data.Rows.Should().HaveCount(3);
         viewModel.Data.Rows[0].Values.Should().Equal(1, "Alice", "alice@example.com");
+    }
+
+    private sealed class FakeFileDialogService : OpenDbViewer.Shell.Services.IFileDialogService
+    {
+        public string? PickSqliteFile() => null;
+
+        public string? PickCsvSavePath(string suggestedFileName) => null;
     }
 }

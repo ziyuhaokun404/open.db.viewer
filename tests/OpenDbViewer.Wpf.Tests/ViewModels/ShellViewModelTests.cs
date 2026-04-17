@@ -49,6 +49,8 @@ public class ShellViewModelTests
         }
 
         public string? PickSqliteFile() => _filePath;
+
+        public string? PickCsvSavePath(string suggestedFileName) => null;
     }
 
     private sealed class FakeDatabaseWorkspaceViewModel : DatabaseWorkspaceViewModel
@@ -56,7 +58,10 @@ public class ShellViewModelTests
         public string? LoadedPath { get; private set; }
 
         public FakeDatabaseWorkspaceViewModel()
-            : base(new ObjectExplorerViewModel(), new SchemaViewModel(), new DataViewModel())
+            : base(new ObjectExplorerViewModel(), new SchemaViewModel(), new DataViewModel(), new QueryViewModel(
+                new QueryService(new NoopSqliteQueryExecutor()),
+                new ExportService(new NoopCsvExportWriter()),
+                new FakeFileDialogService(null)))
         {
         }
 
@@ -65,6 +70,18 @@ public class ShellViewModelTests
             LoadedPath = databasePath;
             return Task.CompletedTask;
         }
+    }
+
+    private sealed class NoopSqliteQueryExecutor : ISqliteQueryExecutor
+    {
+        public Task<QueryExecutionResult> ExecuteAsync(string filePath, string sql, CancellationToken cancellationToken = default) =>
+            Task.FromResult(new QueryExecutionResult(Array.Empty<string>(), Array.Empty<IReadOnlyList<object?>>(), 0, TimeSpan.Zero, string.Empty));
+    }
+
+    private sealed class NoopCsvExportWriter : ICsvExportWriter
+    {
+        public Task WriteAsync(string filePath, IReadOnlyList<string> columns, IReadOnlyList<IReadOnlyList<object?>> rows, CancellationToken cancellationToken = default) =>
+            Task.CompletedTask;
     }
 
     private sealed class InMemoryDatabaseEntryRepository : IDatabaseEntryRepository
