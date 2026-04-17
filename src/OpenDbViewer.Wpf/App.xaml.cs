@@ -1,13 +1,32 @@
-﻿using System.Configuration;
-using System.Data;
 using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace OpenDbViewer.Wpf;
+namespace OpenDbViewer.ShellHost;
 
-/// <summary>
-/// Interaction logic for App.xaml
-/// </summary>
-public partial class App : Application
+public partial class App : System.Windows.Application
 {
-}
+    private IServiceProvider? _serviceProvider;
 
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        base.OnStartup(e);
+
+        _serviceProvider = new ServiceCollection()
+            .AddOpenDbViewerWpfServices()
+            .BuildServiceProvider();
+
+        var mainWindow = _serviceProvider.GetRequiredService<OpenDbViewer.Shell.Views.MainWindow>();
+        MainWindow = mainWindow;
+        mainWindow.Show();
+    }
+
+    protected override void OnExit(ExitEventArgs e)
+    {
+        if (_serviceProvider is IDisposable disposable)
+        {
+            disposable.Dispose();
+        }
+
+        base.OnExit(e);
+    }
+}
