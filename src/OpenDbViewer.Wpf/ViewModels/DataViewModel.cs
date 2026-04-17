@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using OpenDbViewer.Domain.Models;
 using OpenDbViewer.Infrastructure.Sqlite.Sqlite;
 using System.Collections.ObjectModel;
@@ -8,7 +9,10 @@ namespace OpenDbViewer.Shell.ViewModels;
 
 public partial class DataViewModel : ObservableObject
 {
+    private static readonly int[] DefaultPageSizeOptions = [50, 100, 200, 500];
     private readonly SqliteTableDataReader? _tableDataReader;
+    private string? _databasePath;
+    private string? _tableName;
 
     [ObservableProperty]
     private int pageNumber;
@@ -28,6 +32,14 @@ public partial class DataViewModel : ObservableObject
     [ObservableProperty]
     private DataView? tableView;
 
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(LoadPreviousPageCommand))]
+    private bool hasPreviousPage;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(LoadNextPageCommand))]
+    private bool isLoading;
+
     public DataViewModel()
     {
     }
@@ -41,6 +53,8 @@ public partial class DataViewModel : ObservableObject
 
     public ObservableCollection<DataRowViewModel> Rows { get; } = new();
 
+    public IReadOnlyList<int> PageSizeOptions { get; } = DefaultPageSizeOptions;
+
     public async Task LoadFirstPageAsync(string databasePath, string tableName, CancellationToken cancellationToken = default)
     {
         if (_tableDataReader is null)
@@ -48,8 +62,67 @@ public partial class DataViewModel : ObservableObject
             throw new InvalidOperationException("A table data reader is required to load data.");
         }
 
-        var page = await _tableDataReader.ReadPageAsync(databasePath, tableName, 1, PageSize, cancellationToken: cancellationToken);
-        ApplyPage(page);
+        _databasePath = databasePath;
+        _tableName = tableName;
+
+        await LoadPageAsync(1, cancellationToken);
+    }
+
+    public async Task ChangePageSizeAsync(int pageSize, CancellationToken cancellationToken = default)
+    {
+        if (pageSize < 1)
+        {
+            throw new ArgumentOutOfRangeException(nameof(pageSize));
+        }
+
+        PageSize = pageSize;
+
+        if (string.IsNullOrWhiteSpace(_databasePath) || string.IsNullOrWhiteSpace(_tableName))
+        {
+            return;
+        }
+
+        await LoadPageAsync(1, cancellationToken);
+    }
+
+    public async Task ApplySortAsync(string columnName, CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(columnName);
+
+        if (string.IsNullOrWhiteSpace(_databasePath) || string.IsNullOrWhiteSpace(_tableName))
+        {
+            return;
+        }
+
+        SortDirection = string.Equals(SortColumn, columnName, StringComparison.OrdinalIgnoreCase) &&
+                        string.Equals(SortDirection, "ASC", StringComparison.OrdinalIgnoreCase)
+            ? "DESC"
+            : "ASC";
+        SortColumn = columnName;
+
+        await LoadPageAsync(1, cancellationToken);
+    }
+
+    [RelayCommand(CanExecute = nameof(CanLoadPreviousPage))]
+    public async Task LoadPreviousPageAsync(CancellationToken cancellationToken = default)
+    {
+        if (!CanLoadPreviousPage())
+        {
+            return;
+        }
+
+        await LoadPageAsync(PageNumber - 1, cancellationToken);
+    }
+
+    [RelayCommand(CanExecute = nameof(CanLoadNextPage))]
+    public async Task LoadNextPageAsync(CancellationToken cancellationToken = default)
+    {
+        if (!CanLoadNextPage())
+        {
+            return;
+        }
+
+        await LoadPageAsync(PageNumber + 1, cancellationToken);
     }
 
     public void Clear()
@@ -58,9 +131,53 @@ public partial class DataViewModel : ObservableObject
         Rows.Clear();
         TableView = null;
         PageNumber = 0;
+        HasPreviousPage = false;
         HasNextPage = false;
         SortColumn = null;
         SortDirection = null;
+        _databasePath = null;
+        _tableName = null;
+    }
+
+    partial void OnIsLoadingChanged(bool value)
+    {
+        LoadPreviousPageCommand.NotifyCanExecuteChanged();
+        LoadNextPageCommand.NotifyCanExecuteChanged();
+    }
+
+    private bool CanLoadPreviousPage() => !IsLoading && HasPreviousPage;
+
+    private bool CanLoadNextPage() => !IsLoading && HasNextPage;
+
+    private async Task LoadPageAsync(int pageNumber, CancellationToken cancellationToken)
+    {
+        if (_tableDataReader is null)
+        {
+            throw new InvalidOperationException("A table data reader is required to load data.");
+        }
+
+        if (string.IsNullOrWhiteSpace(_databasePath) || string.IsNullOrWhiteSpace(_tableName))
+        {
+            throw new InvalidOperationException("A database and table must be selected before loading data.");
+        }
+
+        IsLoading = true;
+        try
+        {
+            var page = await _tableDataReader.ReadPageAsync(
+                _databasePath,
+                _tableName,
+                pageNumber,
+                PageSize,
+                SortColumn,
+                SortDirection,
+                cancellationToken: cancellationToken);
+            ApplyPage(page);
+        }
+        finally
+        {
+            IsLoading = false;
+        }
     }
 
     private void ApplyPage(TablePageResult page)
@@ -91,6 +208,7 @@ public partial class DataViewModel : ObservableObject
         TableView = table.DefaultView;
         PageNumber = page.PageNumber;
         PageSize = page.PageSize;
+        HasPreviousPage = page.PageNumber > 1;
         HasNextPage = page.HasNextPage;
         SortColumn = page.SortColumn;
         SortDirection = page.SortDirection;

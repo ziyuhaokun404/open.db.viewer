@@ -68,6 +68,44 @@ public class QueryViewModelTests
         viewModel.StatusMessage.Should().Contain("users.csv");
     }
 
+    [Fact]
+    public void TemplateCommands_ShouldReplaceQueryTextForCurrentTable()
+    {
+        var viewModel = new QueryViewModel(
+            new QueryService(new FakeSqliteQueryExecutor(
+                new QueryExecutionResult(Array.Empty<string>(), Array.Empty<IReadOnlyList<object?>>(), 0, TimeSpan.Zero, string.Empty))),
+            new ExportService(new FakeCsvExportWriter()),
+            new FakeFileDialogService(null));
+
+        viewModel.Configure(@"C:\data\sample.db", "users");
+
+        viewModel.UseCountTemplateCommand.Execute(null);
+        viewModel.QueryText.Should().Be("select count(*) as total_rows from \"users\";");
+
+        viewModel.UseSchemaTemplateCommand.Execute(null);
+        viewModel.QueryText.Should().Be("pragma table_info(\"users\");");
+
+        viewModel.UseSelectTemplateCommand.Execute(null);
+        viewModel.QueryText.Should().Be("select * from \"users\" limit 100;");
+    }
+
+    [Fact]
+    public async Task ExecuteQueryAsync_ShouldSurfaceFailureMessageAndClearResults()
+    {
+        var viewModel = new QueryViewModel(
+            new QueryService(new ThrowingSqliteQueryExecutor("SQL error near FROM")),
+            new ExportService(new FakeCsvExportWriter()),
+            new FakeFileDialogService(null));
+
+        viewModel.Configure(@"C:\data\sample.db", "users");
+
+        await viewModel.ExecuteQueryAsync();
+
+        viewModel.HasResults.Should().BeFalse();
+        viewModel.Rows.Should().BeEmpty();
+        viewModel.StatusMessage.Should().Be("SQL error near FROM");
+    }
+
     private sealed class FakeSqliteQueryExecutor : ISqliteQueryExecutor
     {
         private readonly QueryExecutionResult _result;
@@ -108,6 +146,19 @@ public class QueryViewModelTests
             LastRows = rows.Select(row => (IReadOnlyList<object?>)row.ToArray()).ToArray();
             return Task.CompletedTask;
         }
+    }
+
+    private sealed class ThrowingSqliteQueryExecutor : ISqliteQueryExecutor
+    {
+        private readonly string _message;
+
+        public ThrowingSqliteQueryExecutor(string message)
+        {
+            _message = message;
+        }
+
+        public Task<QueryExecutionResult> ExecuteAsync(string filePath, string sql, CancellationToken cancellationToken = default) =>
+            throw new InvalidOperationException(_message);
     }
 
     private sealed class FakeFileDialogService : IFileDialogService

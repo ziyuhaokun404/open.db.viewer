@@ -19,6 +19,8 @@ public class HomeViewModelTests
         await viewModel.OpenDatabaseAsync();
 
         viewModel.StatusMessage.Should().Be("Database opened.");
+        viewModel.RecentEntries.Should().ContainSingle();
+        viewModel.RecentEntries[0].FilePath.Should().Be(@"C:\data\demo.db");
     }
 
     [Fact]
@@ -43,6 +45,109 @@ public class HomeViewModelTests
         await viewModel.OpenDatabaseAsync();
 
         viewModel.StatusMessage.Should().Be(HomeViewModel.DefaultStatusMessage);
+    }
+
+    [Fact]
+    public async Task LoadAsync_ShouldPopulateRecentEntriesFromRepository()
+    {
+        var repository = new InMemoryDatabaseEntryRepository();
+        await repository.SaveRecentAsync(new DatabaseEntry(
+            Guid.NewGuid(),
+            "sample",
+            @"C:\data\sample.db",
+            DateTimeOffset.UtcNow,
+            false));
+        var databaseEntryService = new DatabaseEntryService(repository, _ => Task.FromResult(true));
+        var viewModel = new HomeViewModel(databaseEntryService, new FakeFileDialogService(null));
+
+        await viewModel.LoadAsync();
+
+        viewModel.RecentEntries.Should().ContainSingle();
+        viewModel.RecentEntries[0].Name.Should().Be("sample");
+        viewModel.RecentEntries[0].FilePath.Should().Be(@"C:\data\sample.db");
+    }
+
+    [Fact]
+    public async Task LoadAsync_ShouldPopulatePinnedEntriesFromRepository()
+    {
+        var repository = new InMemoryDatabaseEntryRepository();
+        await repository.SavePinnedAsync(new DatabaseEntry(
+            Guid.NewGuid(),
+            "northwind",
+            @"C:\data\northwind.db",
+            DateTimeOffset.UtcNow,
+            false));
+        var databaseEntryService = new DatabaseEntryService(repository, _ => Task.FromResult(true));
+        var viewModel = new HomeViewModel(databaseEntryService, new FakeFileDialogService(null));
+
+        await viewModel.LoadAsync();
+
+        viewModel.PinnedEntries.Should().ContainSingle();
+        viewModel.PinnedEntries[0].Name.Should().Be("northwind");
+    }
+
+    [Fact]
+    public async Task OpenRecentAsync_ShouldReopenSelectedEntryAndNotifyShell()
+    {
+        var repository = new InMemoryDatabaseEntryRepository();
+        var entry = new DatabaseEntry(
+            Guid.NewGuid(),
+            "sample",
+            @"C:\data\sample.db",
+            DateTimeOffset.UtcNow,
+            false);
+        await repository.SaveRecentAsync(entry);
+        var databaseEntryService = new DatabaseEntryService(repository, _ => Task.FromResult(true));
+        var viewModel = new HomeViewModel(databaseEntryService, new FakeFileDialogService(null));
+        string? openedPath = null;
+        viewModel.DatabaseOpenedAsync = (path, _) =>
+        {
+            openedPath = path;
+            return Task.CompletedTask;
+        };
+
+        await viewModel.LoadAsync();
+        await viewModel.OpenRecentAsync(entry);
+
+        openedPath.Should().Be(@"C:\data\sample.db");
+        viewModel.StatusMessage.Should().Be("Database opened.");
+    }
+
+    [Fact]
+    public async Task TogglePinAsync_ShouldMoveEntryIntoPinnedEntries()
+    {
+        var repository = new InMemoryDatabaseEntryRepository();
+        var entry = new DatabaseEntry(
+            Guid.NewGuid(),
+            "sample",
+            @"C:\data\sample.db",
+            DateTimeOffset.UtcNow,
+            false);
+        await repository.SaveRecentAsync(entry);
+        var databaseEntryService = new DatabaseEntryService(repository, _ => Task.FromResult(true));
+        var viewModel = new HomeViewModel(databaseEntryService, new FakeFileDialogService(null));
+
+        await viewModel.LoadAsync();
+        await viewModel.TogglePinAsync(viewModel.RecentEntries[0]);
+
+        viewModel.PinnedEntries.Should().ContainSingle();
+        viewModel.PinnedEntries[0].FilePath.Should().Be(@"C:\data\sample.db");
+    }
+
+    [Fact]
+    public async Task SearchText_ShouldFilterVisibleEntries()
+    {
+        var repository = new InMemoryDatabaseEntryRepository();
+        await repository.SaveRecentAsync(new DatabaseEntry(Guid.NewGuid(), "northwind", @"C:\data\northwind.db", DateTimeOffset.UtcNow, false));
+        await repository.SaveRecentAsync(new DatabaseEntry(Guid.NewGuid(), "chinook", @"C:\data\chinook.db", DateTimeOffset.UtcNow.AddMinutes(-10), false));
+        var databaseEntryService = new DatabaseEntryService(repository, _ => Task.FromResult(true));
+        var viewModel = new HomeViewModel(databaseEntryService, new FakeFileDialogService(null));
+
+        await viewModel.LoadAsync();
+        viewModel.SearchText = "north";
+
+        viewModel.FilteredRecentEntries.Should().ContainSingle();
+        viewModel.FilteredRecentEntries[0].Name.Should().Be("northwind");
     }
 
     private sealed class FakeFileDialogService : IFileDialogService

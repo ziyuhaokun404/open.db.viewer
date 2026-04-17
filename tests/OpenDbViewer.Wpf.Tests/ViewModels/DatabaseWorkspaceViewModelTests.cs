@@ -66,6 +66,39 @@ public class DatabaseWorkspaceViewModelTests
         viewModel.Data.Rows[0].Values.Should().Equal(1, "Alice", "alice@example.com");
     }
 
+    [Fact]
+    public async Task SelectNodeAsync_ShouldResetDataPageNumberWhenSwitchingTables()
+    {
+        await using var db = await SqliteTestDb.CreateAsync();
+        var connectionFactory = new SqliteConnectionFactory();
+        var inspector = new SqliteDatabaseInspector(connectionFactory);
+        var data = new DataViewModel(new SqliteTableDataReader(connectionFactory))
+        {
+            PageSize = 1
+        };
+        var viewModel = new DatabaseWorkspaceViewModel(
+            new ObjectExplorerViewModel(inspector),
+            new SchemaViewModel(inspector),
+            data,
+            new QueryViewModel(
+                new OpenDbViewer.Application.Services.QueryService(new SqliteQueryExecutor(connectionFactory)),
+                new OpenDbViewer.Application.Services.ExportService(new OpenDbViewer.Infrastructure.Sqlite.Export.CsvExportWriter()),
+                new FakeFileDialogService()));
+
+        await viewModel.LoadAsync(db.FilePath);
+        await viewModel.Data.LoadNextPageAsync();
+
+        var usersNode = viewModel.ObjectExplorer.RootNodes
+            .SelectMany(root => root.Children ?? Array.Empty<OpenDbViewer.Domain.Models.DatabaseObjectNode>())
+            .Single(node => node.Name == "users");
+
+        await viewModel.SelectNodeAsync(usersNode);
+
+        viewModel.Data.PageNumber.Should().Be(1);
+        viewModel.Data.Rows.Should().ContainSingle();
+        viewModel.Data.Rows[0].Values.Should().Equal(1, "Alice", "alice@example.com");
+    }
+
     private sealed class FakeFileDialogService : OpenDbViewer.Shell.Services.IFileDialogService
     {
         public string? PickSqliteFile() => null;

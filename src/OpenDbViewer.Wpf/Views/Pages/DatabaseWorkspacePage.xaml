@@ -87,6 +87,20 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Orientation="Horizontal">
+                        <ui:Button Content="上一页"
+                                   Command="{Binding Data.LoadPreviousPageCommand}"
+                                   Icon="{mw:SymbolIcon ArrowLeft24}" />
+                        <ui:Button Margin="8,0,12,0"
+                                   Content="下一页"
+                                   Command="{Binding Data.LoadNextPageCommand}"
+                                   Icon="{mw:SymbolIcon ArrowRight24}" />
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="每页" />
+                        <ComboBox Margin="8,0,12,0"
+                                  Width="88"
+                                  ItemsSource="{Binding Data.PageSizeOptions}"
+                                  SelectionChanged="PageSizeComboBox_OnSelectionChanged"
+                                  SelectedItem="{Binding Data.PageSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock FontWeight="SemiBold"
                                    Text="第 " />
                         <TextBlock FontWeight="SemiBold"
@@ -100,9 +114,11 @@
                     </StackPanel>
 
                     <DataGrid Grid.Row="2"
+                              x:Name="DataGridView"
                               AutoGenerateColumns="True"
                               CanUserAddRows="False"
                               IsReadOnly="True"
+                              Sorting="DataGridView_OnSorting"
                               ItemsSource="{Binding Data.TableView}" />
                 </Grid>
             </TabItem>
@@ -128,14 +144,31 @@
                                    Icon="{mw:SymbolIcon ArrowExportLtr24}" />
                     </StackPanel>
 
-                    <TextBox Grid.Row="2"
-                             AcceptsReturn="True"
-                             HorizontalScrollBarVisibility="Auto"
-                             Text="{Binding Query.QueryText, UpdateSourceTrigger=PropertyChanged}"
-                             VerticalScrollBarVisibility="Auto"
-                             FontFamily="Consolas"
-                             FontSize="14"
-                             TextWrapping="NoWrap" />
+                    <StackPanel Grid.Row="2">
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,0,0,8">
+                            <TextBlock VerticalAlignment="Center"
+                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                       Text="{Binding Query.CurrentTableName, StringFormat=当前表: {0}}" />
+                            <ui:Button Margin="12,0,0,0"
+                                       Content="Select 100"
+                                       Command="{Binding Query.UseSelectTemplateCommand}" />
+                            <ui:Button Margin="8,0,0,0"
+                                       Content="Count"
+                                       Command="{Binding Query.UseCountTemplateCommand}" />
+                            <ui:Button Margin="8,0,0,0"
+                                       Content="Schema"
+                                       Command="{Binding Query.UseSchemaTemplateCommand}" />
+                        </StackPanel>
+
+                        <TextBox AcceptsReturn="True"
+                                 HorizontalScrollBarVisibility="Auto"
+                                 Text="{Binding Query.QueryText, UpdateSourceTrigger=PropertyChanged}"
+                                 VerticalScrollBarVisibility="Auto"
+                                 FontFamily="Consolas"
+                                 FontSize="14"
+                                 TextWrapping="NoWrap" />
+                    </StackPanel>
 
                     <TextBlock Grid.Row="4"
                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"

@@ -24,6 +24,9 @@ public partial class QueryViewModel : ObservableObject
     private string databasePath = string.Empty;
 
     [ObservableProperty]
+    private string currentTableName = string.Empty;
+
+    [ObservableProperty]
     private string queryText = string.Empty;
 
     [ObservableProperty]
@@ -61,7 +64,13 @@ public partial class QueryViewModel : ObservableObject
         if (tableName is not null)
         {
             _templateTableName = tableName;
-            QueryText = BuildDefaultQuery(tableName);
+            CurrentTableName = tableName;
+            QueryText = BuildSelectTemplate(tableName);
+        }
+        else
+        {
+            _templateTableName = null;
+            CurrentTableName = string.Empty;
         }
 
         ClearResults();
@@ -125,6 +134,42 @@ public partial class QueryViewModel : ObservableObject
         StatusMessage = $"Exported results to {Path.GetFileName(exportPath)}.";
     }
 
+    [RelayCommand]
+    public void UseSelectTemplate()
+    {
+        if (_templateTableName is null)
+        {
+            return;
+        }
+
+        QueryText = BuildSelectTemplate(_templateTableName);
+        StatusMessage = ReadyStatusMessage;
+    }
+
+    [RelayCommand]
+    public void UseCountTemplate()
+    {
+        if (_templateTableName is null)
+        {
+            return;
+        }
+
+        QueryText = BuildCountTemplate(_templateTableName);
+        StatusMessage = ReadyStatusMessage;
+    }
+
+    [RelayCommand]
+    public void UseSchemaTemplate()
+    {
+        if (_templateTableName is null)
+        {
+            return;
+        }
+
+        QueryText = BuildSchemaTemplate(_templateTableName);
+        StatusMessage = ReadyStatusMessage;
+    }
+
     private bool CanExportResults() => HasResults && !IsBusy;
 
     partial void OnIsBusyChanged(bool value) => ExportResultsCommand.NotifyCanExecuteChanged();
@@ -167,7 +212,11 @@ public partial class QueryViewModel : ObservableObject
         HasResults = false;
     }
 
-    private static string BuildDefaultQuery(string tableName) => $"select * from \"{tableName}\" limit 100;";
+    private static string BuildSelectTemplate(string tableName) => $"select * from \"{tableName}\" limit 100;";
+
+    private static string BuildCountTemplate(string tableName) => $"select count(*) as total_rows from \"{tableName}\";";
+
+    private static string BuildSchemaTemplate(string tableName) => $"pragma table_info(\"{tableName}\");";
 
     private static object ToDisplayValue(object? value)
     {

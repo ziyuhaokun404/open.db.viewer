@@ -14,6 +14,7 @@ public sealed partial class ShellViewModel : ObservableObject
         CurrentPage = homeViewModel;
 
         Home.DatabaseOpenedAsync = OpenWorkspaceAsync;
+        _ = Home.LoadAsync();
     }
 
     public HomeViewModel Home { get; }
