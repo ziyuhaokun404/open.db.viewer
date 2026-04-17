@@ -1,0 +1,17 @@
+C:\Code\open.db.viewer\src\OpenDbViewer.Infrastructure.Sqlite\bin\Debug\net8.0\OpenDbViewer.Infrastructure.Sqlite.deps.json
+C:\Code\open.db.viewer\src\OpenDbViewer.Infrastructure.Sqlite\bin\Debug\net8.0\OpenDbViewer.Infrastructure.Sqlite.dll
+C:\Code\open.db.viewer\src\OpenDbViewer.Infrastructure.Sqlite\bin\Debug\net8.0\OpenDbViewer.Infrastructure.Sqlite.pdb
+C:\Code\open.db.viewer\src\OpenDbViewer.Infrastructure.Sqlite\bin\Debug\net8.0\OpenDbViewer.Application.dll
+C:\Code\open.db.viewer\src\OpenDbViewer.Infrastructure.Sqlite\bin\Debug\net8.0\OpenDbViewer.Domain.dll
+C:\Code\open.db.viewer\src\OpenDbViewer.Infrastructure.Sqlite\bin\Debug\net8.0\OpenDbViewer.Application.pdb
+C:\Code\open.db.viewer\src\OpenDbViewer.Infrastructure.Sqlite\bin\Debug\net8.0\OpenDbViewer.Domain.pdb
+C:\Code\open.db.viewer\src\OpenDbViewer.Infrastructure.Sqlite\obj\Debug\net8.0\OpenDbViewer.Infrastructure.Sqlite.csproj.AssemblyReference.cache
+C:\Code\open.db.viewer\src\OpenDbViewer.Infrastructure.Sqlite\obj\Debug\net8.0\OpenDbViewer.Infrastructure.Sqlite.GeneratedMSBuildEditorConfig.editorconfig
+C:\Code\open.db.viewer\src\OpenDbViewer.Infrastructure.Sqlite\obj\Debug\net8.0\OpenDbViewer.Infrastructure.Sqlite.AssemblyInfoInputs.cache
+C:\Code\open.db.viewer\src\OpenDbViewer.Infrastructure.Sqlite\obj\Debug\net8.0\OpenDbViewer.Infrastructure.Sqlite.AssemblyInfo.cs
+C:\Code\open.db.viewer\src\OpenDbViewer.Infrastructure.Sqlite\obj\Debug\net8.0\OpenDbViewer.Infrastructure.Sqlite.csproj.CoreCompileInputs.cache
+C:\Code\open.db.viewer\src\OpenDbViewer.Infrastructure.Sqlite\obj\Debug\net8.0\OpenDbVi.415D33E1.Up2Date
+C:\Code\open.db.viewer\src\OpenDbViewer.Infrastructure.Sqlite\obj\Debug\net8.0\OpenDbViewer.Infrastructure.Sqlite.dll
+C:\Code\open.db.viewer\src\OpenDbViewer.Infrastructure.Sqlite\obj\Debug\net8.0\refint\OpenDbViewer.Infrastructure.Sqlite.dll
+C:\Code\open.db.viewer\src\OpenDbViewer.Infrastructure.Sqlite\obj\Debug\net8.0\OpenDbViewer.Infrastructure.Sqlite.pdb
+C:\Code\open.db.viewer\src\OpenDbViewer.Infrastructure.Sqlite\obj\Debug\net8.0\ref\OpenDbViewer.Infrastructure.Sqlite.dll

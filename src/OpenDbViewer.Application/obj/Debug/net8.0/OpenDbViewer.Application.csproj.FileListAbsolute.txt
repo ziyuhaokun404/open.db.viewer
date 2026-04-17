@@ -1,0 +1,15 @@
+C:\Code\open.db.viewer\src\OpenDbViewer.Application\bin\Debug\net8.0\OpenDbViewer.Application.deps.json
+C:\Code\open.db.viewer\src\OpenDbViewer.Application\bin\Debug\net8.0\OpenDbViewer.Application.dll
+C:\Code\open.db.viewer\src\OpenDbViewer.Application\bin\Debug\net8.0\OpenDbViewer.Application.pdb
+C:\Code\open.db.viewer\src\OpenDbViewer.Application\bin\Debug\net8.0\OpenDbViewer.Domain.dll
+C:\Code\open.db.viewer\src\OpenDbViewer.Application\bin\Debug\net8.0\OpenDbViewer.Domain.pdb
+C:\Code\open.db.viewer\src\OpenDbViewer.Application\obj\Debug\net8.0\OpenDbViewer.Application.csproj.AssemblyReference.cache
+C:\Code\open.db.viewer\src\OpenDbViewer.Application\obj\Debug\net8.0\OpenDbViewer.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Code\open.db.viewer\src\OpenDbViewer.Application\obj\Debug\net8.0\OpenDbViewer.Application.AssemblyInfoInputs.cache
+C:\Code\open.db.viewer\src\OpenDbViewer.Application\obj\Debug\net8.0\OpenDbViewer.Application.AssemblyInfo.cs
+C:\Code\open.db.viewer\src\OpenDbViewer.Application\obj\Debug\net8.0\OpenDbViewer.Application.csproj.CoreCompileInputs.cache
+C:\Code\open.db.viewer\src\OpenDbViewer.Application\obj\Debug\net8.0\OpenDbVi.1A6FF320.Up2Date
+C:\Code\open.db.viewer\src\OpenDbViewer.Application\obj\Debug\net8.0\OpenDbViewer.Application.dll
+C:\Code\open.db.viewer\src\OpenDbViewer.Application\obj\Debug\net8.0\refint\OpenDbViewer.Application.dll
+C:\Code\open.db.viewer\src\OpenDbViewer.Application\obj\Debug\net8.0\OpenDbViewer.Application.pdb
+C:\Code\open.db.viewer\src\OpenDbViewer.Application\obj\Debug\net8.0\ref\OpenDbViewer.Application.dll
