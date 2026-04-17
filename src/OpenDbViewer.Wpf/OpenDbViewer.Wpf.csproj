@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OpenDbViewer.Application\OpenDbViewer.Application.csproj" />
+    <ProjectReference Include="..\OpenDbViewer.Infrastructure.Sqlite\OpenDbViewer.Infrastructure.Sqlite.csproj" />
   </ItemGroup>
 
 </Project>

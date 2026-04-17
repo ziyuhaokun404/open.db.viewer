@@ -1,13 +1,28 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+
 namespace OpenDbViewer.Shell.ViewModels;
 
-public sealed class ShellViewModel
+public sealed partial class ShellViewModel : ObservableObject
 {
-    public ShellViewModel(HomeViewModel homeViewModel)
+    [ObservableProperty]
+    private object currentPage;
+
+    public ShellViewModel(HomeViewModel homeViewModel, DatabaseWorkspaceViewModel databaseWorkspaceViewModel)
     {
         Home = homeViewModel;
+        Workspace = databaseWorkspaceViewModel;
+        CurrentPage = homeViewModel;
+
+        Home.DatabaseOpenedAsync = OpenWorkspaceAsync;
     }
 
     public HomeViewModel Home { get; }
 
-    public HomeViewModel CurrentPage => Home;
+    public DatabaseWorkspaceViewModel Workspace { get; }
+
+    private async Task OpenWorkspaceAsync(string databasePath, CancellationToken cancellationToken)
+    {
+        await Workspace.LoadAsync(databasePath, cancellationToken);
+        CurrentPage = Workspace;
+    }
 }

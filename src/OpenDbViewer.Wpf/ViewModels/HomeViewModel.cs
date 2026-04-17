@@ -15,6 +15,8 @@ public sealed partial class HomeViewModel : ObservableObject
     [ObservableProperty]
     private string statusMessage = DefaultStatusMessage;
 
+    public Func<string, CancellationToken, Task>? DatabaseOpenedAsync { get; set; }
+
     public HomeViewModel(DatabaseEntryService databaseEntryService, IFileDialogService fileDialogService)
     {
         ArgumentNullException.ThrowIfNull(databaseEntryService);
@@ -25,7 +27,7 @@ public sealed partial class HomeViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public async Task OpenDatabaseAsync()
+    public async Task OpenDatabaseAsync(CancellationToken cancellationToken = default)
     {
         var filePath = _fileDialogService.PickSqliteFile();
         if (string.IsNullOrWhiteSpace(filePath))
@@ -33,7 +35,12 @@ public sealed partial class HomeViewModel : ObservableObject
             return;
         }
 
-        var result = await _databaseEntryService.OpenAsync(filePath);
+        var result = await _databaseEntryService.OpenAsync(filePath, cancellationToken);
         StatusMessage = result.Message;
+
+        if (result.IsSuccess && DatabaseOpenedAsync is not null)
+        {
+            await DatabaseOpenedAsync(filePath, cancellationToken);
+        }
     }
 }

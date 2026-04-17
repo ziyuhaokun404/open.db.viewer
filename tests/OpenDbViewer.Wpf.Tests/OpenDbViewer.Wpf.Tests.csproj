@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\OpenDbViewer.Wpf\OpenDbViewer.Wpf.csproj" />
     <ProjectReference Include="..\..\src\OpenDbViewer.Application\OpenDbViewer.Application.csproj" />
+    <ProjectReference Include="..\..\src\OpenDbViewer.Infrastructure.Sqlite\OpenDbViewer.Infrastructure.Sqlite.csproj" />
   </ItemGroup>
 
 </Project>

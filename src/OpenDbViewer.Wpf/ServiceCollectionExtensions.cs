@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OpenDbViewer.Application.Abstractions;
 using OpenDbViewer.Application.Services;
 using OpenDbViewer.Domain.Models;
+using OpenDbViewer.Infrastructure.Sqlite.Sqlite;
 using OpenDbViewer.Shell.Services;
 using OpenDbViewer.Shell.ViewModels;
 using System.IO;
@@ -16,8 +17,15 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton<IDatabaseEntryRepository, InMemoryDatabaseEntryRepository>();
         services.AddSingleton<DatabaseEntryService>();
+        services.AddSingleton<ISqliteConnectionFactory, SqliteConnectionFactory>();
+        services.AddSingleton<SqliteDatabaseInspector>();
+        services.AddSingleton<SqliteTableDataReader>();
         services.AddSingleton<IFileDialogService, FileDialogService>();
         services.AddSingleton<HomeViewModel>();
+        services.AddSingleton<ObjectExplorerViewModel>();
+        services.AddSingleton<SchemaViewModel>();
+        services.AddSingleton<DataViewModel>();
+        services.AddSingleton<DatabaseWorkspaceViewModel>();
         services.AddSingleton<ShellViewModel>();
         services.AddSingleton<OpenDbViewer.Shell.Views.MainWindow>();
 
