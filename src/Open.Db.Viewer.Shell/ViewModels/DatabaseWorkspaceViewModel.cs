@@ -14,7 +14,7 @@ public partial class DatabaseWorkspaceViewModel : ObservableObject
     private string title = string.Empty;
 
     [ObservableProperty]
-    private string statusMessage = "Select a table to start browsing.";
+    private string statusMessage = "请选择一个表开始浏览。";
 
     [ObservableProperty]
     private bool isRefreshing;
@@ -45,11 +45,11 @@ public partial class DatabaseWorkspaceViewModel : ObservableObject
         ObjectExplorer.SelectedNode is not null &&
         string.Equals(ObjectExplorer.SelectedNode.Kind, "table", StringComparison.OrdinalIgnoreCase);
 
-    public string SelectedObjectTitle => ObjectExplorer.SelectedNode?.Name ?? "No table selected";
+    public string SelectedObjectTitle => ObjectExplorer.SelectedNode?.Name ?? "未选择数据表";
 
     public string SelectedObjectSubtitle => HasTableSelection
-        ? "Structure, data, and query tools are ready."
-        : "Choose a table from the left navigation to begin.";
+        ? "表结构、数据和查询工具已就绪。"
+        : "请先从左侧导航选择一个表。";
 
     public virtual async Task LoadAsync(string databasePath, CancellationToken cancellationToken = default)
     {
@@ -67,7 +67,7 @@ public partial class DatabaseWorkspaceViewModel : ObservableObject
         {
             Schema.Clear();
             Data.Clear();
-            StatusMessage = "Select a table to start browsing.";
+            StatusMessage = "请选择一个表开始浏览。";
         }
 
         NotifyWorkspaceStateChanged();
@@ -82,7 +82,7 @@ public partial class DatabaseWorkspaceViewModel : ObservableObject
             Schema.Clear();
             Data.Clear();
             Query.Configure(DatabasePath);
-            StatusMessage = "Select a table to start browsing.";
+            StatusMessage = "请选择一个表开始浏览。";
             NotifyWorkspaceStateChanged();
             return;
         }
@@ -90,7 +90,7 @@ public partial class DatabaseWorkspaceViewModel : ObservableObject
         await Schema.LoadAsync(DatabasePath, node.Name, cancellationToken);
         await Data.LoadFirstPageAsync(DatabasePath, node.Name, cancellationToken);
         Query.Configure(DatabasePath, node.Name);
-        StatusMessage = $"Loaded {node.Name}.";
+        StatusMessage = $"已加载 {node.Name}。";
         NotifyWorkspaceStateChanged();
     }
 
@@ -141,7 +141,7 @@ public partial class DatabaseWorkspaceViewModel : ObservableObject
                 NotifyWorkspaceStateChanged();
             }
 
-            StatusMessage = "Workspace refreshed.";
+            StatusMessage = "工作区已刷新。";
         }
         finally
         {

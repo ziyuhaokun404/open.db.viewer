@@ -15,8 +15,8 @@ public sealed class FileDialogService : IFileDialogService
     {
         var dialog = new OpenFileDialog
         {
-            Title = "Open SQLite database",
-            Filter = "SQLite databases (*.db;*.sqlite;*.sqlite3)|*.db;*.sqlite;*.sqlite3|All files (*.*)|*.*",
+            Title = "打开 SQLite 数据库",
+            Filter = "SQLite 数据库 (*.db;*.sqlite;*.sqlite3)|*.db;*.sqlite;*.sqlite3|所有文件 (*.*)|*.*",
             CheckFileExists = true,
             Multiselect = false
         };
@@ -28,8 +28,8 @@ public sealed class FileDialogService : IFileDialogService
     {
         var dialog = new SaveFileDialog
         {
-            Title = "Export CSV",
-            Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
+            Title = "导出 CSV",
+            Filter = "CSV 文件 (*.csv)|*.csv|所有文件 (*.*)|*.*",
             FileName = suggestedFileName,
             AddExtension = true,
             DefaultExt = ".csv",

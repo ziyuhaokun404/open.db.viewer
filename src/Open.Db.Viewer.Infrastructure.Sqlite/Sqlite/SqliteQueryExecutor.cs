@@ -48,8 +48,8 @@ public sealed class SqliteQueryExecutor : ISqliteQueryExecutor
 
         var affectedRows = reader.FieldCount > 0 ? rows.Count : Math.Max(reader.RecordsAffected, 0);
         var message = reader.FieldCount > 0
-            ? $"Query returned {rows.Count} row(s)."
-            : $"Query affected {affectedRows} row(s).";
+            ? $"查询返回了 {rows.Count} 行。"
+            : $"查询影响了 {affectedRows} 行。";
 
         return new QueryExecutionResult(columns, rows, affectedRows, stopwatch.Elapsed, message);
     }

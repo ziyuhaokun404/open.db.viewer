@@ -150,7 +150,7 @@ public class DataViewModelTests
         await viewModel.LoadFirstPageAsync(db.FilePath, "users");
 
         viewModel.HasRows.Should().BeTrue();
-        viewModel.ResultSummary.Should().Be("Page 1 · 3 columns · 3 visible rows");
+        viewModel.ResultSummary.Should().Be("第 1 页 · 3 列 · 当前显示 3 行");
     }
 
     private sealed class RecordingCsvExportWriter : ICsvExportWriter

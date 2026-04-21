@@ -60,11 +60,11 @@
                 <StackPanel Grid.Column="2"
                             Orientation="Horizontal"
                             VerticalAlignment="Top">
-                    <ui:Button Content="Home"
+                    <ui:Button Content="返回首页"
                                Command="{Binding ReturnHomeCommand}"
                                Icon="{mw:SymbolIcon ArrowReply24}" />
                     <ui:Button Margin="8,0,0,0"
-                               Content="Refresh"
+                               Content="刷新"
                                Command="{Binding RefreshCommand}"
                                Icon="{mw:SymbolIcon ArrowClockwise24}" />
                 </StackPanel>
@@ -84,10 +84,10 @@
                                 Margin="0,0,0,14">
                         <TextBlock FontSize="18"
                                    FontWeight="SemiBold"
-                                   Text="Objects" />
+                                   Text="对象" />
                         <TextBlock Margin="0,4,0,0"
                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                   Text="Browse tables in the current database." />
+                                   Text="浏览当前数据库中的数据表。" />
                     </StackPanel>
 
                     <TreeView x:Name="ObjectTree"
@@ -122,7 +122,7 @@
 
                     <TabControl Grid.Row="2"
                                 Visibility="{Binding HasTableSelection, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TabItem Header="Schema">
+                        <TabItem Header="结构">
                             <Grid Margin="12">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -156,17 +156,17 @@
                                               IsReadOnly="True"
                                               ItemsSource="{Binding Schema.Columns}">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding Name}" Header="Column" />
-                                            <DataGridTextColumn Binding="{Binding DataType}" Header="Type" />
-                                            <DataGridCheckBoxColumn Binding="{Binding IsNullable}" Header="Nullable" />
-                                            <DataGridCheckBoxColumn Binding="{Binding IsPrimaryKey}" Header="Primary key" />
-                                            <DataGridTextColumn Binding="{Binding DefaultValue}" Header="Default" />
+                                            <DataGridTextColumn Binding="{Binding Name}" Header="列名" />
+                                            <DataGridTextColumn Binding="{Binding DataType}" Header="类型" />
+                                            <DataGridCheckBoxColumn Binding="{Binding IsNullable}" Header="可为空" />
+                                            <DataGridCheckBoxColumn Binding="{Binding IsPrimaryKey}" Header="主键" />
+                                            <DataGridTextColumn Binding="{Binding DefaultValue}" Header="默认值" />
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </Border>
                             </Grid>
                         </TabItem>
-                        <TabItem Header="Data">
+                        <TabItem Header="数据">
                             <Grid Margin="12">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -180,24 +180,24 @@
                                         BorderThickness="1"
                                         CornerRadius="14">
                                     <WrapPanel>
-                                        <ui:Button Content="Previous"
+                                        <ui:Button Content="上一页"
                                                    Command="{Binding Data.LoadPreviousPageCommand}"
                                                    Icon="{mw:SymbolIcon ArrowLeft24}" />
                                         <ui:Button Margin="8,0,0,0"
-                                                   Content="Next"
+                                                   Content="下一页"
                                                    Command="{Binding Data.LoadNextPageCommand}"
                                                    Icon="{mw:SymbolIcon ArrowRight24}" />
                                         <ui:Button Margin="8,0,0,0"
-                                                   Content="Refresh"
+                                                   Content="刷新"
                                                    Command="{Binding Data.RefreshCurrentPageCommand}"
                                                    Icon="{mw:SymbolIcon ArrowClockwise24}" />
                                         <ui:Button Margin="8,0,0,0"
-                                                   Content="Export CSV"
+                                                   Content="导出 CSV"
                                                    Command="{Binding Data.ExportCurrentPageCommand}"
                                                    Icon="{mw:SymbolIcon ArrowExportLtr24}" />
                                         <TextBlock Margin="16,0,0,0"
                                                    VerticalAlignment="Center"
-                                                   Text="Rows per page" />
+                                                   Text="每页行数" />
                                         <ComboBox Margin="8,0,0,0"
                                                   Width="96"
                                                   ItemsSource="{Binding Data.PageSizeOptions}"
@@ -241,7 +241,7 @@
                                 </Border>
                             </Grid>
                         </TabItem>
-                        <TabItem Header="Query">
+                        <TabItem Header="查询">
                             <Grid Margin="12">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -259,17 +259,17 @@
                                         BorderThickness="1"
                                         CornerRadius="14">
                                     <WrapPanel>
-                                        <ui:Button Content="Execute"
+                                        <ui:Button Content="执行"
                                                    Command="{Binding Query.ExecuteQueryCommand}"
                                                    Icon="{mw:SymbolIcon Play24}" />
                                         <ui:Button Margin="8,0,0,0"
-                                                   Content="Export CSV"
+                                                   Content="导出 CSV"
                                                    Command="{Binding Query.ExportResultsCommand}"
                                                    Icon="{mw:SymbolIcon ArrowExportLtr24}" />
                                         <TextBlock Margin="16,0,0,0"
                                                    VerticalAlignment="Center"
                                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                   Text="{Binding Query.CurrentTableName, StringFormat=Current table: {0}}" />
+                                                   Text="{Binding Query.CurrentTableName, StringFormat=当前数据表：{0}}" />
                                     </WrapPanel>
                                 </Border>
 
@@ -287,13 +287,13 @@
                                         </Grid.RowDefinitions>
 
                                         <StackPanel Orientation="Horizontal">
-                                            <ui:Button Content="Select 100"
+                                            <ui:Button Content="查询前 100 行"
                                                        Command="{Binding Query.UseSelectTemplateCommand}" />
                                             <ui:Button Margin="8,0,0,0"
-                                                       Content="Count"
+                                                       Content="统计行数"
                                                        Command="{Binding Query.UseCountTemplateCommand}" />
                                             <ui:Button Margin="8,0,0,0"
-                                                       Content="Schema"
+                                                       Content="表结构"
                                                        Command="{Binding Query.UseSchemaTemplateCommand}" />
                                         </StackPanel>
 
@@ -339,10 +339,10 @@
                                         <StackPanel Visibility="{Binding Query.ShowEmptyResultState, Converter={StaticResource BooleanToVisibilityConverter}}">
                                             <TextBlock FontSize="18"
                                                        FontWeight="SemiBold"
-                                                       Text="No query results yet" />
+                                                       Text="暂无查询结果" />
                                             <TextBlock Margin="0,8,0,0"
                                                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                       Text="Run the current SQL to see rows or command feedback here." />
+                                                       Text="执行当前 SQL 后，这里会显示数据行或命令反馈。" />
                                         </StackPanel>
                                     </Grid>
                                 </Border>
@@ -354,10 +354,10 @@
                                 Style="{StaticResource HideWhenTableSelectedStyle}">
                         <TextBlock FontSize="20"
                                    FontWeight="SemiBold"
-                                   Text="Choose a table from the left" />
+                                   Text="请先从左侧选择一个表" />
                         <TextBlock Margin="0,8,0,0"
                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                   Text="Schema, data, and query tools will appear here when a table is selected." />
+                                   Text="选择数据表后，这里会显示结构、数据和查询工具。" />
                     </StackPanel>
                 </Grid>
             </Border>

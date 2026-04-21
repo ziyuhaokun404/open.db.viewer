@@ -64,6 +64,6 @@ public partial class DatabaseWorkspacePage : UserControl
         }
 
         await viewModel.Data.ChangePageSizeAsync(pageSize);
-        viewModel.StatusMessage = $"Updated page size to {pageSize}.";
+        viewModel.StatusMessage = $"每页行数已更新为 {pageSize}。";
     }
 }

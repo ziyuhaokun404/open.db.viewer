@@ -46,7 +46,7 @@ public partial class DataViewModel : ObservableObject
     private bool isLoading;
 
     [ObservableProperty]
-    private string statusMessage = "Choose a table to browse rows.";
+    private string statusMessage = "请选择一个表以浏览数据行。";
 
     public DataViewModel()
     {
@@ -74,12 +74,12 @@ public partial class DataViewModel : ObservableObject
 
     public string ResultSummary =>
         PageNumber == 0
-            ? "No table data loaded."
-            : $"Page {PageNumber} · {Columns.Count} columns · {Rows.Count} visible rows";
+            ? "尚未加载表数据。"
+            : $"第 {PageNumber} 页 · {Columns.Count} 列 · 当前显示 {Rows.Count} 行";
 
     public string SortSummary => string.IsNullOrWhiteSpace(SortColumn)
-        ? "Default sort"
-        : $"{SortColumn} {SortDirection}";
+        ? "默认排序"
+        : $"{SortColumn} · {(string.Equals(SortDirection, "DESC", StringComparison.OrdinalIgnoreCase) ? "降序" : "升序")}";
 
     public async Task LoadFirstPageAsync(string databasePath, string tableName, CancellationToken cancellationToken = default)
     {
@@ -174,7 +174,7 @@ public partial class DataViewModel : ObservableObject
             new TabularData(Columns.ToArray(), Rows.Select(row => row.Values).ToArray()),
             cancellationToken);
 
-        StatusMessage = $"Exported current page to {Path.GetFileName(exportPath)}.";
+        StatusMessage = $"已将当前页导出到 {Path.GetFileName(exportPath)}。";
     }
 
     public void Clear()
@@ -189,7 +189,7 @@ public partial class DataViewModel : ObservableObject
         SortDirection = null;
         _databasePath = null;
         _tableName = null;
-        StatusMessage = "Choose a table to browse rows.";
+        StatusMessage = "请选择一个表以浏览数据行。";
         NotifyStateChanged();
     }
 
@@ -266,7 +266,7 @@ public partial class DataViewModel : ObservableObject
         HasNextPage = page.HasNextPage;
         SortColumn = page.SortColumn;
         SortDirection = page.SortDirection;
-        StatusMessage = $"Loaded {Rows.Count} rows from {(_tableName ?? "table")}.";
+        StatusMessage = $"已从 {(_tableName ?? "数据表")} 加载 {Rows.Count} 行数据。";
         NotifyStateChanged();
     }
 

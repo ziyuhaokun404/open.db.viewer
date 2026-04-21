@@ -12,7 +12,7 @@ namespace Open.Db.Viewer.Shell.ViewModels;
 
 public partial class QueryViewModel : ObservableObject
 {
-    public const string ReadyStatusMessage = "Ready to run SQL.";
+    public const string ReadyStatusMessage = "可以开始执行 SQL。";
 
     private readonly QueryService _queryService;
     private readonly ExportService _exportService;
@@ -58,8 +58,8 @@ public partial class QueryViewModel : ObservableObject
     public ObservableCollection<DataRowViewModel> Rows { get; } = new();
 
     public string ResultSummary => Rows.Count == 0
-        ? "No rows returned."
-        : $"{Rows.Count} row(s) · {Columns.Count} column(s)";
+        ? "未返回任何数据行。"
+        : $"{Rows.Count} 行 · {Columns.Count} 列";
 
     public bool ShowEmptyResultState => !IsBusy && Columns.Count == 0 && Rows.Count == 0 && !string.IsNullOrWhiteSpace(DatabasePath);
 
@@ -91,7 +91,7 @@ public partial class QueryViewModel : ObservableObject
     {
         if (string.IsNullOrWhiteSpace(DatabasePath) || string.IsNullOrWhiteSpace(QueryText))
         {
-            StatusMessage = "Choose a database and enter SQL first.";
+            StatusMessage = "请先选择数据库并输入 SQL。";
             return;
         }
 
@@ -129,7 +129,7 @@ public partial class QueryViewModel : ObservableObject
 
         var suggestedName = _templateTableName is { Length: > 0 }
             ? $"{_templateTableName}.csv"
-            : "query-results.csv";
+            : "查询结果.csv";
         var exportPath = _fileDialogService.PickCsvSavePath(suggestedName);
         if (string.IsNullOrWhiteSpace(exportPath))
         {
@@ -141,7 +141,7 @@ public partial class QueryViewModel : ObservableObject
             new TabularData(Columns.ToArray(), Rows.Select(row => row.Values).ToArray()),
             cancellationToken);
 
-        StatusMessage = $"Exported results to {Path.GetFileName(exportPath)}.";
+        StatusMessage = $"已将结果导出到 {Path.GetFileName(exportPath)}。";
     }
 
     [RelayCommand]

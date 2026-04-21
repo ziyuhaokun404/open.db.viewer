@@ -27,8 +27,8 @@ public partial class SchemaViewModel : ObservableObject
 
     public string ColumnCountSummary => Columns.Count switch
     {
-        1 => "1 column",
-        _ => $"{Columns.Count} columns"
+        1 => "1 列",
+        _ => $"{Columns.Count} 列"
     };
 
     public async Task LoadAsync(string databasePath, string tableName, CancellationToken cancellationToken = default)

@@ -123,7 +123,7 @@ public class DatabaseWorkspaceViewModelTests
         await viewModel.RefreshAsync();
 
         viewModel.ObjectExplorer.SelectedNode?.Name.Should().Be(originalSelection?.Name);
-        viewModel.StatusMessage.Should().Be("Workspace refreshed.");
+        viewModel.StatusMessage.Should().Be("工作区已刷新。");
     }
 
     [Fact]
@@ -143,7 +143,7 @@ public class DatabaseWorkspaceViewModelTests
         viewModel.Data.Clear();
 
         viewModel.HasTableSelection.Should().BeFalse();
-        viewModel.SelectedObjectTitle.Should().Be("No table selected");
+        viewModel.SelectedObjectTitle.Should().Be("未选择数据表");
     }
 
     [Fact]
@@ -153,7 +153,7 @@ public class DatabaseWorkspaceViewModelTests
         viewModel.Columns.Add(new TableColumnInfo("id", "INTEGER", false, null, true));
         viewModel.Columns.Add(new TableColumnInfo("name", "TEXT", true, null, false));
 
-        viewModel.ColumnCountSummary.Should().Be("2 columns");
+        viewModel.ColumnCountSummary.Should().Be("2 列");
     }
 
     private sealed class FakeFileDialogService : Open.Db.Viewer.Shell.Services.IFileDialogService

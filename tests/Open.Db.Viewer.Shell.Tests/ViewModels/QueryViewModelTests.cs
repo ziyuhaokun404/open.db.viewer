@@ -22,7 +22,7 @@ public class QueryViewModelTests
                 ],
                 AffectedRows: 2,
                 Duration: TimeSpan.FromMilliseconds(42),
-                Message: "Query returned 2 row(s)."));
+                Message: "查询返回了 2 行。"));
         var viewModel = new QueryViewModel(
             new QueryService(queryExecutor),
             new ExportService(new FakeCsvExportWriter()),
@@ -37,7 +37,7 @@ public class QueryViewModelTests
         viewModel.Columns.Should().Equal("id", "name");
         viewModel.Rows.Should().HaveCount(2);
         viewModel.Rows[0].Values.Should().Equal(1, "Alice");
-        viewModel.StatusMessage.Should().Contain("Query returned 2 row(s).");
+        viewModel.StatusMessage.Should().Contain("查询返回了 2 行。");
         viewModel.StatusMessage.Should().Contain("42");
     }
 
@@ -52,7 +52,7 @@ public class QueryViewModelTests
                     Rows: [new object?[] { 10 }],
                     AffectedRows: 1,
                     Duration: TimeSpan.FromMilliseconds(5),
-                    Message: "Query returned 1 row(s)."))),
+                    Message: "查询返回了 1 行。"))),
             new ExportService(exportWriter),
             new FakeFileDialogService(@"C:\exports\users.csv"));
 
@@ -116,7 +116,7 @@ public class QueryViewModelTests
                     Rows: Array.Empty<IReadOnlyList<object?>>(),
                     AffectedRows: 0,
                     Duration: TimeSpan.FromMilliseconds(7),
-                    Message: "Query returned 0 row(s)."))),
+                    Message: "查询返回了 0 行。"))),
             new ExportService(new FakeCsvExportWriter()),
             new FakeFileDialogService(null));
 
@@ -124,7 +124,7 @@ public class QueryViewModelTests
         await viewModel.ExecuteQueryAsync();
 
         viewModel.HasResults.Should().BeFalse();
-        viewModel.ResultSummary.Should().Be("No rows returned.");
+        viewModel.ResultSummary.Should().Be("未返回任何数据行。");
     }
 
     private sealed class FakeSqliteQueryExecutor : ISqliteQueryExecutor
