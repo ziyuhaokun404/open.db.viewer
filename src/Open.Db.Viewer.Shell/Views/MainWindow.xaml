@@ -4,11 +4,13 @@
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
                  xmlns:local="clr-namespace:Open.Db.Viewer.Shell.Views"
                  xmlns:vm="clr-namespace:Open.Db.Viewer.Shell.ViewModels"
                  xmlns:pages="clr-namespace:Open.Db.Viewer.Shell.Views.Pages"
                  mc:Ignorable="d"
                  Title="数据库查看器"
+                 Icon="{svgc:SvgImage Source=/Assets/Icons/open-db-viewer-icon.svg, AppName=Open.Db.Viewer.Shell}"
                  Height="900"
                  Width="1400"
                  ExtendsContentIntoTitleBar="True"
@@ -72,17 +74,11 @@
                 <StackPanel Margin="12,0,0,0"
                             VerticalAlignment="Center"
                             Orientation="Horizontal">
-                    <Border Width="28"
-                            Height="28"
-                            CornerRadius="8"
-                            Background="{DynamicResource SystemAccentColorPrimaryBrush}">
-                        <TextBlock HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   FontSize="12"
-                                   FontWeight="Bold"
-                                   Foreground="White"
-                                   Text="DB" />
-                    </Border>
+                    <svgc:SvgViewbox x:Name="AppIconImage"
+                                     Width="28"
+                                     Height="28"
+                                     Margin="0"
+                                     Source="/Assets/Icons/open-db-viewer-icon.svg" />
                     <TextBlock Margin="8,0,0,0"
                                VerticalAlignment="Center"
                                FontSize="13"

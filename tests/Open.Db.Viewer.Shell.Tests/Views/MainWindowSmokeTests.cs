@@ -54,6 +54,13 @@ public class MainWindowSmokeTests
                 window.ExtendsContentIntoTitleBar.Should().BeTrue();
                 var titleBar = window.FindName("MainTitleBar").Should().BeOfType<WpfUiControls.TitleBar>().Subject;
                 titleBar.ActualHeight.Should().BeGreaterThan(0);
+                window.Icon.Should().NotBeNull();
+
+                var appIcon = window.FindName("AppIconImage");
+                appIcon.Should().NotBeNull();
+                var appIconElement = appIcon.Should().BeAssignableTo<FrameworkElement>().Subject;
+                appIconElement.ActualWidth.Should().BeGreaterThan(0);
+                appIconElement.ActualHeight.Should().BeGreaterThan(0);
 
                 var themeToggleButton = window.FindName("ThemeToggleButton").Should().BeOfType<WpfUiControls.Button>().Subject;
                 themeToggleButton.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Button.ClickEvent));

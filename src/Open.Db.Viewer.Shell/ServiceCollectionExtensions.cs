@@ -1,9 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Open.Db.Viewer.Application.Abstractions;
 using Open.Db.Viewer.Application.Services;
-using Open.Db.Viewer.Domain.Models;
 using Open.Db.Viewer.Infrastructure.Sqlite.Export;
 using Open.Db.Viewer.Infrastructure.Sqlite.Sqlite;
+using Open.Db.Viewer.Infrastructure.Sqlite.Storage;
 using Open.Db.Viewer.Shell.Services;
 using Open.Db.Viewer.Shell.ViewModels;
 using System.IO;
@@ -14,9 +14,13 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddOpenDbViewerWpfServices(this IServiceCollection services)
     {
+        var appDataPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "OpenDbViewer");
+
         services.AddSingleton<Func<string, Task<bool>>>(_ => path => Task.FromResult(File.Exists(path)));
 
-        services.AddSingleton<IDatabaseEntryRepository, InMemoryDatabaseEntryRepository>();
+        services.AddSingleton<IDatabaseEntryRepository>(_ => new FileDatabaseEntryRepository(appDataPath));
         services.AddSingleton<DatabaseEntryService>();
         services.AddSingleton<ISqliteConnectionFactory, SqliteConnectionFactory>();
         services.AddSingleton<SqliteDatabaseInspector>();
@@ -40,56 +44,5 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<Open.Db.Viewer.Shell.Views.MainWindow>();
 
         return services;
-    }
-
-    private sealed class InMemoryDatabaseEntryRepository : IDatabaseEntryRepository
-    {
-        private readonly List<DatabaseEntry> _recentEntries = new();
-        private readonly List<DatabaseEntry> _pinnedEntries = new();
-
-        public Task<IReadOnlyList<DatabaseEntry>> GetRecentAsync(CancellationToken cancellationToken = default) =>
-            Task.FromResult<IReadOnlyList<DatabaseEntry>>(_recentEntries.ToArray());
-
-        public Task<IReadOnlyList<DatabaseEntry>> GetPinnedAsync(CancellationToken cancellationToken = default) =>
-            Task.FromResult<IReadOnlyList<DatabaseEntry>>(_pinnedEntries.ToArray());
-
-        public Task SaveRecentAsync(DatabaseEntry entry, CancellationToken cancellationToken = default)
-        {
-            var existingIndex = _recentEntries.FindIndex(x => x.FilePath.Equals(entry.FilePath, StringComparison.OrdinalIgnoreCase));
-
-            if (existingIndex >= 0)
-            {
-                _recentEntries[existingIndex] = entry;
-            }
-            else
-            {
-                _recentEntries.Add(entry);
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public Task SavePinnedAsync(DatabaseEntry entry, CancellationToken cancellationToken = default)
-        {
-            var pinnedEntry = entry with { IsPinned = true };
-            var existingIndex = _pinnedEntries.FindIndex(x => x.FilePath.Equals(entry.FilePath, StringComparison.OrdinalIgnoreCase));
-
-            if (existingIndex >= 0)
-            {
-                _pinnedEntries[existingIndex] = pinnedEntry;
-            }
-            else
-            {
-                _pinnedEntries.Add(pinnedEntry);
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public Task RemovePinnedAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            _pinnedEntries.RemoveAll(entry => entry.Id == id);
-            return Task.CompletedTask;
-        }
     }
 }
