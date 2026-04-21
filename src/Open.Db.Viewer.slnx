@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="../tests/Open.Db.Viewer.Application.Tests/Open.Db.Viewer.Application.Tests.csproj" />
+  <Project Path="../tests/Open.Db.Viewer.Domain.Tests/Open.Db.Viewer.Domain.Tests.csproj" />
+  <Project Path="../tests/Open.Db.Viewer.Infrastructure.Sqlite.Tests/Open.Db.Viewer.Infrastructure.Sqlite.Tests.csproj" />
+  <Project Path="../tests/Open.Db.Viewer.Shell.Tests/Open.Db.Viewer.Shell.Tests.csproj" />
+  <Project Path="Open.Db.Viewer.Application/Open.Db.Viewer.Application.csproj" />
+  <Project Path="Open.Db.Viewer.Domain/Open.Db.Viewer.Domain.csproj" />
+  <Project Path="Open.Db.Viewer.Infrastructure.Sqlite/Open.Db.Viewer.Infrastructure.Sqlite.csproj" />
+  <Project Path="Open.Db.Viewer.Shell/Open.Db.Viewer.Shell.csproj" />
+</Solution>

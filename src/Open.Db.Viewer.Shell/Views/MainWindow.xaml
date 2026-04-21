@@ -1,0 +1,113 @@
+<ui:FluentWindow x:Class="Open.Db.Viewer.Shell.Views.MainWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 xmlns:local="clr-namespace:Open.Db.Viewer.Shell.Views"
+                 xmlns:vm="clr-namespace:Open.Db.Viewer.Shell.ViewModels"
+                 xmlns:pages="clr-namespace:Open.Db.Viewer.Shell.Views.Pages"
+                 mc:Ignorable="d"
+                 Title="数据库查看器"
+                 Height="900"
+                 Width="1400"
+                 ExtendsContentIntoTitleBar="True"
+                 WindowBackdropType="Mica"
+                 WindowStartupLocation="CenterScreen"
+                 ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+                 ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+    <ui:FluentWindow.Resources>
+        <DataTemplate x:Key="HomeTemplate">
+            <pages:HomePage />
+        </DataTemplate>
+        <DataTemplate x:Key="WorkspaceTemplate">
+            <pages:DatabaseWorkspacePage />
+        </DataTemplate>
+        <local:PageTemplateSelector x:Key="PageTemplateSelector"
+                                    HomeTemplate="{StaticResource HomeTemplate}"
+                                    WorkspaceTemplate="{StaticResource WorkspaceTemplate}" />
+
+        <Style x:Key="TitleBarActionButtonStyle"
+               BasedOn="{StaticResource {x:Type ui:Button}}"
+               TargetType="{x:Type ui:Button}">
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Appearance" Value="Transparent" />
+            <Setter Property="Foreground"
+                    Value="{Binding Path=ButtonsForeground, RelativeSource={RelativeSource AncestorType={x:Type ui:TitleBar}}}" />
+            <Setter Property="PressedForeground"
+                    Value="{Binding Path=ButtonsForeground, RelativeSource={RelativeSource AncestorType={x:Type ui:TitleBar}}}" />
+            <Setter Property="MouseOverBackground"
+                    Value="{Binding Path=ButtonsBackground, RelativeSource={RelativeSource AncestorType={x:Type ui:TitleBar}}}" />
+            <Setter Property="MouseOverBorderBrush" Value="Transparent" />
+            <Setter Property="PressedBackground"
+                    Value="{Binding Path=ButtonsBackground, RelativeSource={RelativeSource AncestorType={x:Type ui:TitleBar}}}" />
+            <Setter Property="PressedBorderBrush" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="Focusable" Value="False" />
+        </Style>
+
+        <Style BasedOn="{StaticResource {x:Type ui:TitleBarButton}}"
+               TargetType="{x:Type ui:TitleBarButton}">
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+        </Style>
+    </ui:FluentWindow.Resources>
+
+    <Grid Background="{DynamicResource ApplicationBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar x:Name="MainTitleBar"
+                     Grid.Row="0"
+                     Height="44"
+                     CloseWindowByDoubleClickOnIcon="True">
+            <ui:TitleBar.Header>
+                <StackPanel Margin="12,0,0,0"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                    <Border Width="28"
+                            Height="28"
+                            CornerRadius="8"
+                            Background="{DynamicResource SystemAccentColorPrimaryBrush}">
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontSize="12"
+                                   FontWeight="Bold"
+                                   Foreground="White"
+                                   Text="DB" />
+                    </Border>
+                    <TextBlock Margin="8,0,0,0"
+                               VerticalAlignment="Center"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Text="数据库查看器" />
+                </StackPanel>
+            </ui:TitleBar.Header>
+
+            <ui:TitleBar.TrailingContent>
+                <ui:Button x:Name="ThemeToggleButton"
+                           Click="ToggleThemeMode"
+                           Style="{StaticResource TitleBarActionButtonStyle}"
+                           ToolTipService.ToolTip="切换到深色模式">
+                    <ui:SymbolIcon x:Name="ThemeToggleIcon"
+                                   Symbol="WeatherMoon24" />
+                </ui:Button>
+            </ui:TitleBar.TrailingContent>
+        </ui:TitleBar>
+
+        <Border Grid.Row="1"
+                Margin="12,0,12,12"
+                CornerRadius="20"
+                Background="{DynamicResource ApplicationBackgroundBrush}">
+            <ContentControl Content="{Binding CurrentPage}"
+                            ContentTemplateSelector="{StaticResource PageTemplateSelector}" />
+        </Border>
+    </Grid>
+</ui:FluentWindow>
