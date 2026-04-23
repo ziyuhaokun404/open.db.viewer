@@ -3,55 +3,137 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d">
-    <Grid Margin="24">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="16" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="PinnedPageBrush" Color="#F7F3EE" />
+        <SolidColorBrush x:Key="PinnedCardBrush" Color="#FFFCF8" />
+        <SolidColorBrush x:Key="PinnedCardBorderBrush" Color="#E6DDD3" />
+        <SolidColorBrush x:Key="PinnedSubtleBrush" Color="#736C64" />
+        <SolidColorBrush x:Key="PinnedAccentBrush" Color="#1567D8" />
+        <SolidColorBrush x:Key="PinnedAccentSoftBrush" Color="#E9F1FF" />
 
-        <Border Padding="20"
-                CornerRadius="20"
-                Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
-                BorderThickness="1">
-            <StackPanel>
-                <TextBlock FontSize="26"
-                           FontWeight="SemiBold"
-                           Text="已固定" />
-                <TextBox Margin="0,12,0,0"
-                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
-        </Border>
+        <DropShadowEffect x:Key="PinnedShadowEffect"
+                          BlurRadius="22"
+                          Color="#E7DDD5"
+                          Opacity="0.28"
+                          ShadowDepth="0" />
 
-        <Border Grid.Row="2"
-                Padding="20"
-                CornerRadius="20"
-                Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
-                BorderThickness="1">
-            <ItemsControl ItemsSource="{Binding FilteredEntries}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border Margin="0,0,0,10"
-                                Padding="14"
-                                Background="{DynamicResource ControlFillColorTertiaryBrush}"
-                                BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
-                                BorderThickness="1"
-                                CornerRadius="14">
-                            <StackPanel>
-                                <TextBlock FontWeight="SemiBold"
-                                           Text="{Binding Name}" />
-                                <TextBlock Margin="0,4,0,0"
-                                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                           Text="{Binding FilePath}"
-                                           TextTrimming="CharacterEllipsis" />
-                            </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </Border>
-    </Grid>
+        <Style x:Key="PageSurfaceCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource PinnedCardBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource PinnedCardBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="24" />
+            <Setter Property="Effect" Value="{StaticResource PinnedShadowEffect}" />
+        </Style>
+
+        <Style x:Key="MiniButtonStyle"
+               TargetType="ui:Button"
+               BasedOn="{StaticResource {x:Type ui:Button}}">
+            <Setter Property="Width" Value="44" />
+            <Setter Property="Height" Value="44" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="CornerRadius" Value="14" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="{StaticResource PinnedCardBorderBrush}" />
+            <Setter Property="Appearance" Value="Secondary" />
+        </Style>
+    </UserControl.Resources>
+
+    <Border Background="{StaticResource PinnedPageBrush}">
+        <Grid Margin="20,18,20,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="16" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Border Padding="22"
+                    Style="{StaticResource PageSurfaceCardStyle}">
+                <StackPanel>
+                    <TextBlock FontSize="28"
+                               FontWeight="SemiBold"
+                               Text="已固定的数据库" />
+                    <TextBlock Margin="0,8,0,0"
+                               Foreground="{StaticResource PinnedSubtleBrush}"
+                               Text="把常用数据库固定在这里，主页和详情页都会优先展示。" />
+                    <TextBox Margin="0,16,0,0"
+                             Height="42"
+                             Padding="12,8"
+                             Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="2"
+                    Padding="18"
+                    Style="{StaticResource PageSurfaceCardStyle}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding FilteredEntries}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0,0,0,12"
+                                        Padding="14"
+                                        Background="#FBF8F4"
+                                        BorderBrush="{StaticResource PinnedCardBorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="18">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Width="54"
+                                                Height="54"
+                                                Background="{StaticResource PinnedAccentSoftBrush}"
+                                                CornerRadius="27">
+                                            <ui:SymbolIcon HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"
+                                                           Foreground="{StaticResource PinnedAccentBrush}"
+                                                           Symbol="Database24" />
+                                        </Border>
+
+                                        <StackPanel Grid.Column="1"
+                                                    Margin="14,0,0,0"
+                                                    VerticalAlignment="Center">
+                                            <TextBlock FontSize="16"
+                                                       FontWeight="SemiBold"
+                                                       Text="{Binding Name}" />
+                                            <TextBlock Margin="0,5,0,0"
+                                                       Foreground="{StaticResource PinnedSubtleBrush}"
+                                                       Text="{Binding FilePath}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                        </StackPanel>
+
+                                        <ui:Button Grid.Column="2"
+                                                   Margin="12,0,10,0"
+                                                   VerticalAlignment="Center"
+                                                   Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                   CommandParameter="{Binding}"
+                                                   Style="{StaticResource MiniButtonStyle}"
+                                                   ToolTip="取消固定">
+                                            <ui:SymbolIcon Foreground="{StaticResource PinnedSubtleBrush}"
+                                                           Symbol="Pin24" />
+                                        </ui:Button>
+
+                                        <ui:Button Grid.Column="3"
+                                                   VerticalAlignment="Center"
+                                                   Command="{Binding DataContext.OpenEntryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                   CommandParameter="{Binding}"
+                                                   Style="{StaticResource MiniButtonStyle}"
+                                                   ToolTip="打开此数据库">
+                                            <ui:SymbolIcon Foreground="{StaticResource PinnedSubtleBrush}"
+                                                           Symbol="ArrowEnterLeft24" />
+                                        </ui:Button>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </Border>
 </UserControl>

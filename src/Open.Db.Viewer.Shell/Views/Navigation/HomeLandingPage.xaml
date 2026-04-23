@@ -7,647 +7,594 @@
              xmlns:shell="clr-namespace:Open.Db.Viewer.Shell.ViewModels.Shell"
              mc:Ignorable="d">
     <UserControl.Resources>
-        <SolidColorBrush x:Key="PageCardBrush" Color="#FFFFFF" />
-        <SolidColorBrush x:Key="PageCardBorderBrush" Color="#DCE5F1" />
-        <SolidColorBrush x:Key="PageMutedBrush" Color="#6D7890" />
-        <SolidColorBrush x:Key="PageAccentBrush" Color="#2563EB" />
-        <SolidColorBrush x:Key="PageAccentSoftBrush" Color="#E8F1FF" />
-        <SolidColorBrush x:Key="PageAccentLineBrush" Color="#BED4FF" />
-        <SolidColorBrush x:Key="PageShellBrush" Color="#F8FBFF" />
-        <SolidColorBrush x:Key="PageShadowBrush" Color="#EEF4FE" />
-        <DropShadowEffect x:Key="CardShadowEffect"
-                          BlurRadius="24"
-                          Color="#D8E5F8"
-                          Opacity="0.45"
-                          ShadowDepth="0" />
-        <DropShadowEffect x:Key="FloatingShadowEffect"
-                          BlurRadius="30"
-                          Color="#C7D9F7"
-                          Opacity="0.5"
+        <SolidColorBrush x:Key="LandingPageBackgroundBrush" Color="#F7F3EE" />
+        <SolidColorBrush x:Key="LandingCardBrush" Color="#FFFCF8" />
+        <SolidColorBrush x:Key="LandingCardBorderBrush" Color="#E6DDD3" />
+        <SolidColorBrush x:Key="LandingSubtleBrush" Color="#736C64" />
+        <SolidColorBrush x:Key="LandingAccentBrush" Color="#1567D8" />
+        <SolidColorBrush x:Key="LandingAccentSoftBrush" Color="#E9F1FF" />
+        <SolidColorBrush x:Key="LandingAccentLineBrush" Color="#B8CEF2" />
+        <SolidColorBrush x:Key="LandingPanelBrush" Color="#FBF8F4" />
+        <SolidColorBrush x:Key="LandingPanelAltBrush" Color="#F4EFE8" />
+        <SolidColorBrush x:Key="LandingShadowBrush" Color="#E8DCCF" />
+
+        <DropShadowEffect x:Key="LandingCardShadowEffect"
+                          BlurRadius="26"
+                          Color="#E7DDD5"
+                          Opacity="0.35"
                           ShadowDepth="0" />
 
-        <Style x:Key="SectionCardStyle" TargetType="Border">
-            <Setter Property="Background" Value="{StaticResource PageCardBrush}" />
-            <Setter Property="BorderBrush" Value="{StaticResource PageCardBorderBrush}" />
+        <Style x:Key="SurfaceCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource LandingCardBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource LandingCardBorderBrush}" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="26" />
-            <Setter Property="Padding" Value="18" />
-            <Setter Property="Effect" Value="{StaticResource CardShadowEffect}" />
+            <Setter Property="CornerRadius" Value="24" />
+            <Setter Property="Effect" Value="{StaticResource LandingCardShadowEffect}" />
         </Style>
 
-        <Style x:Key="InlineLinkButtonStyle"
+        <Style x:Key="SectionTitleButtonStyle"
                TargetType="ui:Button"
                BasedOn="{StaticResource {x:Type ui:Button}}">
             <Setter Property="Appearance" Value="Transparent" />
-            <Setter Property="Foreground" Value="{StaticResource PageAccentBrush}" />
             <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Padding" Value="0" />
+            <Setter Property="Foreground" Value="{StaticResource LandingAccentBrush}" />
             <Setter Property="HorizontalContentAlignment" Value="Left" />
         </Style>
 
-        <Style x:Key="MiniActionButtonStyle"
+        <Style x:Key="ActionChipButtonStyle"
                TargetType="ui:Button"
                BasedOn="{StaticResource {x:Type ui:Button}}">
-            <Setter Property="Width" Value="34" />
-            <Setter Property="Height" Value="34" />
+            <Setter Property="Width" Value="48" />
+            <Setter Property="Height" Value="48" />
             <Setter Property="Padding" Value="0" />
-            <Setter Property="CornerRadius" Value="17" />
-            <Setter Property="Appearance" Value="Transparent" />
-            <Setter Property="Background" Value="#FFFFFF" />
-            <Setter Property="BorderBrush" Value="{StaticResource PageCardBorderBrush}" />
+            <Setter Property="CornerRadius" Value="14" />
+            <Setter Property="BorderBrush" Value="{StaticResource LandingCardBorderBrush}" />
             <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Appearance" Value="Secondary" />
+        </Style>
+
+        <Style x:Key="SummaryItemCardStyle" TargetType="Border">
+            <Setter Property="Margin" Value="0,0,0,10" />
+            <Setter Property="Padding" Value="14" />
+            <Setter Property="Background" Value="{StaticResource LandingCardBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource LandingCardBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="18" />
         </Style>
     </UserControl.Resources>
 
-    <Grid Margin="18,18,18,20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="18" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="18" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <Border Background="{StaticResource LandingPageBackgroundBrush}">
+        <Grid Margin="20,18,20,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="16" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="16" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <Border Style="{StaticResource SectionCardStyle}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="470" />
-                </Grid.ColumnDefinitions>
-
-                <StackPanel Margin="0,2,24,0">
-                    <TextBlock Margin="0,8,0,0"
-                               FontSize="33"
-                               FontWeight="SemiBold"
-                               Text="更快打开数据库，&#x0a;更专注查看数据" />
-
-                    <StackPanel Margin="0,24,0,0"
-                                Orientation="Horizontal">
-                        <ui:Button Width="170"
-                                   Height="48"
-                                   Appearance="Primary"
-                                   Command="{Binding OpenDatabaseCommand}"
-                                   Content="打开数据库"
-                                   CornerRadius="16"
-                                   Icon="{ui:SymbolIcon Database24}" />
-                        <ui:Button Width="164"
-                                   Height="48"
-                                   Margin="14,0,0,0"
-                                   Command="{Binding OpenQuickOpenCommand}"
-                                   Content="快速打开"
-                                   CornerRadius="16"
-                                   Icon="{ui:SymbolIcon Flash24}" />
-                    </StackPanel>
-                </StackPanel>
-
-                <Grid Grid.Column="1"
-                      Margin="8,0,0,0">
-                    <Border CornerRadius="28">
-                        <Border.Background>
-                            <LinearGradientBrush StartPoint="0,0"
-                                                 EndPoint="1,1">
-                                <GradientStop Offset="0"
-                                              Color="#F6FAFF" />
-                                <GradientStop Offset="1"
-                                              Color="#EAF2FF" />
-                            </LinearGradientBrush>
-                        </Border.Background>
-                    </Border>
-
-                    <Ellipse Width="276"
-                             Height="276"
-                             Margin="28,-18,0,0"
-                             HorizontalAlignment="Left"
-                             VerticalAlignment="Top"
-                             Fill="#ECF3FF" />
-                    <Ellipse Width="232"
-                             Height="232"
-                             Margin="0,0,-26,-6"
-                             HorizontalAlignment="Right"
-                             VerticalAlignment="Bottom"
-                             Fill="#E4EEFF" />
-
-                    <UniformGrid Rows="4"
-                                 Columns="4"
-                                 Width="64"
-                                 Height="64"
-                                 Margin="0,10,26,0"
-                                 HorizontalAlignment="Right"
-                                 VerticalAlignment="Top">
-                        <Ellipse Width="4" Height="4" Fill="#C9DCFF" />
-                        <Ellipse Width="4" Height="4" Fill="#C9DCFF" />
-                        <Ellipse Width="4" Height="4" Fill="#C9DCFF" />
-                        <Ellipse Width="4" Height="4" Fill="#C9DCFF" />
-                        <Ellipse Width="4" Height="4" Fill="#C9DCFF" />
-                        <Ellipse Width="4" Height="4" Fill="#C9DCFF" />
-                        <Ellipse Width="4" Height="4" Fill="#C9DCFF" />
-                        <Ellipse Width="4" Height="4" Fill="#C9DCFF" />
-                        <Ellipse Width="4" Height="4" Fill="#C9DCFF" />
-                        <Ellipse Width="4" Height="4" Fill="#C9DCFF" />
-                        <Ellipse Width="4" Height="4" Fill="#C9DCFF" />
-                        <Ellipse Width="4" Height="4" Fill="#C9DCFF" />
-                        <Ellipse Width="4" Height="4" Fill="#C9DCFF" />
-                        <Ellipse Width="4" Height="4" Fill="#C9DCFF" />
-                        <Ellipse Width="4" Height="4" Fill="#C9DCFF" />
-                        <Ellipse Width="4" Height="4" Fill="#C9DCFF" />
-                    </UniformGrid>
-
-                    <Border Width="320"
-                            Height="270"
-                            Margin="0,30,56,0"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Top"
-                            Background="#F2F7FF"
-                            BorderBrush="#E0EBFF"
-                            BorderThickness="1"
-                            CornerRadius="28"
-                            Effect="{StaticResource CardShadowEffect}" />
-
-                    <Border Width="88"
-                            Padding="14,12"
-                            Margin="116,44,0,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            Background="#FFFFFF"
-                            BorderBrush="#D8E5FA"
-                            BorderThickness="1"
-                            CornerRadius="18"
-                            Effect="{StaticResource FloatingShadowEffect}">
-                        <TextBlock HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   FontSize="20"
-                                   FontWeight="SemiBold"
-                                   Text="{Binding PinnedSummary.Count}" />
-                    </Border>
-
-                    <Border Width="250"
-                            Height="206"
-                            Margin="0,52,72,0"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Top"
-                            Background="#FFFFFF"
-                            BorderBrush="#D7E5FC"
-                            BorderThickness="1"
-                            CornerRadius="24"
-                            Effect="{StaticResource FloatingShadowEffect}">
-                        <Grid Margin="18">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="18" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="16" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-
-                            <Ellipse Width="12"
-                                     Height="12"
-                                     HorizontalAlignment="Left"
-                                     Fill="#42D392" />
-                            <Border Grid.Row="2"
-                                    Padding="14"
-                                    Background="#F6FAFF"
-                                    BorderBrush="#E0EBFF"
-                                    BorderThickness="1"
-                                    CornerRadius="18">
-                                <TextBlock FontSize="12"
-                                           FontWeight="SemiBold"
-                                           Text="chinook.db" />
-                            </Border>
-
-                            <StackPanel Grid.Row="4">
-                                <Border Height="12"
-                                        Margin="0,0,0,10"
-                                        Background="#DDEAFF"
-                                        CornerRadius="6" />
-                                <Border Width="144"
-                                        Height="12"
-                                        Margin="0,0,0,10"
-                                        HorizontalAlignment="Left"
-                                        Background="#DFEBFF"
-                                        CornerRadius="6" />
-                                <Border Width="110"
-                                        Height="12"
-                                        Margin="0,0,0,10"
-                                        HorizontalAlignment="Left"
-                                        Background="#DFEBFF"
-                                        CornerRadius="6" />
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-
-                    <Grid Width="114"
-                          Height="140"
-                          Margin="0,0,18,50"
-                          HorizontalAlignment="Right"
-                          VerticalAlignment="Bottom"
-                          Effect="{StaticResource FloatingShadowEffect}">
-                        <Ellipse Width="114"
-                                 Height="30"
-                                 VerticalAlignment="Top"
-                                 Fill="#A8C5FF"
-                                 Stroke="#729FFF"
-                                 StrokeThickness="1" />
-                        <Border Width="112"
-                                Height="84"
-                                Margin="1,15,1,0"
-                                VerticalAlignment="Top">
-                            <Border.Background>
-                                <LinearGradientBrush StartPoint="0,0"
-                                                     EndPoint="1,0">
-                                    <GradientStop Offset="0" Color="#91B6FF" />
-                                    <GradientStop Offset="0.18" Color="#F6FAFF" />
-                                    <GradientStop Offset="0.34" Color="#5A8FFF" />
-                                    <GradientStop Offset="0.68" Color="#2F66F0" />
-                                    <GradientStop Offset="1" Color="#7EA5FF" />
-                                </LinearGradientBrush>
-                            </Border.Background>
-                        </Border>
-                        <Border Width="12"
-                                Height="78"
-                                Margin="18,18,0,0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Background="#80FFFFFF"
-                                CornerRadius="6" />
-                        <Ellipse Width="114"
-                                 Height="30"
-                                 Margin="0,54,0,0"
-                                 VerticalAlignment="Top"
-                                 Fill="#6B99FA"
-                                 Stroke="#4C7DF4"
-                                 StrokeThickness="1" />
-                        <Ellipse Width="114"
-                                 Height="30"
-                                 Margin="0,88,0,0"
-                                 VerticalAlignment="Top"
-                                 Fill="#5E8CF1"
-                                 Stroke="#3E70E9"
-                                 StrokeThickness="1" />
-                    </Grid>
-                </Grid>
-            </Grid>
-        </Border>
-
-        <Border Grid.Row="2"
-                Style="{StaticResource SectionCardStyle}">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="16" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
+            <Border Padding="34,34,34,30"
+                    Style="{StaticResource SurfaceCardStyle}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="480" />
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel Orientation="Horizontal">
-                        <ui:SymbolIcon Margin="0,2,10,0"
-                                       Foreground="{StaticResource PageAccentBrush}"
-                                       Symbol="Flash24" />
-                        <TextBlock FontSize="18"
+                    <StackPanel Margin="20,10,24,0">
+                        <TextBlock FontSize="32"
                                    FontWeight="SemiBold"
-                                   Text="快速打开" />
+                                   Foreground="#262626"
+                                   LineHeight="58"
+                                   Text="更快打开数据库，&#x0a;更专注查看数据" />
+
+                        <StackPanel Margin="0,28,0,0"
+                                    Orientation="Horizontal">
+                            <ui:Button Width="188"
+                                       Height="56"
+                                       Appearance="Primary"
+                                       Command="{Binding OpenDatabaseCommand}"
+                                       Content="打开数据库"
+                                       CornerRadius="16"
+                                       FontSize="18"
+                                       FontWeight="SemiBold"
+                                       Icon="{ui:SymbolIcon Database24}" />
+                            <ui:Button Width="176"
+                                       Height="56"
+                                       Margin="16,0,0,0"
+                                       Command="{Binding OpenQuickOpenCommand}"
+                                       Content="快速打开"
+                                       CornerRadius="16"
+                                       FontSize="18"
+                                       FontWeight="SemiBold"
+                                       Icon="{ui:SymbolIcon Flash24}" />
+                        </StackPanel>
                     </StackPanel>
 
-                        <ui:Button Grid.Column="1"
-                                   VerticalAlignment="Top"
-                                   Style="{StaticResource InlineLinkButtonStyle}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock FontWeight="SemiBold"
-                                       Text="查看全部" />
-                            <ui:SymbolIcon Margin="6,2,0,0"
-                                           Foreground="{StaticResource PageAccentBrush}"
-                                           Symbol="ChevronRight24" />
-                        </StackPanel>
-                        <ui:Button.Command>
-                            <Binding Path="DataContext.NavigateToSectionCommand"
-                                     RelativeSource="{RelativeSource AncestorType=Window}" />
-                        </ui:Button.Command>
-                        <ui:Button.CommandParameter>
-                            <x:Static Member="shell:ShellSection.Recent" />
-                        </ui:Button.CommandParameter>
-                    </ui:Button>
+                    <Grid Grid.Column="1">
+                        <Ellipse Width="286"
+                                 Height="286"
+                                 Margin="50,-6,0,0"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Top"
+                                 Fill="#F3EEE8" />
+
+                            <UniformGrid Rows="4"
+                                         Columns="4"
+                                         Width="70"
+                                         Height="70"
+                                         Margin="0,20,32,0"
+                                         HorizontalAlignment="Right"
+                                         VerticalAlignment="Top">
+                                <Ellipse Width="5" Height="5" Fill="#DFD8D1" />
+                                <Ellipse Width="5" Height="5" Fill="#DFD8D1" />
+                                <Ellipse Width="5" Height="5" Fill="#DFD8D1" />
+                                <Ellipse Width="5" Height="5" Fill="#DFD8D1" />
+                                <Ellipse Width="5" Height="5" Fill="#DFD8D1" />
+                                <Ellipse Width="5" Height="5" Fill="#DFD8D1" />
+                                <Ellipse Width="5" Height="5" Fill="#DFD8D1" />
+                                <Ellipse Width="5" Height="5" Fill="#DFD8D1" />
+                                <Ellipse Width="5" Height="5" Fill="#DFD8D1" />
+                                <Ellipse Width="5" Height="5" Fill="#DFD8D1" />
+                                <Ellipse Width="5" Height="5" Fill="#DFD8D1" />
+                                <Ellipse Width="5" Height="5" Fill="#DFD8D1" />
+                                <Ellipse Width="5" Height="5" Fill="#DFD8D1" />
+                                <Ellipse Width="5" Height="5" Fill="#DFD8D1" />
+                                <Ellipse Width="5" Height="5" Fill="#DFD8D1" />
+                                <Ellipse Width="5" Height="5" Fill="#DFD8D1" />
+                            </UniformGrid>
+
+                            <Border Width="238"
+                                    Height="182"
+                                    Margin="0,52,84,0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    Background="#FFFDFB"
+                                    BorderBrush="{StaticResource LandingAccentLineBrush}"
+                                    BorderThickness="1.4"
+                                    CornerRadius="18">
+                                <Grid Margin="18">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="18" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="10" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="10" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="10" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="10" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Width="26"
+                                                Height="26"
+                                                CornerRadius="7"
+                                                BorderBrush="{StaticResource LandingAccentLineBrush}"
+                                                BorderThickness="1.2">
+                                            <ui:SymbolIcon HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"
+                                                           Foreground="#7E9CCB"
+                                                           Symbol="Document24" />
+                                        </Border>
+                                        <StackPanel Margin="14,4,0,0">
+                                            <Border Width="92"
+                                                    Height="5"
+                                                    Background="#D4E1F7"
+                                                    CornerRadius="3" />
+                                            <Border Width="74"
+                                                    Height="5"
+                                                    Margin="0,8,0,0"
+                                                    Background="#DDE7F8"
+                                                    CornerRadius="3" />
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <Border Grid.Row="2"
+                                            Height="5"
+                                            Background="#D6E1F4"
+                                            CornerRadius="3" />
+                                    <Border Grid.Row="4"
+                                            Width="164"
+                                            Height="5"
+                                            HorizontalAlignment="Left"
+                                            Background="#D6E1F4"
+                                            CornerRadius="3" />
+                                    <Border Grid.Row="6"
+                                            Width="154"
+                                            Height="5"
+                                            HorizontalAlignment="Left"
+                                            Background="#D6E1F4"
+                                            CornerRadius="3" />
+                                    <Border Grid.Row="8"
+                                            Width="132"
+                                            Height="5"
+                                            HorizontalAlignment="Left"
+                                            Background="#D6E1F4"
+                                            CornerRadius="3" />
+                                    <Border Grid.Row="10"
+                                            Width="98"
+                                            Height="5"
+                                            HorizontalAlignment="Left"
+                                            Background="#D6E1F4"
+                                            CornerRadius="3" />
+                                </Grid>
+                            </Border>
+
+                            <Grid Width="112"
+                                  Height="136"
+                                  Margin="0,0,26,26"
+                                  HorizontalAlignment="Right"
+                                  VerticalAlignment="Bottom">
+                                <Ellipse Width="112"
+                                         Height="28"
+                                         VerticalAlignment="Top"
+                                         Fill="#E4EAF5"
+                                         Stroke="#D4DCEA"
+                                         StrokeThickness="1" />
+                                <Border Width="110"
+                                        Height="74"
+                                        Margin="1,14,1,0"
+                                        VerticalAlignment="Top">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0"
+                                                             EndPoint="1,0">
+                                            <GradientStop Offset="0" Color="#F4F7FD" />
+                                            <GradientStop Offset="0.5" Color="#C8D4E9" />
+                                            <GradientStop Offset="1" Color="#F5F8FD" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                </Border>
+                                <Ellipse Width="112"
+                                         Height="28"
+                                         Margin="0,34,0,0"
+                                         VerticalAlignment="Top"
+                                         Fill="#DEE6F3"
+                                         Stroke="#CED9E8"
+                                         StrokeThickness="1" />
+                                <Ellipse Width="112"
+                                         Height="28"
+                                         Margin="0,68,0,0"
+                                         VerticalAlignment="Top"
+                                         Fill="#E7EDF7"
+                                         Stroke="#D6DFEB"
+                                         StrokeThickness="1" />
+                            </Grid>
+                    </Grid>
                 </Grid>
+            </Border>
 
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2.15*" />
-                        <ColumnDefinition Width="16" />
-                        <ColumnDefinition Width="1.25*" />
-                    </Grid.ColumnDefinitions>
+            <Border Grid.Row="2"
+                    Padding="20"
+                    Style="{StaticResource SurfaceCardStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="16" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
-                    <Border Padding="10"
-                            Background="{StaticResource PageShellBrush}"
-                            BorderBrush="{StaticResource PageCardBorderBrush}"
-                            BorderThickness="1"
-                            CornerRadius="20">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Border Width="48"
-                                    Height="48"
-                                    Background="#DCEAFF"
-                                    CornerRadius="24">
-                                <ui:SymbolIcon HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"
-                                               Foreground="{StaticResource PageAccentBrush}"
-                                               Symbol="Clock24" />
-                            </Border>
-
-                            <StackPanel Grid.Column="1"
-                                        Margin="12,0,0,0"
-                                        VerticalAlignment="Center">
-                                <TextBlock FontSize="17"
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon Margin="0,2,10,0"
+                                               Foreground="#303030"
+                                               Symbol="Flash24" />
+                                <TextBlock FontSize="18"
                                            FontWeight="SemiBold"
-                                           Text="{Binding QuickOpenEntry.Name, FallbackValue=app, TargetNullValue=尚未打开数据库}" />
-                                <TextBlock Margin="0,4,0,0"
-                                           Foreground="{StaticResource PageMutedBrush}"
-                                           Text="{Binding QuickOpenEntry.FilePath, TargetNullValue=从左侧开始打开第一个 SQLite 文件}"
-                                           TextTrimming="CharacterEllipsis" />
+                                           Text="快速打开" />
                             </StackPanel>
 
-                            <ui:Button Grid.Column="2"
-                                       Width="106"
-                                       Height="40"
-                                       VerticalAlignment="Center"
-                                       Command="{Binding OpenQuickOpenCommand}"
-                                       Content="打开"
-                                       CornerRadius="14" />
+                            <ui:Button Grid.Column="1"
+                                       Style="{StaticResource SectionTitleButtonStyle}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontSize="15"
+                                               FontWeight="SemiBold"
+                                               Text="查看全部" />
+                                    <ui:SymbolIcon Margin="6,2,0,0"
+                                                   Foreground="{StaticResource LandingAccentBrush}"
+                                                   Symbol="ChevronRight24" />
+                                </StackPanel>
+                                <ui:Button.Command>
+                                    <Binding Path="DataContext.NavigateToSectionCommand"
+                                             RelativeSource="{RelativeSource AncestorType=Window}" />
+                                </ui:Button.Command>
+                                <ui:Button.CommandParameter>
+                                    <x:Static Member="shell:ShellSection.Recent" />
+                                </ui:Button.CommandParameter>
+                            </ui:Button>
+                        </Grid>
+
+                        <Border Grid.Row="2"
+                                Padding="14"
+                                Background="{StaticResource LandingPanelBrush}"
+                                BorderBrush="{StaticResource LandingCardBorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="20">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <Border Width="56"
+                                        Height="56"
+                                        Background="{StaticResource LandingAccentSoftBrush}"
+                                        CornerRadius="28">
+                                    <ui:SymbolIcon HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{StaticResource LandingAccentBrush}"
+                                                   Symbol="Database24" />
+                                </Border>
+
+                                <StackPanel Grid.Column="1"
+                                            Margin="16,0,0,0"
+                                            VerticalAlignment="Center">
+                                    <TextBlock FontSize="17"
+                                               FontWeight="SemiBold"
+                                               Text="{Binding QuickOpenEntry.Name, FallbackValue=app, TargetNullValue=app}" />
+                                    <TextBlock Margin="0,5,0,0"
+                                               Foreground="{StaticResource LandingSubtleBrush}"
+                                               Text="{Binding QuickOpenEntry.FilePath, TargetNullValue=C:\Users\Administrator\AppData\Local\Vision.Aoi.Studio\config\app.db}"
+                                               TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+
+                                <ui:Button Grid.Column="2"
+                                           Width="98"
+                                           Height="42"
+                                           Margin="16,0,12,0"
+                                           VerticalAlignment="Center"
+                                           Command="{Binding OpenQuickOpenCommand}"
+                                           Content="打开"
+                                           CornerRadius="14"
+                                           FontWeight="SemiBold" />
+
+                                <ui:Button Grid.Column="3"
+                                           VerticalAlignment="Center"
+                                           Command="{Binding OpenEntryCommand}"
+                                           CommandParameter="{Binding QuickOpenEntry}"
+                                           Style="{StaticResource ActionChipButtonStyle}"
+                                           ToolTip="打开此数据库">
+                                    <ui:SymbolIcon Foreground="{StaticResource LandingSubtleBrush}"
+                                                   Symbol="MoreVertical24" />
+                                </ui:Button>
+                            </Grid>
+                        </Border>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="18" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                    <Border Padding="20"
+                            Style="{StaticResource SurfaceCardStyle}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="16" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:SymbolIcon Margin="0,2,10,0"
+                                                   Foreground="#303030"
+                                                   Symbol="Pin24" />
+                                    <TextBlock FontSize="18"
+                                               FontWeight="SemiBold"
+                                               Text="已固定的数据库" />
+                                </StackPanel>
+
+                                <ui:Button Grid.Column="1"
+                                           Style="{StaticResource SectionTitleButtonStyle}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Text="查看全部" />
+                                        <ui:SymbolIcon Margin="6,2,0,0"
+                                                       Foreground="{StaticResource LandingAccentBrush}"
+                                                       Symbol="ChevronRight24" />
+                                    </StackPanel>
+                                    <ui:Button.Command>
+                                        <Binding Path="DataContext.NavigateToSectionCommand"
+                                                 RelativeSource="{RelativeSource AncestorType=Window}" />
+                                    </ui:Button.Command>
+                                    <ui:Button.CommandParameter>
+                                        <x:Static Member="shell:ShellSection.Pinned" />
+                                    </ui:Button.CommandParameter>
+                                </ui:Button>
+                            </Grid>
+
+                            <ItemsControl Grid.Row="2"
+                                          ItemsSource="{Binding PinnedSummary}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource SummaryItemCardStyle}">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <Border Width="54"
+                                                        Height="54"
+                                                        Background="{StaticResource LandingAccentSoftBrush}"
+                                                        CornerRadius="27">
+                                                    <ui:SymbolIcon HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"
+                                                                   Foreground="{StaticResource LandingAccentBrush}"
+                                                                   Symbol="Database24" />
+                                                </Border>
+
+                                                <StackPanel Grid.Column="1"
+                                                            Margin="14,0,0,0"
+                                                            VerticalAlignment="Center">
+                                                    <TextBlock FontSize="16"
+                                                               FontWeight="SemiBold"
+                                                               Text="{Binding Name}" />
+                                                    <TextBlock Margin="0,5,0,0"
+                                                               Foreground="{StaticResource LandingSubtleBrush}"
+                                                               Text="{Binding FilePath}"
+                                                               TextTrimming="CharacterEllipsis" />
+                                                </StackPanel>
+
+                                                <ui:Button Grid.Column="2"
+                                                           Margin="12,0,10,0"
+                                                           VerticalAlignment="Center"
+                                                           Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                           CommandParameter="{Binding}"
+                                                           Style="{StaticResource ActionChipButtonStyle}"
+                                                           ToolTip="取消固定">
+                                                    <ui:SymbolIcon Foreground="{StaticResource LandingSubtleBrush}"
+                                                                   Symbol="Pin24" />
+                                                </ui:Button>
+
+                                                <ui:Button Grid.Column="3"
+                                                           VerticalAlignment="Center"
+                                                           Command="{Binding DataContext.OpenEntryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                           CommandParameter="{Binding}"
+                                                           Style="{StaticResource ActionChipButtonStyle}"
+                                                           ToolTip="打开此数据库">
+                                                    <ui:SymbolIcon Foreground="{StaticResource LandingSubtleBrush}"
+                                                                   Symbol="MoreVertical24" />
+                                                </ui:Button>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </Grid>
                     </Border>
 
                     <Border Grid.Column="2"
-                            Padding="10"
-                            Background="{StaticResource PageShellBrush}"
-                            BorderBrush="{StaticResource PageCardBorderBrush}"
-                            BorderThickness="1"
-                            CornerRadius="20">
+                            Padding="20"
+                            Style="{StaticResource SurfaceCardStyle}">
                         <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="16" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
 
-                            <StackPanel>
-                                <TextBlock FontWeight="SemiBold"
-                                           Text="{Binding QuickOpenEntry.Name, FallbackValue=app, TargetNullValue=尚未打开数据库}" />
-                                <TextBlock Margin="0,4,0,0"
-                                           Foreground="{StaticResource PageMutedBrush}"
-                                           Text="{Binding QuickOpenEntry.FilePath, TargetNullValue=从左侧开始打开第一个 SQLite 文件}"
-                                           TextTrimming="CharacterEllipsis" />
-                            </StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
 
-                            <ui:Button Grid.Column="1"
-                                       Margin="12,0,0,0"
-                                       VerticalAlignment="Center"
-                                       Style="{StaticResource MiniActionButtonStyle}"
-                                       ToolTip="打开此数据库"
-                                       Command="{Binding OpenEntryCommand}"
-                                       CommandParameter="{Binding QuickOpenEntry}">
-                                <ui:SymbolIcon Foreground="{StaticResource PageMutedBrush}"
-                                               Symbol="MoreVertical24" />
-                            </ui:Button>
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:SymbolIcon Margin="0,2,10,0"
+                                                   Foreground="#303030"
+                                                   Symbol="History24" />
+                                    <TextBlock FontSize="18"
+                                               FontWeight="SemiBold"
+                                               Text="最近使用" />
+                                </StackPanel>
+
+                                <ui:Button Grid.Column="1"
+                                           Style="{StaticResource SectionTitleButtonStyle}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Text="查看全部" />
+                                        <ui:SymbolIcon Margin="6,2,0,0"
+                                                       Foreground="{StaticResource LandingAccentBrush}"
+                                                       Symbol="ChevronRight24" />
+                                    </StackPanel>
+                                    <ui:Button.Command>
+                                        <Binding Path="DataContext.NavigateToSectionCommand"
+                                                 RelativeSource="{RelativeSource AncestorType=Window}" />
+                                    </ui:Button.Command>
+                                    <ui:Button.CommandParameter>
+                                        <x:Static Member="shell:ShellSection.Recent" />
+                                    </ui:Button.CommandParameter>
+                                </ui:Button>
+                            </Grid>
+
+                            <ItemsControl Grid.Row="2"
+                                          ItemsSource="{Binding RecentSummary}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource SummaryItemCardStyle}">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <Border Width="54"
+                                                        Height="54"
+                                                        Background="{StaticResource LandingAccentSoftBrush}"
+                                                        CornerRadius="27">
+                                                    <ui:SymbolIcon HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"
+                                                                   Foreground="{StaticResource LandingAccentBrush}"
+                                                                   Symbol="Database24" />
+                                                </Border>
+
+                                                <StackPanel Grid.Column="1"
+                                                            Margin="14,0,0,0"
+                                                            VerticalAlignment="Center">
+                                                    <TextBlock FontSize="16"
+                                                               FontWeight="SemiBold"
+                                                               Text="{Binding Name}" />
+                                                    <TextBlock Margin="0,5,0,0"
+                                                               Foreground="{StaticResource LandingSubtleBrush}"
+                                                               Text="{Binding FilePath}"
+                                                               TextTrimming="CharacterEllipsis" />
+                                                </StackPanel>
+
+                                                <ui:Button Grid.Column="2"
+                                                           Margin="12,0,10,0"
+                                                           VerticalAlignment="Center"
+                                                           Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                           CommandParameter="{Binding}"
+                                                           Style="{StaticResource ActionChipButtonStyle}"
+                                                           ToolTip="固定或取消固定">
+                                                    <ui:SymbolIcon Foreground="{StaticResource LandingSubtleBrush}"
+                                                                   Symbol="Pin24" />
+                                                </ui:Button>
+
+                                                <ui:Button Grid.Column="3"
+                                                           VerticalAlignment="Center"
+                                                           Command="{Binding DataContext.OpenEntryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                           CommandParameter="{Binding}"
+                                                           Style="{StaticResource ActionChipButtonStyle}"
+                                                           ToolTip="打开此数据库">
+                                                    <ui:SymbolIcon Foreground="{StaticResource LandingSubtleBrush}"
+                                                                   Symbol="MoreVertical24" />
+                                                </ui:Button>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </Grid>
                     </Border>
-                </Grid>
             </Grid>
-        </Border>
-
-        <Grid Grid.Row="4">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="18" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <Border Style="{StaticResource SectionCardStyle}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="16" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Orientation="Horizontal">
-                            <ui:SymbolIcon Margin="0,2,10,0"
-                                           Foreground="{StaticResource PageAccentBrush}"
-                                           Symbol="Pin24" />
-                        <TextBlock FontSize="18"
-                                   FontWeight="SemiBold"
-                                   Text="已固定的数据库" />
-                        </StackPanel>
-
-                        <ui:Button Grid.Column="1"
-                                   VerticalAlignment="Top"
-                                   Style="{StaticResource InlineLinkButtonStyle}">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock FontWeight="SemiBold"
-                                           Text="查看全部" />
-                                <ui:SymbolIcon Margin="6,2,0,0"
-                                               Foreground="{StaticResource PageAccentBrush}"
-                                               Symbol="ChevronRight24" />
-                            </StackPanel>
-                            <ui:Button.Command>
-                                <Binding Path="DataContext.NavigateToSectionCommand"
-                                         RelativeSource="{RelativeSource AncestorType=Window}" />
-                            </ui:Button.Command>
-                            <ui:Button.CommandParameter>
-                                <x:Static Member="shell:ShellSection.Pinned" />
-                            </ui:Button.CommandParameter>
-                        </ui:Button>
-                    </Grid>
-
-                    <ItemsControl Grid.Row="2"
-                                  ItemsSource="{Binding PinnedSummary}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border Margin="0,0,0,4"
-                                        Padding="10"
-                                        Background="{StaticResource PageShellBrush}"
-                                        BorderBrush="{StaticResource PageCardBorderBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="18">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="44" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-
-                                            <Border Width="42"
-                                                    Height="42"
-                                                    Background="#DCEAFF"
-                                                    CornerRadius="21">
-                                            <ui:SymbolIcon HorizontalAlignment="Center"
-                                                           VerticalAlignment="Center"
-                                                           Foreground="{StaticResource PageAccentBrush}"
-                                                           Symbol="Database24" />
-                                        </Border>
-                                        <StackPanel Grid.Column="1"
-                                                    Margin="12,0,0,0"
-                                                    VerticalAlignment="Center">
-                                            <TextBlock FontSize="16"
-                                                       FontWeight="SemiBold"
-                                                       Text="{Binding Name}" />
-                                            <TextBlock Margin="0,4,0,0"
-                                                       Foreground="{StaticResource PageMutedBrush}"
-                                                       Text="{Binding FilePath}"
-                                                       TextTrimming="CharacterEllipsis" />
-                                        </StackPanel>
-                                        <ui:Button Grid.Column="2"
-                                                   Margin="12,0,8,0"
-                                                   VerticalAlignment="Center"
-                                                   Style="{StaticResource MiniActionButtonStyle}"
-                                                   ToolTip="取消固定"
-                                                   Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                   CommandParameter="{Binding}">
-                                            <ui:SymbolIcon Foreground="{StaticResource PageMutedBrush}"
-                                                           Symbol="Pin24" />
-                                        </ui:Button>
-                                        <ui:Button Grid.Column="3"
-                                                   VerticalAlignment="Center"
-                                                   Style="{StaticResource MiniActionButtonStyle}"
-                                                   ToolTip="打开此数据库"
-                                                   Command="{Binding DataContext.OpenEntryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                   CommandParameter="{Binding}">
-                                            <ui:SymbolIcon Foreground="{StaticResource PageMutedBrush}"
-                                                           Symbol="MoreVertical24" />
-                                        </ui:Button>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Grid>
-            </Border>
-
-            <Border Grid.Column="2"
-                    Style="{StaticResource SectionCardStyle}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="16" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Orientation="Horizontal">
-                            <ui:SymbolIcon Margin="0,2,10,0"
-                                           Foreground="{StaticResource PageAccentBrush}"
-                                           Symbol="Clock24" />
-                        <TextBlock FontSize="18"
-                                   FontWeight="SemiBold"
-                                   Text="最近使用" />
-                        </StackPanel>
-
-                        <ui:Button Grid.Column="1"
-                                   VerticalAlignment="Top"
-                                   Style="{StaticResource InlineLinkButtonStyle}">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock FontWeight="SemiBold"
-                                           Text="查看全部" />
-                                <ui:SymbolIcon Margin="6,2,0,0"
-                                               Foreground="{StaticResource PageAccentBrush}"
-                                               Symbol="ChevronRight24" />
-                            </StackPanel>
-                            <ui:Button.Command>
-                                <Binding Path="DataContext.NavigateToSectionCommand"
-                                         RelativeSource="{RelativeSource AncestorType=Window}" />
-                            </ui:Button.Command>
-                            <ui:Button.CommandParameter>
-                                <x:Static Member="shell:ShellSection.Recent" />
-                            </ui:Button.CommandParameter>
-                        </ui:Button>
-                    </Grid>
-
-                    <ItemsControl Grid.Row="2"
-                                  ItemsSource="{Binding RecentSummary}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border Margin="0,0,0,4"
-                                        Padding="10"
-                                        Background="{StaticResource PageShellBrush}"
-                                        BorderBrush="{StaticResource PageCardBorderBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="18">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="44" />
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-
-                                            <Border Width="42"
-                                                    Height="42"
-                                                    Background="#DCEAFF"
-                                                    CornerRadius="21">
-                                            <ui:SymbolIcon HorizontalAlignment="Center"
-                                                           VerticalAlignment="Center"
-                                                           Foreground="{StaticResource PageAccentBrush}"
-                                                           Symbol="Clock24" />
-                                        </Border>
-                                        <StackPanel Grid.Column="1"
-                                                    Margin="12,0,0,0"
-                                                    VerticalAlignment="Center">
-                                            <TextBlock FontSize="16"
-                                                       FontWeight="SemiBold"
-                                                       Text="{Binding Name}" />
-                                            <TextBlock Margin="0,4,0,0"
-                                                       Foreground="{StaticResource PageMutedBrush}"
-                                                       Text="{Binding FilePath}"
-                                                       TextTrimming="CharacterEllipsis" />
-                                        </StackPanel>
-                                        <ui:Button Grid.Column="2"
-                                                   Margin="12,0,8,0"
-                                                   VerticalAlignment="Center"
-                                                   Style="{StaticResource MiniActionButtonStyle}"
-                                                   ToolTip="固定或取消固定"
-                                                   Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                   CommandParameter="{Binding}">
-                                            <ui:SymbolIcon Foreground="{StaticResource PageMutedBrush}"
-                                                           Symbol="Pin24" />
-                                        </ui:Button>
-                                        <ui:Button Grid.Column="3"
-                                                   VerticalAlignment="Center"
-                                                   Style="{StaticResource MiniActionButtonStyle}"
-                                                   ToolTip="打开此数据库"
-                                                   Command="{Binding DataContext.OpenEntryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                   CommandParameter="{Binding}">
-                                            <ui:SymbolIcon Foreground="{StaticResource PageMutedBrush}"
-                                                           Symbol="MoreVertical24" />
-                                        </ui:Button>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Grid>
-            </Border>
         </Grid>
-    </Grid>
+    </Border>
 </UserControl>

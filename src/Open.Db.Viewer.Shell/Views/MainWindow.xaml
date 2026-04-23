@@ -1,23 +1,27 @@
-<ui:FluentWindow x:Class="Open.Db.Viewer.Shell.Views.MainWindow"
-                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-                 xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
-                 xmlns:local="clr-namespace:Open.Db.Viewer.Shell.Views"
-                 xmlns:navigation="clr-namespace:Open.Db.Viewer.Shell.Views.Navigation"
-                 xmlns:workspace="clr-namespace:Open.Db.Viewer.Shell.Views.Workspace"
-                 mc:Ignorable="d"
-                 Title="Open.db.viewer"
-                 Icon="{svgc:SvgImage Source=/Assets/Icons/open_db_viewer_logo_transparent.svg, AppName=Open.Db.Viewer.Shell}"
-                 Height="920"
-                 Width="1440"
-                 ExtendsContentIntoTitleBar="True"
-                 WindowBackdropType="Mica"
-                 WindowStartupLocation="CenterScreen"
-                 ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
-                 ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+<ui:FluentWindow
+    x:Class="Open.Db.Viewer.Shell.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Open.Db.Viewer.Shell.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:navigation="clr-namespace:Open.Db.Viewer.Shell.Views.Navigation"
+    xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:workspace="clr-namespace:Open.Db.Viewer.Shell.Views.Workspace"
+    Title="Open.db.viewer"
+    Width="1440"
+    Height="920"
+    MinWidth="1220"
+    MinHeight="780"
+    ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+    ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    ExtendsContentIntoTitleBar="True"
+    Icon="{svgc:SvgImage Source=/Assets/Icons/open_db_viewer_logo_transparent.svg,
+                         AppName=Open.Db.Viewer.Shell}"
+    WindowBackdropType="Mica"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
     <ui:FluentWindow.Resources>
         <DataTemplate x:Key="HomeLandingTemplate">
             <navigation:HomeLandingPage />
@@ -38,17 +42,25 @@
             <workspace:WorkspaceHostPage />
         </DataTemplate>
 
-        <local:PageTemplateSelector x:Key="PageTemplateSelector"
-                                    HomeTemplate="{StaticResource HomeLandingTemplate}"
-                                    RecentTemplate="{StaticResource RecentTemplate}"
-                                    PinnedTemplate="{StaticResource PinnedTemplate}"
-                                    SettingsTemplate="{StaticResource SettingsTemplate}"
-                                    AboutTemplate="{StaticResource AboutTemplate}"
-                                    WorkspaceTemplate="{StaticResource WorkspaceTemplate}" />
+        <local:PageTemplateSelector
+            x:Key="PageTemplateSelector"
+            AboutTemplate="{StaticResource AboutTemplate}"
+            HomeTemplate="{StaticResource HomeLandingTemplate}"
+            PinnedTemplate="{StaticResource PinnedTemplate}"
+            RecentTemplate="{StaticResource RecentTemplate}"
+            SettingsTemplate="{StaticResource SettingsTemplate}"
+            WorkspaceTemplate="{StaticResource WorkspaceTemplate}" />
 
-        <Style x:Key="TitleBarActionButtonStyle"
-               BasedOn="{StaticResource {x:Type ui:Button}}"
-               TargetType="{x:Type ui:Button}">
+        <SolidColorBrush x:Key="ShellWindowBrush" Color="#F7F3EE" />
+        <SolidColorBrush x:Key="ShellSidebarBrush" Color="#F8F4EE" />
+        <SolidColorBrush x:Key="ShellContentBrush" Color="#F7F3EE" />
+        <SolidColorBrush x:Key="ShellSidebarBorderBrush" Color="#E5DDD4" />
+        <SolidColorBrush x:Key="ShellContentBorderBrush" Color="#E5DDD4" />
+
+        <Style
+            x:Key="TitleBarActionButtonStyle"
+            BasedOn="{StaticResource {x:Type ui:Button}}"
+            TargetType="{x:Type ui:Button}">
             <Setter Property="Width" Value="40" />
             <Setter Property="Height" Value="40" />
             <Setter Property="Margin" Value="0" />
@@ -56,57 +68,61 @@
             <Setter Property="Appearance" Value="Transparent" />
             <Setter Property="Foreground" Value="{Binding Path=ButtonsForeground, RelativeSource={RelativeSource AncestorType={x:Type ui:TitleBar}}}" />
             <Setter Property="PressedForeground" Value="{Binding Path=ButtonsForeground, RelativeSource={RelativeSource AncestorType={x:Type ui:TitleBar}}}" />
-            <Setter Property="MouseOverBackground" Value="{Binding Path=ButtonsBackground, RelativeSource={RelativeSource AncestorType={x:Type ui:TitleBar}}}" />
+            <Setter Property="MouseOverBackground" Value="#14000000" />
             <Setter Property="MouseOverBorderBrush" Value="Transparent" />
-            <Setter Property="PressedBackground" Value="{Binding Path=ButtonsBackground, RelativeSource={RelativeSource AncestorType={x:Type ui:TitleBar}}}" />
+            <Setter Property="PressedBackground" Value="#1A000000" />
             <Setter Property="PressedBorderBrush" Value="Transparent" />
             <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="CornerRadius" Value="10" />
             <Setter Property="Focusable" Value="False" />
         </Style>
 
-        <Style BasedOn="{StaticResource {x:Type ui:TitleBarButton}}"
-               TargetType="{x:Type ui:TitleBarButton}">
+        <Style BasedOn="{StaticResource {x:Type ui:TitleBarButton}}" TargetType="{x:Type ui:TitleBarButton}">
             <Setter Property="Width" Value="40" />
             <Setter Property="Height" Value="40" />
         </Style>
     </ui:FluentWindow.Resources>
 
-    <Grid x:Name="RootLayout">
+    <Grid Background="{StaticResource ShellWindowBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <ui:TitleBar x:Name="MainTitleBar"
-                     Grid.Row="0"
-                     Height="44"
-                     CloseWindowByDoubleClickOnIcon="True">
+        <ui:TitleBar
+            x:Name="MainTitleBar"
+            Grid.Row="0"
+            Height="52"
+            Background="{StaticResource ShellWindowBrush}"
+            CloseWindowByDoubleClickOnIcon="True">
             <ui:TitleBar.Header>
-                <StackPanel Margin="10,0,0,0"
-                            VerticalAlignment="Center"
-                            Orientation="Horizontal">
-                    <svgc:SvgViewbox x:Name="AppIconImage"
-                                     Width="34"
-                                     Height="34"
-                                     Source="/Assets/Icons/open_db_viewer_logo_transparent.svg" />
-                    <TextBlock Margin="6,0,0,0"
-                               VerticalAlignment="Center"
-                               FontSize="13"
-                               FontWeight="SemiBold"
-                               Text="Open.db.viewer" />
+                <StackPanel
+                    Margin="10,0,0,0"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <svgc:SvgViewbox
+                        x:Name="AppIconImage"
+                        Width="34"
+                        Height="34"
+                        Source="/Assets/Icons/open_db_viewer_logo_transparent.svg" />
+                    <TextBlock
+                        Margin="8,0,0,0"
+                        VerticalAlignment="Center"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Text="Open.db.viewer" />
                 </StackPanel>
             </ui:TitleBar.Header>
 
             <ui:TitleBar.TrailingContent>
                 <StackPanel Orientation="Horizontal">
-                    <ui:Button x:Name="ThemeToggleButton"
-                               Click="ToggleThemeMode"
-                               Style="{StaticResource TitleBarActionButtonStyle}"
-                               ToolTipService.ToolTip="切换到深色模式">
-                        <ui:SymbolIcon x:Name="ThemeToggleIcon"
-                                       Symbol="WeatherMoon24" />
+                    <ui:Button
+                        x:Name="ThemeToggleButton"
+                        Click="ToggleThemeMode"
+                        Style="{StaticResource TitleBarActionButtonStyle}"
+                        ToolTipService.ToolTip="切换到深色模式">
+                        <ui:SymbolIcon x:Name="ThemeToggleIcon" Symbol="WeatherMoon24" />
                     </ui:Button>
                 </StackPanel>
             </ui:TitleBar.TrailingContent>
@@ -118,55 +134,66 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <ui:NavigationView x:Name="RootNavigation"
-                               Width="Auto"
-                               MinWidth="48"
-                               PaneDisplayMode="Left">
+            <ui:NavigationView
+                x:Name="RootNavigation"
+                Grid.Column="0"
+                BorderThickness="0,0,1,0"
+                PaneDisplayMode="Left">
                 <ui:NavigationView.MenuItems>
-                    <ui:NavigationViewItem x:Name="HomeNavItem"
-                                           Click="NavItem_Click"
-                                           Content="首页"
-                                           Icon="{ui:SymbolIcon Home24}"
-                                           Tag="home" />
-                    <ui:NavigationViewItem x:Name="RecentNavItem"
-                                           Click="NavItem_Click"
-                                           Content="最近使用"
-                                           Icon="{ui:SymbolIcon History24}"
-                                           Tag="recent" />
-                    <ui:NavigationViewItem x:Name="PinnedNavItem"
-                                           Click="NavItem_Click"
-                                           Content="已固定"
-                                           Icon="{ui:SymbolIcon Pin24}"
-                                           Tag="pinned" />
-                    <ui:NavigationViewItem x:Name="WorkspaceNavItem"
-                                           Click="NavItem_Click"
-                                           Content="数据库工作台"
-                                           Icon="{ui:SymbolIcon Database24}"
-                                           Tag="workspace" />
+                    <ui:NavigationViewItem
+                        x:Name="HomeNavItem"
+                        Click="NavItem_Click"
+                        Content="首页"
+                        Icon="{ui:SymbolIcon Home24}"
+                        Tag="home" />
+                    <ui:NavigationViewItem
+                        x:Name="RecentNavItem"
+                        Click="NavItem_Click"
+                        Content="最近使用"
+                        Icon="{ui:SymbolIcon History24}"
+                        Tag="recent" />
+                    <ui:NavigationViewItem
+                        x:Name="PinnedNavItem"
+                        Click="NavItem_Click"
+                        Content="已固定"
+                        Icon="{ui:SymbolIcon Pin24}"
+                        Tag="pinned" />
+                    <ui:NavigationViewItem
+                        x:Name="WorkspaceNavItem"
+                        Click="NavItem_Click"
+                        Content="数据库工作台"
+                        Icon="{ui:SymbolIcon Database24}"
+                        Tag="workspace" />
                 </ui:NavigationView.MenuItems>
 
                 <ui:NavigationView.FooterMenuItems>
-                    <ui:NavigationViewItem x:Name="SettingsNavItem"
-                                           Click="NavItem_Click"
-                                           Content="设置"
-                                           Icon="{ui:SymbolIcon Settings24}"
-                                           Tag="settings" />
-                    <ui:NavigationViewItem x:Name="AboutNavItem"
-                                           Click="NavItem_Click"
-                                           Content="关于"
-                                           Icon="{ui:SymbolIcon Info24}"
-                                           Tag="about" />
+                    <ui:NavigationViewItem
+                        x:Name="SettingsNavItem"
+                        Click="NavItem_Click"
+                        Content="设置"
+                        Icon="{ui:SymbolIcon Settings24}"
+                        Tag="settings" />
+                    <ui:NavigationViewItem
+                        x:Name="AboutNavItem"
+                        Click="NavItem_Click"
+                        Content="关于"
+                        Icon="{ui:SymbolIcon Info24}"
+                        Tag="about" />
                 </ui:NavigationView.FooterMenuItems>
             </ui:NavigationView>
 
-            <Border Grid.Column="1"
-                    Margin="16,0,16,16"
-                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                    BorderBrush="{DynamicResource CardBorderBrush}"
-                    BorderThickness="1"
-                    CornerRadius="28">
-                <ContentControl Content="{Binding CurrentContentViewModel}"
-                                ContentTemplateSelector="{StaticResource PageTemplateSelector}" />
+            <Border
+                Grid.Column="1"
+                Background="{StaticResource ShellContentBrush}"
+                BorderBrush="{StaticResource ShellContentBorderBrush}"
+                BorderThickness="0"
+                FocusVisualStyle="{x:Null}"
+                Focusable="False">
+                <ContentControl
+                    Content="{Binding CurrentContentViewModel}"
+                    ContentTemplateSelector="{StaticResource PageTemplateSelector}"
+                    FocusVisualStyle="{x:Null}"
+                    Focusable="False" />
             </Border>
         </Grid>
     </Grid>
