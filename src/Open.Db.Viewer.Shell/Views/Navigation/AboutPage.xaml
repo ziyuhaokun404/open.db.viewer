@@ -13,7 +13,7 @@
                            Text="关于" />
                 <TextBlock Margin="0,12,0,0"
                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                           Text="数据库查看器" />
+                           Text="Open.db.viewer" />
                 <TextBlock Margin="0,4,0,0"
                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                            Text="open.db.viewer" />

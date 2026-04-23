@@ -41,7 +41,7 @@
                 <StackPanel>
                     <TextBlock FontSize="30"
                                FontWeight="SemiBold"
-                               Text="数据库查看器" />
+                               Text="Open.db.viewer" />
                     <TextBlock Margin="0,10,0,0"
                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                Text="浏览本地 SQLite 文件，查看表结构，执行快速 SQL，并导出结果。" />

@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\Icons\open-db-viewer-icon.svg" />
+    <Resource Include="Assets\Icons\open_db_viewer_logo_transparent.svg" />
   </ItemGroup>
 
 </Project>

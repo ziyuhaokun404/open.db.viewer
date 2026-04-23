@@ -9,8 +9,8 @@
                  xmlns:navigation="clr-namespace:Open.Db.Viewer.Shell.Views.Navigation"
                  xmlns:workspace="clr-namespace:Open.Db.Viewer.Shell.Views.Workspace"
                  mc:Ignorable="d"
-                 Title="数据库查看器"
-                 Icon="{svgc:SvgImage Source=/Assets/Icons/open-db-viewer-icon.svg, AppName=Open.Db.Viewer.Shell}"
+                 Title="Open.db.viewer"
+                 Icon="{svgc:SvgImage Source=/Assets/Icons/open_db_viewer_logo_transparent.svg, AppName=Open.Db.Viewer.Shell}"
                  Height="920"
                  Width="1440"
                  ExtendsContentIntoTitleBar="True"
@@ -90,12 +90,12 @@
                     <svgc:SvgViewbox x:Name="AppIconImage"
                                      Width="34"
                                      Height="34"
-                                     Source="/Assets/Icons/open-db-viewer-icon.svg" />
+                                     Source="/Assets/Icons/open_db_viewer_logo_transparent.svg" />
                     <TextBlock Margin="6,0,0,0"
                                VerticalAlignment="Center"
                                FontSize="13"
                                FontWeight="SemiBold"
-                               Text="数据库查看器" />
+                               Text="Open.db.viewer" />
                 </StackPanel>
             </ui:TitleBar.Header>
 
