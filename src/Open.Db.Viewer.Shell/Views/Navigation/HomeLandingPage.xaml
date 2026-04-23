@@ -4,152 +4,564 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:shell="clr-namespace:Open.Db.Viewer.Shell.ViewModels.Shell"
              mc:Ignorable="d">
-    <Grid Margin="24">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="20" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="20" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="PageCardBrush" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="PageCardBorderBrush" Color="#DCE5F1" />
+        <SolidColorBrush x:Key="PageMutedBrush" Color="#6D7890" />
+        <SolidColorBrush x:Key="PageAccentBrush" Color="#2563EB" />
+        <SolidColorBrush x:Key="PageAccentSoftBrush" Color="#E8F1FF" />
+        <SolidColorBrush x:Key="PageAccentLineBrush" Color="#BED4FF" />
+        <SolidColorBrush x:Key="PageBannerBrush" Color="#EAF4FF" />
+        <SolidColorBrush x:Key="PageBannerBorderBrush" Color="#C8DDFE" />
 
-        <Border Padding="28"
-                CornerRadius="24"
-                Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
-                BorderThickness="1">
-            <Grid>
+        <Style x:Key="SectionCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource PageCardBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource PageCardBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="28" />
+            <Setter Property="Padding" Value="26" />
+        </Style>
+
+        <Style x:Key="InlineLinkButtonStyle"
+               TargetType="ui:Button"
+               BasedOn="{StaticResource {x:Type ui:Button}}">
+            <Setter Property="Appearance" Value="Transparent" />
+            <Setter Property="Foreground" Value="{StaticResource PageAccentBrush}" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="28,26,28,28">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Border Style="{StaticResource SectionCardStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="360" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Margin="4,4,24,4">
+                        <Border Width="86"
+                                Padding="10,5"
+                                HorizontalAlignment="Left"
+                                Background="{StaticResource PageAccentSoftBrush}"
+                                BorderBrush="{StaticResource PageAccentLineBrush}"
+                                BorderThickness="1"
+                                CornerRadius="999">
+                            <TextBlock HorizontalAlignment="Center"
+                                       FontSize="11"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource PageAccentBrush}"
+                                       Text="HOME" />
+                        </Border>
+
+                        <TextBlock Margin="0,18,0,0"
+                                   FontSize="38"
+                                   FontWeight="SemiBold"
+                                   Text="更快打开数据库，&#x0a;更专注查看数据" />
+                        <TextBlock Margin="0,14,0,0"
+                                   Foreground="{StaticResource PageMutedBrush}"
+                                   FontSize="15"
+                                   LineHeight="24"
+                                   Text="浏览 SQLite 文件、查看表结构、快速运行 SQL，并把常用数据库固定在首页，像工作台一样持续使用。" />
+
+                        <StackPanel Margin="0,28,0,0"
+                                    Orientation="Horizontal">
+                            <ui:Button Width="154"
+                                       Height="46"
+                                       Appearance="Primary"
+                                       Command="{Binding OpenDatabaseCommand}"
+                                       Content="打开数据库"
+                                       CornerRadius="18" />
+                            <ui:Button Width="142"
+                                       Height="46"
+                                       Margin="12,0,0,0"
+                                       Command="{Binding OpenQuickOpenCommand}"
+                                       Content="快速打开"
+                                       CornerRadius="18" />
+                        </StackPanel>
+
+                        <Border Margin="0,22,0,0"
+                                Padding="14,12"
+                                Background="#F7FAFF"
+                                BorderBrush="{StaticResource PageCardBorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="18">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Border Width="34"
+                                        Height="34"
+                                        Background="{StaticResource PageAccentSoftBrush}"
+                                        CornerRadius="12">
+                                    <TextBlock HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontSize="14"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource PageAccentBrush}"
+                                               Text="i" />
+                                </Border>
+                                <TextBlock Grid.Column="1"
+                                           Margin="12,0,0,0"
+                                           VerticalAlignment="Center"
+                                           Foreground="{StaticResource PageMutedBrush}"
+                                           Text="{Binding StatusMessage}" />
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+
+                    <Grid Grid.Column="1"
+                          Margin="12,4,0,4">
+                        <Border CornerRadius="30">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0"
+                                                     EndPoint="1,1">
+                                    <GradientStop Offset="0"
+                                                  Color="#EEF5FF" />
+                                    <GradientStop Offset="1"
+                                                  Color="#DCEBFF" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+
+                        <Ellipse Width="218"
+                                 Height="218"
+                                 Margin="-26,-22,0,0"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Top"
+                                 Fill="#9EC5FF"
+                                 Opacity="0.28" />
+                        <Ellipse Width="172"
+                                 Height="172"
+                                 Margin="0,0,-10,-28"
+                                 HorizontalAlignment="Right"
+                                 VerticalAlignment="Bottom"
+                                 Fill="#72A5FF"
+                                 Opacity="0.2" />
+
+                        <Border Width="230"
+                                Height="220"
+                                Margin="0,18,26,24"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Background="#FFFFFF"
+                                BorderBrush="#CFE0FB"
+                                BorderThickness="1"
+                                CornerRadius="24">
+                            <Grid Margin="18">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="18" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="14" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <Ellipse Width="8"
+                                             Height="8"
+                                             Fill="#FF7A7A" />
+                                    <Ellipse Width="8"
+                                             Height="8"
+                                             Margin="8,0,0,0"
+                                             Fill="#FFBF66" />
+                                    <Ellipse Width="8"
+                                             Height="8"
+                                             Margin="8,0,0,0"
+                                             Fill="#67D6A2" />
+                                </StackPanel>
+
+                                <Border Grid.Row="2"
+                                        Padding="12"
+                                        Background="#F3F8FF"
+                                        BorderBrush="#D8E7FF"
+                                        BorderThickness="1"
+                                        CornerRadius="18">
+                                    <StackPanel>
+                                        <TextBlock FontWeight="SemiBold"
+                                                   Text="chinook.db" />
+                                        <TextBlock Margin="0,6,0,0"
+                                                   Foreground="{StaticResource PageMutedBrush}"
+                                                   Text="SQLite" />
+                                    </StackPanel>
+                                </Border>
+
+                                <StackPanel Grid.Row="4">
+                                    <Border Height="14"
+                                            Margin="0,0,0,10"
+                                            Background="#E6F0FF"
+                                            CornerRadius="7" />
+                                    <Border Height="14"
+                                            Width="150"
+                                            Margin="0,0,0,10"
+                                            HorizontalAlignment="Left"
+                                            Background="#D8E7FF"
+                                            CornerRadius="7" />
+                                    <Border Height="58"
+                                            Background="#EDF5FF"
+                                            CornerRadius="16" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Border Width="122"
+                                Padding="16,12"
+                                Margin="18,42,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Background="#FFFFFF"
+                                BorderBrush="#D6E4FA"
+                                BorderThickness="1"
+                                CornerRadius="20">
+                            <StackPanel>
+                                <TextBlock FontSize="12"
+                                           Foreground="{StaticResource PageMutedBrush}"
+                                           Text="固定数据库" />
+                                <TextBlock Margin="0,6,0,0"
+                                           FontSize="22"
+                                           FontWeight="SemiBold"
+                                           Text="{Binding PinnedSummary.Count}" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="2"
+                    Style="{StaticResource SectionCardStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="18" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel>
+                            <TextBlock FontSize="24"
+                                       FontWeight="SemiBold"
+                                       Text="快速打开" />
+                            <TextBlock Margin="0,6,0,0"
+                                       Foreground="{StaticResource PageMutedBrush}"
+                                       Text="直接回到最近一次使用的数据库，继续你的上一次工作。" />
+                        </StackPanel>
+
+                        <ui:Button Grid.Column="1"
+                                   VerticalAlignment="Top"
+                                   Style="{StaticResource InlineLinkButtonStyle}"
+                                   Command="{Binding DataContext.NavigateToSectionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                   CommandParameter="{x:Static shell:ShellSection.Recent}"
+                                   Content="查看全部" />
+                    </Grid>
+
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2.2*" />
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="1.1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Border Padding="18"
+                                Background="#F7FAFF"
+                                BorderBrush="{StaticResource PageCardBorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="22">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <Border Width="48"
+                                        Height="48"
+                                        Background="{StaticResource PageAccentSoftBrush}"
+                                        CornerRadius="16">
+                                    <TextBlock HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontSize="18"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource PageAccentBrush}"
+                                               Text="◷" />
+                                </Border>
+
+                                <StackPanel Grid.Column="1"
+                                            Margin="14,0,0,0"
+                                            VerticalAlignment="Center">
+                                    <TextBlock FontSize="17"
+                                               FontWeight="SemiBold"
+                                               Text="{Binding QuickOpenEntry.Name, FallbackValue=尚未打开数据库, TargetNullValue=尚未打开数据库}" />
+                                    <TextBlock Margin="0,6,0,0"
+                                               Foreground="{StaticResource PageMutedBrush}"
+                                               Text="{Binding QuickOpenEntry.FilePath, FallbackValue=从左侧开始打开第一个 SQLite 文件, TargetNullValue=从左侧开始打开第一个 SQLite 文件}"
+                                               TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+
+                                <ui:Button Grid.Column="2"
+                                           Width="118"
+                                           Height="42"
+                                           VerticalAlignment="Center"
+                                           Command="{Binding OpenQuickOpenCommand}"
+                                           Content="立即打开"
+                                           CornerRadius="16" />
+                            </Grid>
+                        </Border>
+
+                        <ItemsControl Grid.Column="2"
+                                      ItemsSource="{Binding RecentSummary}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="0,0,0,10"
+                                            Padding="14,12"
+                                            Background="#F7FAFF"
+                                            BorderBrush="{StaticResource PageCardBorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="18">
+                                        <StackPanel>
+                                            <TextBlock FontSize="12"
+                                                       Foreground="{StaticResource PageMutedBrush}"
+                                                       Text="最近" />
+                                            <TextBlock Margin="0,6,0,0"
+                                                       FontWeight="SemiBold"
+                                                       Text="{Binding Name}" />
+                                            <TextBlock Margin="0,4,0,0"
+                                                       Foreground="{StaticResource PageMutedBrush}"
+                                                       Text="{Binding FilePath}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Row="4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="300" />
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <StackPanel>
-                    <TextBlock FontSize="34"
-                               FontWeight="SemiBold"
-                               Text="数据库查看器" />
-                    <TextBlock Margin="0,12,0,0"
-                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                               Text="浏览 SQLite 文件，查看表结构，执行快速 SQL，并导出结果。" />
-                    <StackPanel Margin="0,24,0,0"
-                                Orientation="Horizontal">
-                        <ui:Button Width="160"
-                                   Height="44"
-                                   Appearance="Primary"
-                                   Content="打开数据库"
-                                   Command="{Binding OpenDatabaseCommand}"
-                                   Icon="{ui:SymbolIcon FolderOpen24}" />
-                        <ui:Button Width="140"
-                                   Height="44"
-                                   Margin="12,0,0,0"
-                                   Content="打开最近"
-                                   Command="{Binding OpenQuickOpenCommand}"
-                                   Icon="{ui:SymbolIcon History24}" />
-                    </StackPanel>
-                </StackPanel>
+                <Border Style="{StaticResource SectionCardStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="18" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
-                <Border Grid.Column="1"
-                        CornerRadius="20"
-                        Background="{DynamicResource ControlFillColorTertiaryBrush}" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel>
+                                <TextBlock FontSize="24"
+                                           FontWeight="SemiBold"
+                                           Text="已固定的数据库" />
+                                <TextBlock Margin="0,6,0,0"
+                                           Foreground="{StaticResource PageMutedBrush}"
+                                           Text="把高频数据库放在这里，减少每次重新定位文件的成本。" />
+                            </StackPanel>
+
+                            <ui:Button Grid.Column="1"
+                                       VerticalAlignment="Top"
+                                       Style="{StaticResource InlineLinkButtonStyle}"
+                                       Command="{Binding DataContext.NavigateToSectionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                       CommandParameter="{x:Static shell:ShellSection.Pinned}"
+                                       Content="查看全部" />
+                        </Grid>
+
+                        <ItemsControl Grid.Row="2"
+                                      ItemsSource="{Binding PinnedSummary}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="0,0,0,12"
+                                            Padding="16"
+                                            Background="#F7FAFF"
+                                            BorderBrush="{StaticResource PageCardBorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="18">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="32" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Border Width="32"
+                                                    Height="32"
+                                                    Background="{StaticResource PageAccentSoftBrush}"
+                                                    CornerRadius="11">
+                                                <TextBlock HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"
+                                                           FontSize="13"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="{StaticResource PageAccentBrush}"
+                                                           Text="✦" />
+                                            </Border>
+                                            <StackPanel Grid.Column="1"
+                                                        Margin="12,0,0,0">
+                                                <TextBlock FontWeight="SemiBold"
+                                                           Text="{Binding Name}" />
+                                                <TextBlock Margin="0,4,0,0"
+                                                           Foreground="{StaticResource PageMutedBrush}"
+                                                           Text="{Binding FilePath}"
+                                                           TextTrimming="CharacterEllipsis" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Column="2"
+                        Style="{StaticResource SectionCardStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="18" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel>
+                                <TextBlock FontSize="24"
+                                           FontWeight="SemiBold"
+                                           Text="最近使用" />
+                                <TextBlock Margin="0,6,0,0"
+                                           Foreground="{StaticResource PageMutedBrush}"
+                                           Text="保留最近访问记录，随时返回上一次查看的位置。" />
+                            </StackPanel>
+
+                            <ui:Button Grid.Column="1"
+                                       VerticalAlignment="Top"
+                                       Style="{StaticResource InlineLinkButtonStyle}"
+                                       Command="{Binding DataContext.NavigateToSectionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                       CommandParameter="{x:Static shell:ShellSection.Recent}"
+                                       Content="查看全部" />
+                        </Grid>
+
+                        <ItemsControl Grid.Row="2"
+                                      ItemsSource="{Binding RecentSummary}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="0,0,0,12"
+                                            Padding="16"
+                                            Background="#F7FAFF"
+                                            BorderBrush="{StaticResource PageCardBorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="18">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="32" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Border Width="32"
+                                                    Height="32"
+                                                    Background="{StaticResource PageAccentSoftBrush}"
+                                                    CornerRadius="11">
+                                                <TextBlock HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"
+                                                           FontSize="13"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="{StaticResource PageAccentBrush}"
+                                                           Text="◷" />
+                                            </Border>
+                                            <StackPanel Grid.Column="1"
+                                                        Margin="12,0,0,0">
+                                                <TextBlock FontWeight="SemiBold"
+                                                           Text="{Binding Name}" />
+                                                <TextBlock Margin="0,4,0,0"
+                                                           Foreground="{StaticResource PageMutedBrush}"
+                                                           Text="{Binding FilePath}"
+                                                           TextTrimming="CharacterEllipsis" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </Border>
             </Grid>
-        </Border>
 
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="20" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+            <Border Grid.Row="6"
+                    Padding="20,18"
+                    Background="{StaticResource PageBannerBrush}"
+                    BorderBrush="{StaticResource PageBannerBorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="24">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-            <Border Padding="20"
-                    CornerRadius="20"
-                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                    BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
-                    BorderThickness="1">
-                <StackPanel>
-                    <TextBlock FontSize="22"
-                               FontWeight="SemiBold"
-                               Text="快速打开" />
-                    <TextBlock Margin="0,6,0,12"
-                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                               Text="快速返回最近打开过的数据库。" />
-                    <ItemsControl ItemsSource="{Binding RecentSummary}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border Margin="0,0,0,10"
-                                        Padding="14"
-                                        Background="{DynamicResource ControlFillColorTertiaryBrush}"
-                                        BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="14">
-                                    <StackPanel>
-                                        <TextBlock FontWeight="SemiBold"
-                                                   Text="{Binding Name}" />
-                                        <TextBlock Margin="0,4,0,0"
-                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                   Text="{Binding FilePath}"
-                                                   TextTrimming="CharacterEllipsis" />
-                                    </StackPanel>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-            </Border>
+                    <Border Width="42"
+                            Height="42"
+                            Background="#FFFFFF"
+                            CornerRadius="14">
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource PageAccentBrush}"
+                                   Text="!" />
+                    </Border>
 
-            <Border Grid.Column="2"
-                    Padding="20"
-                    CornerRadius="20"
-                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                    BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
-                    BorderThickness="1">
-                <StackPanel>
-                    <TextBlock FontSize="22"
-                               FontWeight="SemiBold"
-                               Text="已固定的数据库" />
-                    <TextBlock Margin="0,6,0,12"
-                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                               Text="把最常用的数据库固定在这里，方便快速进入。" />
-                    <ItemsControl ItemsSource="{Binding PinnedSummary}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border Margin="0,0,0,10"
-                                        Padding="14"
-                                        Background="{DynamicResource ControlFillColorTertiaryBrush}"
-                                        BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="14">
-                                    <StackPanel>
-                                        <TextBlock FontWeight="SemiBold"
-                                                   Text="{Binding Name}" />
-                                        <TextBlock Margin="0,4,0,0"
-                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                   Text="{Binding FilePath}"
-                                                   TextTrimming="CharacterEllipsis" />
-                                    </StackPanel>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
+                    <StackPanel Grid.Column="1"
+                                Margin="14,0,0,0"
+                                VerticalAlignment="Center">
+                        <TextBlock FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Text="小贴士" />
+                        <TextBlock Margin="0,4,0,0"
+                                   Foreground="{StaticResource PageMutedBrush}"
+                                   Text="先把常用数据库固定到首页，再用最近使用做临时切换，日常操作会顺很多。" />
+                    </StackPanel>
+
+                    <TextBlock Grid.Column="2"
+                               VerticalAlignment="Center"
+                               FontSize="18"
+                               Foreground="{StaticResource PageMutedBrush}"
+                               Text="×" />
+                </Grid>
             </Border>
         </Grid>
-
-        <Border Grid.Row="4"
-                Padding="18"
-                CornerRadius="20"
-                Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
-                BorderThickness="1">
-            <StackPanel>
-                <TextBlock FontSize="20"
-                           FontWeight="SemiBold"
-                           Text="小贴士" />
-                <TextBlock Margin="0,8,0,0"
-                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                           Text="你可以将常用数据库固定到首页，方便快速访问。" />
-            </StackPanel>
-        </Border>
-    </Grid>
+    </ScrollViewer>
 </UserControl>
