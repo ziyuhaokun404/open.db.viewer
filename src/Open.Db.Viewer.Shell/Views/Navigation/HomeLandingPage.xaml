@@ -15,6 +15,16 @@
         <SolidColorBrush x:Key="PageAccentLineBrush" Color="#BED4FF" />
         <SolidColorBrush x:Key="PageShellBrush" Color="#F8FBFF" />
         <SolidColorBrush x:Key="PageShadowBrush" Color="#EEF4FE" />
+        <DropShadowEffect x:Key="CardShadowEffect"
+                          BlurRadius="24"
+                          Color="#D8E5F8"
+                          Opacity="0.45"
+                          ShadowDepth="0" />
+        <DropShadowEffect x:Key="FloatingShadowEffect"
+                          BlurRadius="30"
+                          Color="#C7D9F7"
+                          Opacity="0.5"
+                          ShadowDepth="0" />
 
         <Style x:Key="SectionCardStyle" TargetType="Border">
             <Setter Property="Background" Value="{StaticResource PageCardBrush}" />
@@ -22,6 +32,7 @@
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="26" />
             <Setter Property="Padding" Value="22" />
+            <Setter Property="Effect" Value="{StaticResource CardShadowEffect}" />
         </Style>
 
         <Style x:Key="InlineLinkButtonStyle"
@@ -186,7 +197,8 @@
                             Background="#F2F7FF"
                             BorderBrush="#E0EBFF"
                             BorderThickness="1"
-                            CornerRadius="28" />
+                            CornerRadius="28"
+                            Effect="{StaticResource CardShadowEffect}" />
 
                     <Border Width="88"
                             Padding="14,12"
@@ -196,7 +208,8 @@
                             Background="#FFFFFF"
                             BorderBrush="#D8E5FA"
                             BorderThickness="1"
-                            CornerRadius="18">
+                            CornerRadius="18"
+                            Effect="{StaticResource FloatingShadowEffect}">
                         <StackPanel>
                             <TextBlock FontSize="11"
                                        Foreground="{StaticResource PageMutedBrush}"
@@ -216,7 +229,8 @@
                             Background="#FFFFFF"
                             BorderBrush="#D7E5FC"
                             BorderThickness="1"
-                            CornerRadius="24">
+                            CornerRadius="24"
+                            Effect="{StaticResource FloatingShadowEffect}">
                         <Grid Margin="18">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -271,7 +285,8 @@
                           Height="140"
                           Margin="0,0,22,54"
                           HorizontalAlignment="Right"
-                          VerticalAlignment="Bottom">
+                          VerticalAlignment="Bottom"
+                          Effect="{StaticResource FloatingShadowEffect}">
                         <Ellipse Width="114"
                                  Height="30"
                                  VerticalAlignment="Top"
@@ -432,6 +447,15 @@
                                            Foreground="{StaticResource PageMutedBrush}"
                                            Text="{Binding QuickOpenEntry.FilePath, FallbackValue=从左侧开始打开第一个 SQLite 文件, TargetNullValue=从左侧开始打开第一个 SQLite 文件}"
                                            TextTrimming="CharacterEllipsis" />
+                                <TextBlock Margin="0,6,0,0"
+                                           Foreground="{StaticResource PageMutedBrush}"
+                                           FontSize="12">
+                                    <TextBlock.Text>
+                                        <Binding Path="QuickOpenEntry.LastOpenedAt"
+                                                 StringFormat="今天 {0:HH:mm}"
+                                                 TargetNullValue="" />
+                                    </TextBlock.Text>
+                                </TextBlock>
                             </StackPanel>
 
                             <ui:SymbolIcon Grid.Column="1"
@@ -644,8 +668,12 @@
                                                        TextTrimming="CharacterEllipsis" />
                                             <TextBlock Margin="0,6,0,0"
                                                        Foreground="{StaticResource PageMutedBrush}"
-                                                       FontSize="12"
-                                                       Text="今天 14:32" />
+                                                       FontSize="12">
+                                                <TextBlock.Text>
+                                                    <Binding Path="LastOpenedAt"
+                                                             StringFormat="今天 {0:HH:mm}" />
+                                                </TextBlock.Text>
+                                            </TextBlock>
                                         </StackPanel>
                                         <ui:SymbolIcon Grid.Column="2"
                                                        VerticalAlignment="Center"

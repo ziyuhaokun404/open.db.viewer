@@ -102,7 +102,7 @@
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsSelected}" Value="True">
                     <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource ShellSelectedBorderBrush}" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
                 </DataTrigger>
             </Style.Triggers>
@@ -115,7 +115,7 @@
                 <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
                              Value="{x:Static shell:ShellSection.Home}">
                     <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource ShellSelectedBorderBrush}" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
                 </DataTrigger>
             </Style.Triggers>
@@ -128,7 +128,7 @@
                 <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
                              Value="{x:Static shell:ShellSection.Recent}">
                     <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource ShellSelectedBorderBrush}" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
                 </DataTrigger>
             </Style.Triggers>
@@ -141,7 +141,7 @@
                 <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
                              Value="{x:Static shell:ShellSection.Pinned}">
                     <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource ShellSelectedBorderBrush}" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
                 </DataTrigger>
             </Style.Triggers>
@@ -154,7 +154,7 @@
                 <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
                              Value="{x:Static shell:ShellSection.Workspace}">
                     <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource ShellSelectedBorderBrush}" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
                 </DataTrigger>
             </Style.Triggers>
@@ -167,7 +167,7 @@
                 <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
                              Value="{x:Static shell:ShellSection.Settings}">
                     <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource ShellSelectedBorderBrush}" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
                 </DataTrigger>
             </Style.Triggers>
@@ -180,7 +180,7 @@
                 <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
                              Value="{x:Static shell:ShellSection.About}">
                     <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource ShellSelectedBorderBrush}" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
                 </DataTrigger>
             </Style.Triggers>
