@@ -8,6 +8,7 @@ using Open.Db.Viewer.Application.Services;
 using Open.Db.Viewer.Domain.Models;
 using Open.Db.Viewer.Shell.Services;
 using Open.Db.Viewer.Shell.ViewModels;
+using Open.Db.Viewer.Shell.ViewModels.Navigation;
 using Open.Db.Viewer.Shell.Views;
 using Wpf.Ui.Appearance;
 using WpfUiControls = Wpf.Ui.Controls;
@@ -38,7 +39,14 @@ public class MainWindowSmokeTests
                         new QueryService(new NoopSqliteQueryExecutor()),
                         new ExportService(new NoopCsvExportWriter()),
                         new FakeFileDialogService()));
-                var shell = new ShellViewModel(home, workspace);
+                var shell = new ShellViewModel(
+                    home,
+                    workspace,
+                    new HomeLandingViewModel(databaseEntryService, new FakeFileDialogService()),
+                    new RecentDatabasesViewModel(databaseEntryService),
+                    new PinnedDatabasesViewModel(databaseEntryService),
+                    new SettingsViewModel(),
+                    new AboutViewModel());
                 var window = new MainWindow(shell);
 
                 window.Show();
@@ -69,8 +77,8 @@ public class MainWindowSmokeTests
 
                 var contentControl = EnumerateVisualTree(window)
                     .OfType<ContentControl>()
-                    .Single(control => ReferenceEquals(control.Content, shell.CurrentPage));
-                contentControl.Content.Should().BeSameAs(shell.CurrentPage);
+                    .Single(control => ReferenceEquals(control.Content, shell.CurrentContentViewModel));
+                contentControl.Content.Should().BeSameAs(shell.CurrentContentViewModel);
                 contentControl.ActualWidth.Should().BeGreaterThan(0);
                 contentControl.ActualHeight.Should().BeGreaterThan(0);
 
@@ -81,7 +89,10 @@ public class MainWindowSmokeTests
                     .ToArray();
 
                 renderedTexts.Should().Contain("数据库查看器");
-                renderedTexts.Should().Contain("查找已保存的数据库");
+                renderedTexts.Should().Contain("首页");
+                renderedTexts.Should().Contain("最近使用");
+                renderedTexts.Should().Contain("数据库工作台");
+                renderedTexts.Should().Contain("快速打开");
 
                 window.Close();
                 application.Shutdown();

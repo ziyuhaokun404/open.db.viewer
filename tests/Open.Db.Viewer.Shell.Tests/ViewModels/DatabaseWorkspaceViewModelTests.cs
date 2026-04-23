@@ -156,6 +156,23 @@ public class DatabaseWorkspaceViewModelTests
         viewModel.ColumnCountSummary.Should().Be("2 列");
     }
 
+    [Fact]
+    public void Workspace_ShouldExposeEmptyState_WhenNoDatabaseIsOpen()
+    {
+        var viewModel = new DatabaseWorkspaceViewModel(
+            new ObjectExplorerViewModel(),
+            new SchemaViewModel(),
+            new DataViewModel(),
+            new QueryViewModel(
+                new QueryService(new NoopSqliteQueryExecutor()),
+                new ExportService(new NoopCsvExportWriter()),
+                new FakeFileDialogService()));
+
+        viewModel.HasOpenDatabase.Should().BeFalse();
+        viewModel.EmptyStateTitle.Should().Be("尚未打开数据库");
+        viewModel.EmptyStateDescription.Should().Contain("打开一个 SQLite 数据库");
+    }
+
     private sealed class FakeFileDialogService : Open.Db.Viewer.Shell.Services.IFileDialogService
     {
         public string? PickSqliteFile() => null;

@@ -6,28 +6,46 @@
                  xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
                  xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
                  xmlns:local="clr-namespace:Open.Db.Viewer.Shell.Views"
-                 xmlns:vm="clr-namespace:Open.Db.Viewer.Shell.ViewModels"
-                 xmlns:pages="clr-namespace:Open.Db.Viewer.Shell.Views.Pages"
+                 xmlns:navigation="clr-namespace:Open.Db.Viewer.Shell.Views.Navigation"
+                 xmlns:workspace="clr-namespace:Open.Db.Viewer.Shell.Views.Workspace"
+                 xmlns:shell="clr-namespace:Open.Db.Viewer.Shell.ViewModels.Shell"
                  mc:Ignorable="d"
                  Title="数据库查看器"
                  Icon="{svgc:SvgImage Source=/Assets/Icons/open-db-viewer-icon.svg, AppName=Open.Db.Viewer.Shell}"
-                 Height="900"
-                 Width="1400"
+                 Height="920"
+                 Width="1440"
                  ExtendsContentIntoTitleBar="True"
                  WindowBackdropType="Mica"
                  WindowStartupLocation="CenterScreen"
                  ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
                  ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}">
     <ui:FluentWindow.Resources>
-        <DataTemplate x:Key="HomeTemplate">
-            <pages:HomePage />
+        <DataTemplate x:Key="HomeLandingTemplate">
+            <navigation:HomeLandingPage />
+        </DataTemplate>
+        <DataTemplate x:Key="RecentTemplate">
+            <navigation:RecentDatabasesPage />
+        </DataTemplate>
+        <DataTemplate x:Key="PinnedTemplate">
+            <navigation:PinnedDatabasesPage />
+        </DataTemplate>
+        <DataTemplate x:Key="SettingsTemplate">
+            <navigation:SettingsPage />
+        </DataTemplate>
+        <DataTemplate x:Key="AboutTemplate">
+            <navigation:AboutPage />
         </DataTemplate>
         <DataTemplate x:Key="WorkspaceTemplate">
-            <pages:DatabaseWorkspacePage />
+            <workspace:WorkspaceHostPage />
         </DataTemplate>
         <local:PageTemplateSelector x:Key="PageTemplateSelector"
-                                    HomeTemplate="{StaticResource HomeTemplate}"
+                                    HomeTemplate="{StaticResource HomeLandingTemplate}"
+                                    RecentTemplate="{StaticResource RecentTemplate}"
+                                    PinnedTemplate="{StaticResource PinnedTemplate}"
+                                    SettingsTemplate="{StaticResource SettingsTemplate}"
+                                    AboutTemplate="{StaticResource AboutTemplate}"
                                     WorkspaceTemplate="{StaticResource WorkspaceTemplate}" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
         <Style x:Key="TitleBarActionButtonStyle"
                BasedOn="{StaticResource {x:Type ui:Button}}"
@@ -57,6 +75,21 @@
                TargetType="{x:Type ui:TitleBarButton}">
             <Setter Property="Width" Value="40" />
             <Setter Property="Height" Value="40" />
+        </Style>
+
+        <Style x:Key="NavigationButtonStyle"
+               TargetType="ui:Button"
+               BasedOn="{StaticResource {x:Type ui:Button}}">
+            <Setter Property="Height" Value="46" />
+            <Setter Property="Margin" Value="0,0,0,8" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Appearance" Value="Transparent" />
+            <Setter Property="Padding" Value="16,0" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                    <Setter Property="Appearance" Value="Secondary" />
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
     </ui:FluentWindow.Resources>
 
@@ -98,12 +131,77 @@
             </ui:TitleBar.TrailingContent>
         </ui:TitleBar>
 
-        <Border Grid.Row="1"
-                Margin="12,0,12,12"
-                CornerRadius="20"
-                Background="{DynamicResource ApplicationBackgroundBrush}">
-            <ContentControl Content="{Binding CurrentPage}"
-                            ContentTemplateSelector="{StaticResource PageTemplateSelector}" />
-        </Border>
+        <Grid Grid.Row="1"
+              Margin="12,0,12,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Padding="12"
+                    CornerRadius="20"
+                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                    BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
+                    BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="16" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel>
+                        <TextBlock FontSize="18"
+                                   FontWeight="SemiBold"
+                                   Text="数据库查看器" />
+                        <TextBlock Margin="0,4,0,0"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                   Text="open.db.viewer" />
+                    </StackPanel>
+
+                    <ui:Button Grid.Row="2"
+                               Height="44"
+                               Appearance="Primary"
+                               Content="打开数据库"
+                               Command="{Binding OpenDatabaseCommand}"
+                               Icon="{ui:SymbolIcon FolderOpen24}" />
+
+                    <ItemsControl Grid.Row="4"
+                                  ItemsSource="{Binding NavigationItems}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <ui:Button Style="{StaticResource NavigationButtonStyle}"
+                                           Content="{Binding Title}"
+                                           Command="{Binding DataContext.NavigateToSectionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                           CommandParameter="{Binding Section}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <StackPanel Grid.Row="5"
+                                Margin="0,16,0,0">
+                        <ui:Button Style="{StaticResource NavigationButtonStyle}"
+                                   Content="设置"
+                                   Command="{Binding NavigateToSectionCommand}"
+                                   CommandParameter="{x:Static shell:ShellSection.Settings}" />
+                        <ui:Button Style="{StaticResource NavigationButtonStyle}"
+                                   Content="关于"
+                                   Command="{Binding NavigateToSectionCommand}"
+                                   CommandParameter="{x:Static shell:ShellSection.About}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="2"
+                    CornerRadius="20"
+                    Background="{DynamicResource ApplicationBackgroundBrush}">
+                <ContentControl Content="{Binding CurrentContentViewModel}"
+                                ContentTemplateSelector="{StaticResource PageTemplateSelector}" />
+            </Border>
+        </Grid>
     </Grid>
 </ui:FluentWindow>

@@ -41,6 +41,12 @@ public partial class DatabaseWorkspaceViewModel : ObservableObject
 
     public QueryViewModel Query { get; }
 
+    public bool HasOpenDatabase => !string.IsNullOrWhiteSpace(DatabasePath);
+
+    public string EmptyStateTitle => "尚未打开数据库";
+
+    public string EmptyStateDescription => "从左侧导航或首页动作中打开一个 SQLite 数据库。";
+
     public bool HasTableSelection =>
         ObjectExplorer.SelectedNode is not null &&
         string.Equals(ObjectExplorer.SelectedNode.Kind, "table", StringComparison.OrdinalIgnoreCase);
@@ -70,6 +76,9 @@ public partial class DatabaseWorkspaceViewModel : ObservableObject
             StatusMessage = "请选择一个表开始浏览。";
         }
 
+        OnPropertyChanged(nameof(HasOpenDatabase));
+        OnPropertyChanged(nameof(EmptyStateTitle));
+        OnPropertyChanged(nameof(EmptyStateDescription));
         NotifyWorkspaceStateChanged();
     }
 
@@ -83,6 +92,7 @@ public partial class DatabaseWorkspaceViewModel : ObservableObject
             Data.Clear();
             Query.Configure(DatabasePath);
             StatusMessage = "请选择一个表开始浏览。";
+            OnPropertyChanged(nameof(HasOpenDatabase));
             NotifyWorkspaceStateChanged();
             return;
         }
@@ -152,6 +162,7 @@ public partial class DatabaseWorkspaceViewModel : ObservableObject
 
     private void NotifyWorkspaceStateChanged()
     {
+        OnPropertyChanged(nameof(HasOpenDatabase));
         OnPropertyChanged(nameof(HasTableSelection));
         OnPropertyChanged(nameof(SelectedObjectTitle));
         OnPropertyChanged(nameof(SelectedObjectSubtitle));

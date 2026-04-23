@@ -2,6 +2,8 @@ using Wpf.Ui.Controls;
 using System.Windows;
 using System.Windows.Controls;
 using Open.Db.Viewer.Shell.ViewModels;
+using Open.Db.Viewer.Shell.ViewModels.Navigation;
+using Open.Db.Viewer.Shell.ViewModels.Workspace;
 using Wpf.Ui.Appearance;
 
 namespace Open.Db.Viewer.Shell.Views;
@@ -55,14 +57,26 @@ public sealed class PageTemplateSelector : DataTemplateSelector
 {
     public DataTemplate? HomeTemplate { get; set; }
 
+    public DataTemplate? RecentTemplate { get; set; }
+
+    public DataTemplate? PinnedTemplate { get; set; }
+
+    public DataTemplate? SettingsTemplate { get; set; }
+
+    public DataTemplate? AboutTemplate { get; set; }
+
     public DataTemplate? WorkspaceTemplate { get; set; }
 
     public override DataTemplate? SelectTemplate(object item, DependencyObject container)
     {
         return item switch
         {
-            HomeViewModel => HomeTemplate,
-            DatabaseWorkspaceViewModel => WorkspaceTemplate,
+            HomeLandingViewModel => HomeTemplate,
+            RecentDatabasesViewModel => RecentTemplate,
+            PinnedDatabasesViewModel => PinnedTemplate,
+            SettingsViewModel => SettingsTemplate,
+            AboutViewModel => AboutTemplate,
+            WorkspaceHostViewModel => WorkspaceTemplate,
             _ => base.SelectTemplate(item, container)
         };
     }

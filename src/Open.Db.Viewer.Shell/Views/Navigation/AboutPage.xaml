@@ -1,0 +1,23 @@
+<UserControl x:Class="Open.Db.Viewer.Shell.Views.Navigation.AboutPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="24">
+        <Border Padding="24"
+                CornerRadius="20"
+                Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
+                BorderThickness="1">
+            <StackPanel>
+                <TextBlock FontSize="28"
+                           FontWeight="SemiBold"
+                           Text="关于" />
+                <TextBlock Margin="0,12,0,0"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                           Text="数据库查看器" />
+                <TextBlock Margin="0,4,0,0"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                           Text="open.db.viewer" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

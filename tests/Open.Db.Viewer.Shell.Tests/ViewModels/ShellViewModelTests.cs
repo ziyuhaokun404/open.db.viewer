@@ -4,66 +4,116 @@ using Open.Db.Viewer.Application.Services;
 using Open.Db.Viewer.Domain.Models;
 using Open.Db.Viewer.Shell.Services;
 using Open.Db.Viewer.Shell.ViewModels;
+using Open.Db.Viewer.Shell.ViewModels.Navigation;
+using Open.Db.Viewer.Shell.ViewModels.Shell;
 
 namespace Open.Db.Viewer.Shell.Tests.ViewModels;
 
 public class ShellViewModelTests
 {
     [Fact]
-    public async Task OpenDatabaseAsync_ShouldNavigateToWorkspaceAfterSuccessfulOpen()
+    public void Constructor_ShouldDefaultToHomeSection()
     {
-        var repository = new InMemoryDatabaseEntryRepository();
-        var databaseEntryService = new DatabaseEntryService(repository, _ => Task.FromResult(true));
-        var workspace = new FakeDatabaseWorkspaceViewModel();
-        var home = new HomeViewModel(databaseEntryService, new FakeFileDialogService(@"C:\data\demo.db"));
-        var shell = new ShellViewModel(home, workspace);
+        var shell = CreateShell();
 
-        await home.OpenDatabaseAsync();
+        shell.CurrentSection.Should().Be(ShellSection.Home);
+        shell.NavigationItems.Select(item => item.Section)
+            .Should().ContainInOrder(
+                ShellSection.Home,
+                ShellSection.Recent,
+                ShellSection.Pinned,
+                ShellSection.Workspace);
+    }
 
-        shell.CurrentPage.Should().BeSameAs(workspace);
-        workspace.LoadedPath.Should().Be(@"C:\data\demo.db");
+    [Fact]
+    public void NavigateToSection_ShouldSwitchCurrentSection()
+    {
+        var shell = CreateShell();
+
+        shell.NavigateToSection(ShellSection.Pinned);
+
+        shell.CurrentSection.Should().Be(ShellSection.Pinned);
+        shell.NavigationItems.Single(item => item.Section == ShellSection.Pinned).IsSelected.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task OpenDatabaseAsync_ShouldNavigateToWorkspaceAndCaptureSession()
+    {
+        var shell = CreateShell(@"C:\data\demo.db");
+
+        await shell.OpenDatabaseAsync();
+
+        shell.CurrentSection.Should().Be(ShellSection.Workspace);
+        shell.CurrentDatabasePath.Should().Be(@"C:\data\demo.db");
+        shell.CurrentContentViewModel.Should().BeSameAs(shell.WorkspaceHost);
     }
 
     [Fact]
     public async Task OpenDatabaseAsync_ShouldStayOnHomeWhenOpenFails()
     {
-        var repository = new InMemoryDatabaseEntryRepository();
-        var databaseEntryService = new DatabaseEntryService(repository, _ => Task.FromResult(false));
-        var workspace = new FakeDatabaseWorkspaceViewModel();
-        var home = new HomeViewModel(databaseEntryService, new FakeFileDialogService(@"C:\data\missing.db"));
-        var shell = new ShellViewModel(home, workspace);
+        var shell = CreateShell(@"C:\data\missing.db", databaseExists: false);
 
-        await home.OpenDatabaseAsync();
+        await shell.OpenDatabaseAsync();
 
-        shell.CurrentPage.Should().BeSameAs(home);
-        workspace.LoadedPath.Should().BeNull();
+        shell.CurrentSection.Should().Be(ShellSection.Home);
+        shell.CurrentDatabasePath.Should().BeEmpty();
+        shell.CurrentContentViewModel.Should().BeSameAs(shell.HomeLanding);
     }
 
     [Fact]
-    public async Task ReturnHomeAsync_ShouldNavigateBackToHomePage()
+    public async Task ReturnHomeAsync_ShouldNavigateBackToHomeSection()
     {
-        var repository = new InMemoryDatabaseEntryRepository();
-        var databaseEntryService = new DatabaseEntryService(repository, _ => Task.FromResult(true));
-        var workspace = new FakeDatabaseWorkspaceViewModel();
-        var home = new HomeViewModel(databaseEntryService, new FakeFileDialogService(@"C:\data\demo.db"));
-        var shell = new ShellViewModel(home, workspace);
+        var shell = CreateShell(@"C:\data\demo.db");
 
-        await home.OpenDatabaseAsync();
-        await workspace.ReturnHomeAsync();
+        await shell.OpenDatabaseAsync();
+        await shell.Workspace.ReturnHomeAsync();
 
-        shell.CurrentPage.Should().BeSameAs(home);
+        shell.CurrentSection.Should().Be(ShellSection.Home);
+        shell.CurrentContentViewModel.Should().BeSameAs(shell.HomeLanding);
     }
 
-    private sealed class FakeFileDialogService : IFileDialogService
+    [Fact]
+    public async Task NavigateToSection_ShouldLoadRecentPageOnDemand()
     {
-        private readonly string? _filePath;
+        var shell = CreateShell();
 
-        public FakeFileDialogService(string? filePath)
-        {
-            _filePath = filePath;
-        }
+        shell.NavigateToSection(ShellSection.Recent);
+        await shell.LoadCurrentSectionAsync();
 
-        public string? PickSqliteFile() => _filePath;
+        shell.RecentPage.FilteredEntries.Should().NotBeNull();
+        shell.CurrentContentViewModel.Should().BeSameAs(shell.RecentPage);
+    }
+
+    [Fact]
+    public async Task OpenDatabaseAsync_ShouldRefreshHomeSummariesAfterSuccess()
+    {
+        var shell = CreateShell(@"C:\data\demo.db");
+
+        await shell.OpenDatabaseAsync();
+
+        shell.HomeLanding.QuickOpenEntry.Should().NotBeNull();
+        shell.RecentPage.Entries.Should().ContainSingle(entry => entry.FilePath == @"C:\data\demo.db");
+    }
+
+    private static ShellViewModel CreateShell(string? filePath = null, bool databaseExists = true)
+    {
+        var repository = new InMemoryDatabaseEntryRepository();
+        var databaseEntryService = new DatabaseEntryService(repository, _ => Task.FromResult(databaseExists));
+        var workspace = new FakeDatabaseWorkspaceViewModel();
+        var home = new HomeViewModel(databaseEntryService, new FakeFileDialogService(filePath));
+        return new ShellViewModel(
+            home,
+            workspace,
+            new HomeLandingViewModel(databaseEntryService, new FakeFileDialogService(filePath)),
+            new RecentDatabasesViewModel(databaseEntryService),
+            new PinnedDatabasesViewModel(databaseEntryService),
+            new SettingsViewModel(),
+            new AboutViewModel());
+    }
+
+    private sealed class FakeFileDialogService(string? filePath) : IFileDialogService
+    {
+        public string? PickSqliteFile() => filePath;
 
         public string? PickCsvSavePath(string suggestedFileName) => null;
     }
