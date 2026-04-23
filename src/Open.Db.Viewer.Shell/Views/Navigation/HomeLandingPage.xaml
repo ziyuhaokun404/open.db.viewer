@@ -31,7 +31,7 @@
             <Setter Property="BorderBrush" Value="{StaticResource PageCardBorderBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="26" />
-            <Setter Property="Padding" Value="22" />
+            <Setter Property="Padding" Value="18" />
             <Setter Property="Effect" Value="{StaticResource CardShadowEffect}" />
         </Style>
 
@@ -64,12 +64,11 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Margin="0,2,24,0">
-                    <Border Width="78"
+                    <Border Width="64"
                             Padding="10,5"
                             HorizontalAlignment="Left"
-                            Background="{StaticResource PageAccentSoftBrush}"
-                            BorderBrush="{StaticResource PageAccentLineBrush}"
-                            BorderThickness="1"
+                            Background="#DBE9FF"
+                            BorderThickness="0"
                             CornerRadius="999">
                         <TextBlock HorizontalAlignment="Center"
                                    FontSize="11"
@@ -78,8 +77,8 @@
                                    Text="HOME" />
                     </Border>
 
-                    <TextBlock Margin="0,18,0,0"
-                               FontSize="34"
+                    <TextBlock Margin="0,16,0,0"
+                               FontSize="33"
                                FontWeight="SemiBold"
                                Text="更快打开数据库，&#x0a;更专注查看数据" />
                     <TextBlock Margin="0,14,0,0"
@@ -88,7 +87,7 @@
                                LineHeight="20"
                                Text="浏览 SQLite 文件、查看表结构、快速运行 SQL，&#x0a;并把常用数据库固定在首页，像工作台一样持续使用" />
 
-                    <StackPanel Margin="0,24,0,0"
+                    <StackPanel Margin="0,22,0,0"
                                 Orientation="Horizontal">
                         <ui:Button Width="170"
                                    Height="48"
@@ -106,7 +105,9 @@
                                    Icon="{ui:SymbolIcon Flash24}" />
                     </StackPanel>
 
-                    <Border Margin="0,26,0,0"
+                    <Border Width="586"
+                            Margin="0,22,0,0"
+                            HorizontalAlignment="Left"
                             Padding="14,12"
                             Background="{StaticResource PageShellBrush}"
                             BorderBrush="{StaticResource PageCardBorderBrush}"
@@ -283,15 +284,15 @@
 
                     <Grid Width="114"
                           Height="140"
-                          Margin="0,0,22,54"
+                          Margin="0,0,18,50"
                           HorizontalAlignment="Right"
                           VerticalAlignment="Bottom"
                           Effect="{StaticResource FloatingShadowEffect}">
                         <Ellipse Width="114"
                                  Height="30"
                                  VerticalAlignment="Top"
-                                 Fill="#BBD2FF"
-                                 Stroke="#8CB2FF"
+                                 Fill="#A8C5FF"
+                                 Stroke="#729FFF"
                                  StrokeThickness="1" />
                         <Border Width="112"
                                 Height="84"
@@ -300,25 +301,34 @@
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0"
                                                      EndPoint="1,0">
-                                    <GradientStop Offset="0" Color="#CFE0FF" />
-                                    <GradientStop Offset="0.55" Color="#8BB0FF" />
-                                    <GradientStop Offset="1" Color="#6F99F8" />
+                                    <GradientStop Offset="0" Color="#91B6FF" />
+                                    <GradientStop Offset="0.18" Color="#F6FAFF" />
+                                    <GradientStop Offset="0.34" Color="#5A8FFF" />
+                                    <GradientStop Offset="0.68" Color="#2F66F0" />
+                                    <GradientStop Offset="1" Color="#7EA5FF" />
                                 </LinearGradientBrush>
                             </Border.Background>
                         </Border>
+                        <Border Width="12"
+                                Height="78"
+                                Margin="18,18,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                Background="#80FFFFFF"
+                                CornerRadius="6" />
                         <Ellipse Width="114"
                                  Height="30"
                                  Margin="0,54,0,0"
                                  VerticalAlignment="Top"
-                                 Fill="#9DC0FF"
-                                 Stroke="#7BA5FF"
+                                 Fill="#6B99FA"
+                                 Stroke="#4C7DF4"
                                  StrokeThickness="1" />
                         <Ellipse Width="114"
                                  Height="30"
                                  Margin="0,88,0,0"
                                  VerticalAlignment="Top"
-                                 Fill="#87AEFF"
-                                 Stroke="#6E9AF8"
+                                 Fill="#5E8CF1"
+                                 Stroke="#3E70E9"
                                  StrokeThickness="1" />
                     </Grid>
                 </Grid>
@@ -344,24 +354,24 @@
                         <ui:SymbolIcon Margin="0,2,10,0"
                                        Foreground="{StaticResource PageAccentBrush}"
                                        Symbol="Flash24" />
-                        <TextBlock FontSize="22"
+                        <TextBlock FontSize="18"
                                    FontWeight="SemiBold"
                                    Text="快速打开" />
-                        <TextBlock Margin="12,7,0,0"
+                        <TextBlock Margin="10,5,0,0"
                                    Foreground="{StaticResource PageMutedBrush}"
-                                   FontSize="12"
+                                   FontSize="11"
                                    Text="直接回到最近一次使用的数据库，继续你的上一次工作。" />
                     </StackPanel>
 
-                    <ui:Button Grid.Column="1"
-                               VerticalAlignment="Top"
-                               Style="{StaticResource InlineLinkButtonStyle}">
+                        <ui:Button Grid.Column="1"
+                                   VerticalAlignment="Top"
+                                   Style="{StaticResource InlineLinkButtonStyle}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock FontWeight="SemiBold"
                                        Text="查看全部" />
                             <ui:SymbolIcon Margin="6,2,0,0"
                                            Foreground="{StaticResource PageAccentBrush}"
-                                           Symbol="ArrowRight24" />
+                                           Symbol="ChevronRight24" />
                         </StackPanel>
                         <ui:Button.Command>
                             <Binding Path="DataContext.NavigateToSectionCommand"
@@ -380,7 +390,7 @@
                         <ColumnDefinition Width="1.25*" />
                     </Grid.ColumnDefinitions>
 
-                    <Border Padding="14"
+                    <Border Padding="10"
                             Background="{StaticResource PageShellBrush}"
                             BorderBrush="{StaticResource PageCardBorderBrush}"
                             BorderThickness="1"
@@ -392,10 +402,10 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <Border Width="52"
-                                    Height="52"
+                            <Border Width="48"
+                                    Height="48"
                                     Background="#DCEAFF"
-                                    CornerRadius="26">
+                                    CornerRadius="24">
                                 <ui:SymbolIcon HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
                                                Foreground="{StaticResource PageAccentBrush}"
@@ -403,7 +413,7 @@
                             </Border>
 
                             <StackPanel Grid.Column="1"
-                                        Margin="14,0,0,0"
+                                        Margin="12,0,0,0"
                                         VerticalAlignment="Center">
                                 <TextBlock FontSize="17"
                                            FontWeight="SemiBold"
@@ -415,8 +425,8 @@
                             </StackPanel>
 
                             <ui:Button Grid.Column="2"
-                                       Width="120"
-                                       Height="42"
+                                       Width="110"
+                                       Height="38"
                                        VerticalAlignment="Center"
                                        Command="{Binding OpenQuickOpenCommand}"
                                        Content="立即打开"
@@ -425,7 +435,7 @@
                     </Border>
 
                     <Border Grid.Column="2"
-                            Padding="14"
+                            Padding="10"
                             Background="{StaticResource PageShellBrush}"
                             BorderBrush="{StaticResource PageCardBorderBrush}"
                             BorderThickness="1"
@@ -462,7 +472,7 @@
                                            Margin="12,0,0,0"
                                            VerticalAlignment="Center"
                                            Foreground="{StaticResource PageMutedBrush}"
-                                           Symbol="MoreHorizontal24" />
+                                           Symbol="MoreVertical24" />
                         </Grid>
                     </Border>
                 </Grid>
@@ -498,9 +508,9 @@
                             <ui:SymbolIcon Margin="0,2,10,0"
                                            Foreground="{StaticResource PageAccentBrush}"
                                            Symbol="Pin24" />
-                            <TextBlock FontSize="22"
-                                       FontWeight="SemiBold"
-                                       Text="已固定的数据库" />
+                        <TextBlock FontSize="18"
+                                   FontWeight="SemiBold"
+                                   Text="已固定的数据库" />
                         </StackPanel>
 
                         <ui:Button Grid.Column="1"
@@ -511,7 +521,7 @@
                                            Text="查看全部" />
                                 <ui:SymbolIcon Margin="6,2,0,0"
                                                Foreground="{StaticResource PageAccentBrush}"
-                                               Symbol="ArrowRight24" />
+                                               Symbol="ChevronRight24" />
                             </StackPanel>
                             <ui:Button.Command>
                                 <Binding Path="DataContext.NavigateToSectionCommand"
@@ -531,8 +541,8 @@
                                   ItemsSource="{Binding PinnedSummary}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Margin="0,0,0,8"
-                                        Padding="14"
+                                <Border Margin="0,0,0,4"
+                                        Padding="10"
                                         Background="{StaticResource PageShellBrush}"
                                         BorderBrush="{StaticResource PageCardBorderBrush}"
                                         BorderThickness="1"
@@ -545,17 +555,17 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
-                                        <Border Width="44"
-                                                Height="44"
-                                                Background="#DCEAFF"
-                                                CornerRadius="22">
+                                            <Border Width="42"
+                                                    Height="42"
+                                                    Background="#DCEAFF"
+                                                    CornerRadius="21">
                                             <ui:SymbolIcon HorizontalAlignment="Center"
                                                            VerticalAlignment="Center"
                                                            Foreground="{StaticResource PageAccentBrush}"
                                                            Symbol="Database24" />
                                         </Border>
                                         <StackPanel Grid.Column="1"
-                                                    Margin="14,0,0,0"
+                                                    Margin="12,0,0,0"
                                                     VerticalAlignment="Center">
                                             <TextBlock FontSize="16"
                                                        FontWeight="SemiBold"
@@ -573,7 +583,7 @@
                                         <ui:SymbolIcon Grid.Column="3"
                                                        VerticalAlignment="Center"
                                                        Foreground="{StaticResource PageMutedBrush}"
-                                                       Symbol="MoreHorizontal24" />
+                                                       Symbol="MoreVertical24" />
                                     </Grid>
                                 </Border>
                             </DataTemplate>
@@ -601,9 +611,9 @@
                             <ui:SymbolIcon Margin="0,2,10,0"
                                            Foreground="{StaticResource PageAccentBrush}"
                                            Symbol="Clock24" />
-                            <TextBlock FontSize="22"
-                                       FontWeight="SemiBold"
-                                       Text="最近使用" />
+                        <TextBlock FontSize="18"
+                                   FontWeight="SemiBold"
+                                   Text="最近使用" />
                         </StackPanel>
 
                         <ui:Button Grid.Column="1"
@@ -614,7 +624,7 @@
                                            Text="查看全部" />
                                 <ui:SymbolIcon Margin="6,2,0,0"
                                                Foreground="{StaticResource PageAccentBrush}"
-                                               Symbol="ArrowRight24" />
+                                               Symbol="ChevronRight24" />
                             </StackPanel>
                             <ui:Button.Command>
                                 <Binding Path="DataContext.NavigateToSectionCommand"
@@ -634,8 +644,8 @@
                                   ItemsSource="{Binding RecentSummary}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Margin="0,0,0,8"
-                                        Padding="14"
+                                <Border Margin="0,0,0,4"
+                                        Padding="10"
                                         Background="{StaticResource PageShellBrush}"
                                         BorderBrush="{StaticResource PageCardBorderBrush}"
                                         BorderThickness="1"
@@ -647,17 +657,17 @@
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
-                                        <Border Width="44"
-                                                Height="44"
-                                                Background="#DCEAFF"
-                                                CornerRadius="22">
+                                            <Border Width="42"
+                                                    Height="42"
+                                                    Background="#DCEAFF"
+                                                    CornerRadius="21">
                                             <ui:SymbolIcon HorizontalAlignment="Center"
                                                            VerticalAlignment="Center"
                                                            Foreground="{StaticResource PageAccentBrush}"
                                                            Symbol="Clock24" />
                                         </Border>
                                         <StackPanel Grid.Column="1"
-                                                    Margin="14,0,0,0"
+                                                    Margin="12,0,0,0"
                                                     VerticalAlignment="Center">
                                             <TextBlock FontSize="16"
                                                        FontWeight="SemiBold"
@@ -678,7 +688,7 @@
                                         <ui:SymbolIcon Grid.Column="2"
                                                        VerticalAlignment="Center"
                                                        Foreground="{StaticResource PageMutedBrush}"
-                                                       Symbol="MoreHorizontal24" />
+                                                       Symbol="MoreVertical24" />
                                     </Grid>
                                 </Border>
                             </DataTemplate>

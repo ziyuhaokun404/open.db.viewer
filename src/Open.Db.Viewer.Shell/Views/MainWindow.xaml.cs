@@ -48,8 +48,8 @@ public partial class MainWindow : FluentWindow
         }
 
         var isDarkTheme = applicationTheme == ApplicationTheme.Dark;
-        ThemeToggleIcon.Symbol = isDarkTheme ? SymbolRegular.WeatherSunny24 : SymbolRegular.WeatherMoon24;
-        ThemeToggleButton.ToolTip = isDarkTheme ? "切换到浅色模式" : "切换到深色模式";
+        ThemeToggleIcon.Symbol = isDarkTheme ? SymbolRegular.WeatherMoon24 : SymbolRegular.WeatherSunny24;
+        ThemeToggleButton.ToolTip = isDarkTheme ? "当前为深色模式" : "当前为浅色模式";
     }
 }
 

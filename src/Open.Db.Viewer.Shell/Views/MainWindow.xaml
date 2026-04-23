@@ -61,21 +61,23 @@
         <Style x:Key="TitleBarActionButtonStyle"
                BasedOn="{StaticResource {x:Type ui:Button}}"
                TargetType="{x:Type ui:Button}">
-            <Setter Property="Width" Value="40" />
-            <Setter Property="Height" Value="40" />
-            <Setter Property="Margin" Value="0" />
+            <Setter Property="Width" Value="44" />
+            <Setter Property="Height" Value="44" />
+            <Setter Property="Margin" Value="0,0,4,0" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="Appearance" Value="Transparent" />
+            <Setter Property="Background" Value="#FFFFFF" />
+            <Setter Property="BorderBrush" Value="{StaticResource ShellRailBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Foreground" Value="{StaticResource ShellMutedTextBrush}" />
             <Setter Property="PressedForeground" Value="{StaticResource ShellMutedTextBrush}" />
             <Setter Property="MouseOverBackground" Value="{StaticResource ShellHoverBackgroundBrush}" />
-            <Setter Property="MouseOverBorderBrush" Value="Transparent" />
+            <Setter Property="MouseOverBorderBrush" Value="{StaticResource ShellRailBorderBrush}" />
             <Setter Property="PressedBackground" Value="{StaticResource ShellHoverBackgroundBrush}" />
-            <Setter Property="PressedBorderBrush" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="CornerRadius" Value="14" />
+            <Setter Property="PressedBorderBrush" Value="{StaticResource ShellRailBorderBrush}" />
+            <Setter Property="CornerRadius" Value="22" />
             <Setter Property="Focusable" Value="False" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         </Style>
 
         <Style BasedOn="{StaticResource {x:Type ui:TitleBarButton}}"
@@ -87,22 +89,25 @@
         <Style x:Key="NavigationButtonStyle"
                TargetType="ui:Button"
                BasedOn="{StaticResource {x:Type ui:Button}}">
-            <Setter Property="Height" Value="50" />
-            <Setter Property="Margin" Value="0,0,0,10" />
+            <Setter Property="Height" Value="48" />
+            <Setter Property="Margin" Value="0,0,0,8" />
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
             <Setter Property="Appearance" Value="Transparent" />
             <Setter Property="Padding" Value="16,0" />
             <Setter Property="CornerRadius" Value="16" />
-            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderThickness" Value="0" />
             <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
             <Setter Property="MouseOverBackground" Value="{StaticResource ShellHoverBackgroundBrush}" />
             <Setter Property="MouseOverBorderBrush" Value="Transparent" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsSelected}" Value="True">
                     <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="{StaticResource ShellAccentBrush}" />
+                    <Setter Property="BorderThickness" Value="3,0,0,0" />
                     <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
                 </DataTrigger>
             </Style.Triggers>
@@ -115,7 +120,8 @@
                 <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
                              Value="{x:Static shell:ShellSection.Home}">
                     <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="{StaticResource ShellAccentBrush}" />
+                    <Setter Property="BorderThickness" Value="3,0,0,0" />
                     <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
                 </DataTrigger>
             </Style.Triggers>
@@ -128,7 +134,8 @@
                 <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
                              Value="{x:Static shell:ShellSection.Recent}">
                     <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="{StaticResource ShellAccentBrush}" />
+                    <Setter Property="BorderThickness" Value="3,0,0,0" />
                     <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
                 </DataTrigger>
             </Style.Triggers>
@@ -141,7 +148,8 @@
                 <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
                              Value="{x:Static shell:ShellSection.Pinned}">
                     <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="{StaticResource ShellAccentBrush}" />
+                    <Setter Property="BorderThickness" Value="3,0,0,0" />
                     <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
                 </DataTrigger>
             </Style.Triggers>
@@ -154,7 +162,8 @@
                 <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
                              Value="{x:Static shell:ShellSection.Workspace}">
                     <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="{StaticResource ShellAccentBrush}" />
+                    <Setter Property="BorderThickness" Value="3,0,0,0" />
                     <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
                 </DataTrigger>
             </Style.Triggers>
@@ -167,7 +176,8 @@
                 <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
                              Value="{x:Static shell:ShellSection.Settings}">
                     <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="{StaticResource ShellAccentBrush}" />
+                    <Setter Property="BorderThickness" Value="3,0,0,0" />
                     <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
                 </DataTrigger>
             </Style.Triggers>
@@ -180,7 +190,8 @@
                 <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
                              Value="{x:Static shell:ShellSection.About}">
                     <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="{StaticResource ShellAccentBrush}" />
+                    <Setter Property="BorderThickness" Value="3,0,0,0" />
                     <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
                 </DataTrigger>
             </Style.Triggers>
@@ -235,8 +246,8 @@
         <Grid Grid.Row="1"
               Margin="16,12,16,16">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="236" />
-                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="266" />
+                <ColumnDefinition Width="18" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
@@ -290,8 +301,8 @@
                     </Border>
 
                     <ui:Button Grid.Row="2"
-                               Height="54"
-                               Padding="16,0"
+                               Height="56"
+                               Padding="18,0"
                                Appearance="Primary"
                                BorderThickness="0"
                                Command="{Binding OpenDatabaseCommand}"
@@ -300,17 +311,17 @@
                                HorizontalContentAlignment="Stretch">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="28" />
+                                <ColumnDefinition Width="26" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
                             <ui:SymbolIcon VerticalAlignment="Center"
                                            Foreground="White"
-                                           Symbol="Database24" />
+                                           Symbol="Add24" />
                             <TextBlock Grid.Column="1"
                                        Margin="12,0,0,0"
                                        VerticalAlignment="Center"
-                                       FontSize="14"
+                                       FontSize="13"
                                        FontWeight="SemiBold"
                                        Foreground="White"
                                        Text="打开数据库 SQLite 文件" />
