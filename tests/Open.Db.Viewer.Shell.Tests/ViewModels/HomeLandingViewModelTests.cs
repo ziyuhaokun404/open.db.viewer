@@ -46,6 +46,41 @@ public class HomeLandingViewModelTests
         openedPath.Should().Be(@"C:\data\app.db");
     }
 
+    [Fact]
+    public async Task OpenEntryAsync_ShouldOpenPinnedOrRecentSummaryEntry_AndNotifyShell()
+    {
+        var repository = new InMemoryDatabaseEntryRepository();
+        var entry = new DatabaseEntry(Guid.NewGuid(), "app", @"C:\data\app.db", DateTimeOffset.UtcNow, false);
+        await repository.SaveRecentAsync(entry);
+        var service = new DatabaseEntryService(repository, _ => Task.FromResult(true));
+        var viewModel = new HomeLandingViewModel(service, new FakeFileDialogService(null));
+        string? openedPath = null;
+        viewModel.DatabaseOpenedAsync = (path, _) =>
+        {
+            openedPath = path;
+            return Task.CompletedTask;
+        };
+
+        await viewModel.OpenEntryAsync(entry);
+
+        openedPath.Should().Be(@"C:\data\app.db");
+    }
+
+    [Fact]
+    public async Task TogglePinAsync_ShouldRemovePinnedSummaryEntry_WhenEntryIsAlreadyPinned()
+    {
+        var repository = new InMemoryDatabaseEntryRepository();
+        var entry = new DatabaseEntry(Guid.NewGuid(), "app", @"C:\data\app.db", DateTimeOffset.UtcNow, true);
+        await repository.SavePinnedAsync(entry);
+        var service = new DatabaseEntryService(repository, _ => Task.FromResult(true));
+        var viewModel = new HomeLandingViewModel(service, new FakeFileDialogService(null));
+
+        await viewModel.LoadAsync();
+        await viewModel.TogglePinAsync(viewModel.PinnedSummary[0]);
+
+        viewModel.PinnedSummary.Should().BeEmpty();
+    }
+
     private sealed class FakeFileDialogService(string? filePath) : IFileDialogService
     {
         public string? PickSqliteFile() => filePath;

@@ -45,6 +45,19 @@
             <Setter Property="Padding" Value="0" />
             <Setter Property="HorizontalContentAlignment" Value="Left" />
         </Style>
+
+        <Style x:Key="MiniActionButtonStyle"
+               TargetType="ui:Button"
+               BasedOn="{StaticResource {x:Type ui:Button}}">
+            <Setter Property="Width" Value="34" />
+            <Setter Property="Height" Value="34" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="CornerRadius" Value="17" />
+            <Setter Property="Appearance" Value="Transparent" />
+            <Setter Property="Background" Value="#FFFFFF" />
+            <Setter Property="BorderBrush" Value="{StaticResource PageCardBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
     </UserControl.Resources>
 
     <Grid Margin="18,18,18,20">
@@ -64,30 +77,12 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Margin="0,2,24,0">
-                    <Border Width="64"
-                            Padding="10,5"
-                            HorizontalAlignment="Left"
-                            Background="#DBE9FF"
-                            BorderThickness="0"
-                            CornerRadius="999">
-                        <TextBlock HorizontalAlignment="Center"
-                                   FontSize="11"
-                                   FontWeight="SemiBold"
-                                   Foreground="{StaticResource PageAccentBrush}"
-                                   Text="HOME" />
-                    </Border>
-
-                    <TextBlock Margin="0,16,0,0"
+                    <TextBlock Margin="0,8,0,0"
                                FontSize="33"
                                FontWeight="SemiBold"
                                Text="更快打开数据库，&#x0a;更专注查看数据" />
-                    <TextBlock Margin="0,14,0,0"
-                               Foreground="{StaticResource PageMutedBrush}"
-                               FontSize="14"
-                               LineHeight="20"
-                               Text="浏览 SQLite 文件、查看表结构、快速运行 SQL，&#x0a;并把常用数据库固定在首页，像工作台一样持续使用" />
 
-                    <StackPanel Margin="0,22,0,0"
+                    <StackPanel Margin="0,24,0,0"
                                 Orientation="Horizontal">
                         <ui:Button Width="170"
                                    Height="48"
@@ -104,38 +99,6 @@
                                    CornerRadius="16"
                                    Icon="{ui:SymbolIcon Flash24}" />
                     </StackPanel>
-
-                    <Border Width="586"
-                            Margin="0,22,0,0"
-                            HorizontalAlignment="Left"
-                            Padding="14,12"
-                            Background="{StaticResource PageShellBrush}"
-                            BorderBrush="{StaticResource PageCardBorderBrush}"
-                            BorderThickness="1"
-                            CornerRadius="16">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-
-                            <Border Width="28"
-                                    Height="28"
-                                    Background="{StaticResource PageAccentSoftBrush}"
-                                    CornerRadius="14">
-                                <ui:SymbolIcon HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"
-                                               Foreground="{StaticResource PageAccentBrush}"
-                                               Symbol="Info24" />
-                            </Border>
-                            <TextBlock Grid.Column="1"
-                                       Margin="12,0,0,0"
-                                       VerticalAlignment="Center"
-                                       Foreground="{StaticResource PageMutedBrush}"
-                                       FontSize="13"
-                                       Text="小贴士：拖放 SQLite 文件到窗口可快速打开" />
-                        </Grid>
-                    </Border>
                 </StackPanel>
 
                 <Grid Grid.Column="1"
@@ -211,15 +174,11 @@
                             BorderThickness="1"
                             CornerRadius="18"
                             Effect="{StaticResource FloatingShadowEffect}">
-                        <StackPanel>
-                            <TextBlock FontSize="11"
-                                       Foreground="{StaticResource PageMutedBrush}"
-                                       Text="固定数据库" />
-                            <TextBlock Margin="0,6,0,0"
-                                       FontSize="20"
-                                       FontWeight="SemiBold"
-                                       Text="{Binding PinnedSummary.Count}" />
-                        </StackPanel>
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontSize="20"
+                                   FontWeight="SemiBold"
+                                   Text="{Binding PinnedSummary.Count}" />
                     </Border>
 
                     <Border Width="250"
@@ -251,14 +210,9 @@
                                     BorderBrush="#E0EBFF"
                                     BorderThickness="1"
                                     CornerRadius="18">
-                                <StackPanel>
-                                    <TextBlock FontSize="12"
-                                               FontWeight="SemiBold"
-                                               Text="chinook.db" />
-                                    <TextBlock Margin="0,6,0,0"
-                                               Foreground="{StaticResource PageMutedBrush}"
-                                               Text="SQLite" />
-                                </StackPanel>
+                                <TextBlock FontSize="12"
+                                           FontWeight="SemiBold"
+                                           Text="chinook.db" />
                             </Border>
 
                             <StackPanel Grid.Row="4">
@@ -357,10 +311,6 @@
                         <TextBlock FontSize="18"
                                    FontWeight="SemiBold"
                                    Text="快速打开" />
-                        <TextBlock Margin="10,5,0,0"
-                                   Foreground="{StaticResource PageMutedBrush}"
-                                   FontSize="11"
-                                   Text="直接回到最近一次使用的数据库，继续你的上一次工作。" />
                     </StackPanel>
 
                         <ui:Button Grid.Column="1"
@@ -418,18 +368,18 @@
                                 <TextBlock FontSize="17"
                                            FontWeight="SemiBold"
                                            Text="{Binding QuickOpenEntry.Name, FallbackValue=app, TargetNullValue=尚未打开数据库}" />
-                                <TextBlock Margin="0,6,0,0"
+                                <TextBlock Margin="0,4,0,0"
                                            Foreground="{StaticResource PageMutedBrush}"
-                                           Text="{Binding QuickOpenEntry.FilePath, FallbackValue=从左侧开始打开第一个 SQLite 文件, TargetNullValue=从左侧开始打开第一个 SQLite 文件}"
+                                           Text="{Binding QuickOpenEntry.FilePath, TargetNullValue=从左侧开始打开第一个 SQLite 文件}"
                                            TextTrimming="CharacterEllipsis" />
                             </StackPanel>
 
                             <ui:Button Grid.Column="2"
-                                       Width="110"
-                                       Height="38"
+                                       Width="106"
+                                       Height="40"
                                        VerticalAlignment="Center"
                                        Command="{Binding OpenQuickOpenCommand}"
-                                       Content="立即打开"
+                                       Content="打开"
                                        CornerRadius="14" />
                         </Grid>
                     </Border>
@@ -447,32 +397,24 @@
                             </Grid.ColumnDefinitions>
 
                             <StackPanel>
-                                <TextBlock FontSize="12"
-                                           Foreground="{StaticResource PageMutedBrush}"
-                                           Text="最近" />
-                                <TextBlock Margin="0,6,0,0"
-                                           FontWeight="SemiBold"
+                                <TextBlock FontWeight="SemiBold"
                                            Text="{Binding QuickOpenEntry.Name, FallbackValue=app, TargetNullValue=尚未打开数据库}" />
                                 <TextBlock Margin="0,4,0,0"
                                            Foreground="{StaticResource PageMutedBrush}"
-                                           Text="{Binding QuickOpenEntry.FilePath, FallbackValue=从左侧开始打开第一个 SQLite 文件, TargetNullValue=从左侧开始打开第一个 SQLite 文件}"
+                                           Text="{Binding QuickOpenEntry.FilePath, TargetNullValue=从左侧开始打开第一个 SQLite 文件}"
                                            TextTrimming="CharacterEllipsis" />
-                                <TextBlock Margin="0,6,0,0"
-                                           Foreground="{StaticResource PageMutedBrush}"
-                                           FontSize="12">
-                                    <TextBlock.Text>
-                                        <Binding Path="QuickOpenEntry.LastOpenedAt"
-                                                 StringFormat="今天 {0:HH:mm}"
-                                                 TargetNullValue="" />
-                                    </TextBlock.Text>
-                                </TextBlock>
                             </StackPanel>
 
-                            <ui:SymbolIcon Grid.Column="1"
-                                           Margin="12,0,0,0"
-                                           VerticalAlignment="Center"
-                                           Foreground="{StaticResource PageMutedBrush}"
-                                           Symbol="MoreVertical24" />
+                            <ui:Button Grid.Column="1"
+                                       Margin="12,0,0,0"
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource MiniActionButtonStyle}"
+                                       ToolTip="打开此数据库"
+                                       Command="{Binding OpenEntryCommand}"
+                                       CommandParameter="{Binding QuickOpenEntry}">
+                                <ui:SymbolIcon Foreground="{StaticResource PageMutedBrush}"
+                                               Symbol="MoreVertical24" />
+                            </ui:Button>
                         </Grid>
                     </Border>
                 </Grid>
@@ -533,10 +475,6 @@
                         </ui:Button>
                     </Grid>
 
-                    <TextBlock Grid.Row="1"
-                               Foreground="{StaticResource PageMutedBrush}"
-                               Text="把高频数据库放在这里，减少每次重新定位文件的成本。" />
-
                     <ItemsControl Grid.Row="2"
                                   ItemsSource="{Binding PinnedSummary}">
                         <ItemsControl.ItemTemplate>
@@ -575,15 +513,25 @@
                                                        Text="{Binding FilePath}"
                                                        TextTrimming="CharacterEllipsis" />
                                         </StackPanel>
-                                        <ui:SymbolIcon Grid.Column="2"
-                                                       Margin="12,0,10,0"
-                                                       VerticalAlignment="Center"
-                                                       Foreground="{StaticResource PageMutedBrush}"
-                                                       Symbol="Pin24" />
-                                        <ui:SymbolIcon Grid.Column="3"
-                                                       VerticalAlignment="Center"
-                                                       Foreground="{StaticResource PageMutedBrush}"
-                                                       Symbol="MoreVertical24" />
+                                        <ui:Button Grid.Column="2"
+                                                   Margin="12,0,8,0"
+                                                   VerticalAlignment="Center"
+                                                   Style="{StaticResource MiniActionButtonStyle}"
+                                                   ToolTip="取消固定"
+                                                   Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                   CommandParameter="{Binding}">
+                                            <ui:SymbolIcon Foreground="{StaticResource PageMutedBrush}"
+                                                           Symbol="Pin24" />
+                                        </ui:Button>
+                                        <ui:Button Grid.Column="3"
+                                                   VerticalAlignment="Center"
+                                                   Style="{StaticResource MiniActionButtonStyle}"
+                                                   ToolTip="打开此数据库"
+                                                   Command="{Binding DataContext.OpenEntryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                   CommandParameter="{Binding}">
+                                            <ui:SymbolIcon Foreground="{StaticResource PageMutedBrush}"
+                                                           Symbol="MoreVertical24" />
+                                        </ui:Button>
                                     </Grid>
                                 </Border>
                             </DataTemplate>
@@ -636,10 +584,6 @@
                         </ui:Button>
                     </Grid>
 
-                    <TextBlock Grid.Row="1"
-                               Foreground="{StaticResource PageMutedBrush}"
-                               Text="保留最近访问记录，随时返回上一次查看的位置。" />
-
                     <ItemsControl Grid.Row="2"
                                   ItemsSource="{Binding RecentSummary}">
                         <ItemsControl.ItemTemplate>
@@ -654,6 +598,7 @@
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="44" />
                                             <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
 
@@ -676,19 +621,26 @@
                                                        Foreground="{StaticResource PageMutedBrush}"
                                                        Text="{Binding FilePath}"
                                                        TextTrimming="CharacterEllipsis" />
-                                            <TextBlock Margin="0,6,0,0"
-                                                       Foreground="{StaticResource PageMutedBrush}"
-                                                       FontSize="12">
-                                                <TextBlock.Text>
-                                                    <Binding Path="LastOpenedAt"
-                                                             StringFormat="今天 {0:HH:mm}" />
-                                                </TextBlock.Text>
-                                            </TextBlock>
                                         </StackPanel>
-                                        <ui:SymbolIcon Grid.Column="2"
-                                                       VerticalAlignment="Center"
-                                                       Foreground="{StaticResource PageMutedBrush}"
-                                                       Symbol="MoreVertical24" />
+                                        <ui:Button Grid.Column="2"
+                                                   Margin="12,0,8,0"
+                                                   VerticalAlignment="Center"
+                                                   Style="{StaticResource MiniActionButtonStyle}"
+                                                   ToolTip="固定或取消固定"
+                                                   Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                   CommandParameter="{Binding}">
+                                            <ui:SymbolIcon Foreground="{StaticResource PageMutedBrush}"
+                                                           Symbol="Pin24" />
+                                        </ui:Button>
+                                        <ui:Button Grid.Column="3"
+                                                   VerticalAlignment="Center"
+                                                   Style="{StaticResource MiniActionButtonStyle}"
+                                                   ToolTip="打开此数据库"
+                                                   Command="{Binding DataContext.OpenEntryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                   CommandParameter="{Binding}">
+                                            <ui:SymbolIcon Foreground="{StaticResource PageMutedBrush}"
+                                                           Symbol="MoreVertical24" />
+                                        </ui:Button>
                                     </Grid>
                                 </Border>
                             </DataTemplate>

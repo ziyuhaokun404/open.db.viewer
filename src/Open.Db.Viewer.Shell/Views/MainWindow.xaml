@@ -8,7 +8,6 @@
                  xmlns:local="clr-namespace:Open.Db.Viewer.Shell.Views"
                  xmlns:navigation="clr-namespace:Open.Db.Viewer.Shell.Views.Navigation"
                  xmlns:workspace="clr-namespace:Open.Db.Viewer.Shell.Views.Workspace"
-                 xmlns:shell="clr-namespace:Open.Db.Viewer.Shell.ViewModels.Shell"
                  mc:Ignorable="d"
                  Title="数据库查看器"
                  Icon="{svgc:SvgImage Source=/Assets/Icons/open-db-viewer-icon.svg, AppName=Open.Db.Viewer.Shell}"
@@ -38,6 +37,7 @@
         <DataTemplate x:Key="WorkspaceTemplate">
             <workspace:WorkspaceHostPage />
         </DataTemplate>
+
         <local:PageTemplateSelector x:Key="PageTemplateSelector"
                                     HomeTemplate="{StaticResource HomeLandingTemplate}"
                                     RecentTemplate="{StaticResource RecentTemplate}"
@@ -45,39 +45,25 @@
                                     SettingsTemplate="{StaticResource SettingsTemplate}"
                                     AboutTemplate="{StaticResource AboutTemplate}"
                                     WorkspaceTemplate="{StaticResource WorkspaceTemplate}" />
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <SolidColorBrush x:Key="ShellCanvasBrush" Color="#F4F7FC" />
-        <SolidColorBrush x:Key="ShellChromeBrush" Color="#FAFCFF" />
-        <SolidColorBrush x:Key="ShellRailBrush" Color="#FFFFFF" />
-        <SolidColorBrush x:Key="ShellRailBorderBrush" Color="#DCE5F1" />
-        <SolidColorBrush x:Key="ShellSelectedBackgroundBrush" Color="#E8F1FF" />
-        <SolidColorBrush x:Key="ShellSelectedBorderBrush" Color="#BFD3FF" />
-        <SolidColorBrush x:Key="ShellHoverBackgroundBrush" Color="#F3F7FD" />
-        <SolidColorBrush x:Key="ShellMutedTextBrush" Color="#6D7890" />
-        <SolidColorBrush x:Key="ShellAccentBrush" Color="#2563EB" />
-        <SolidColorBrush x:Key="ShellAccentSoftBrush" Color="#DDEBFF" />
-        <SolidColorBrush x:Key="ShellBadgeBrush" Color="#EDF4FF" />
 
         <Style x:Key="TitleBarActionButtonStyle"
                BasedOn="{StaticResource {x:Type ui:Button}}"
                TargetType="{x:Type ui:Button}">
-            <Setter Property="Width" Value="44" />
-            <Setter Property="Height" Value="44" />
-            <Setter Property="Margin" Value="0,0,4,0" />
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Margin" Value="0" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="Appearance" Value="Transparent" />
-            <Setter Property="Background" Value="#FFFFFF" />
-            <Setter Property="BorderBrush" Value="{StaticResource ShellRailBorderBrush}" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="Foreground" Value="{StaticResource ShellMutedTextBrush}" />
-            <Setter Property="PressedForeground" Value="{StaticResource ShellMutedTextBrush}" />
-            <Setter Property="MouseOverBackground" Value="{StaticResource ShellHoverBackgroundBrush}" />
-            <Setter Property="MouseOverBorderBrush" Value="{StaticResource ShellRailBorderBrush}" />
-            <Setter Property="PressedBackground" Value="{StaticResource ShellHoverBackgroundBrush}" />
-            <Setter Property="PressedBorderBrush" Value="{StaticResource ShellRailBorderBrush}" />
-            <Setter Property="CornerRadius" Value="22" />
+            <Setter Property="Foreground" Value="{Binding Path=ButtonsForeground, RelativeSource={RelativeSource AncestorType={x:Type ui:TitleBar}}}" />
+            <Setter Property="PressedForeground" Value="{Binding Path=ButtonsForeground, RelativeSource={RelativeSource AncestorType={x:Type ui:TitleBar}}}" />
+            <Setter Property="MouseOverBackground" Value="{Binding Path=ButtonsBackground, RelativeSource={RelativeSource AncestorType={x:Type ui:TitleBar}}}" />
+            <Setter Property="MouseOverBorderBrush" Value="Transparent" />
+            <Setter Property="PressedBackground" Value="{Binding Path=ButtonsBackground, RelativeSource={RelativeSource AncestorType={x:Type ui:TitleBar}}}" />
+            <Setter Property="PressedBorderBrush" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="CornerRadius" Value="0" />
             <Setter Property="Focusable" Value="False" />
-            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         </Style>
 
         <Style BasedOn="{StaticResource {x:Type ui:TitleBarButton}}"
@@ -85,120 +71,9 @@
             <Setter Property="Width" Value="40" />
             <Setter Property="Height" Value="40" />
         </Style>
-
-        <Style x:Key="NavigationButtonStyle"
-               TargetType="ui:Button"
-               BasedOn="{StaticResource {x:Type ui:Button}}">
-            <Setter Property="Height" Value="48" />
-            <Setter Property="Margin" Value="0,0,0,8" />
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-            <Setter Property="Appearance" Value="Transparent" />
-            <Setter Property="Padding" Value="16,0" />
-            <Setter Property="CornerRadius" Value="16" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
-            <Setter Property="MouseOverBackground" Value="{StaticResource ShellHoverBackgroundBrush}" />
-            <Setter Property="MouseOverBorderBrush" Value="Transparent" />
-            <Setter Property="Focusable" Value="False" />
-            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                    <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource ShellAccentBrush}" />
-                    <Setter Property="BorderThickness" Value="3,0,0,0" />
-                    <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="HomeNavigationButtonStyle"
-               TargetType="ui:Button"
-               BasedOn="{StaticResource NavigationButtonStyle}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
-                             Value="{x:Static shell:ShellSection.Home}">
-                    <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource ShellAccentBrush}" />
-                    <Setter Property="BorderThickness" Value="3,0,0,0" />
-                    <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="RecentNavigationButtonStyle"
-               TargetType="ui:Button"
-               BasedOn="{StaticResource NavigationButtonStyle}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
-                             Value="{x:Static shell:ShellSection.Recent}">
-                    <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource ShellAccentBrush}" />
-                    <Setter Property="BorderThickness" Value="3,0,0,0" />
-                    <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="PinnedNavigationButtonStyle"
-               TargetType="ui:Button"
-               BasedOn="{StaticResource NavigationButtonStyle}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
-                             Value="{x:Static shell:ShellSection.Pinned}">
-                    <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource ShellAccentBrush}" />
-                    <Setter Property="BorderThickness" Value="3,0,0,0" />
-                    <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="WorkspaceNavigationButtonStyle"
-               TargetType="ui:Button"
-               BasedOn="{StaticResource NavigationButtonStyle}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
-                             Value="{x:Static shell:ShellSection.Workspace}">
-                    <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource ShellAccentBrush}" />
-                    <Setter Property="BorderThickness" Value="3,0,0,0" />
-                    <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="SettingsNavigationButtonStyle"
-               TargetType="ui:Button"
-               BasedOn="{StaticResource NavigationButtonStyle}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
-                             Value="{x:Static shell:ShellSection.Settings}">
-                    <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource ShellAccentBrush}" />
-                    <Setter Property="BorderThickness" Value="3,0,0,0" />
-                    <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="AboutNavigationButtonStyle"
-               TargetType="ui:Button"
-               BasedOn="{StaticResource NavigationButtonStyle}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
-                             Value="{x:Static shell:ShellSection.About}">
-                    <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
-                    <Setter Property="BorderBrush" Value="{StaticResource ShellAccentBrush}" />
-                    <Setter Property="BorderThickness" Value="3,0,0,0" />
-                    <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
     </ui:FluentWindow.Resources>
 
-    <Grid Background="{StaticResource ShellCanvasBrush}">
+    <Grid x:Name="RootLayout">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -206,185 +81,90 @@
 
         <ui:TitleBar x:Name="MainTitleBar"
                      Grid.Row="0"
-                     Height="52"
-                     Background="{StaticResource ShellChromeBrush}"
-                     BorderBrush="{StaticResource ShellRailBorderBrush}"
-                     BorderThickness="0,0,0,1"
+                     Height="44"
                      CloseWindowByDoubleClickOnIcon="True">
             <ui:TitleBar.Header>
-                <StackPanel Margin="16,0,0,0"
+                <StackPanel Margin="10,0,0,0"
                             VerticalAlignment="Center"
                             Orientation="Horizontal">
                     <svgc:SvgViewbox x:Name="AppIconImage"
-                                     Width="30"
-                                     Height="30"
-                                     Margin="0"
+                                     Width="34"
+                                     Height="34"
                                      Source="/Assets/Icons/open-db-viewer-icon.svg" />
-                    <StackPanel Margin="10,0,0,0">
-                        <TextBlock FontSize="13"
-                                   FontWeight="SemiBold"
-                                   Text="数据库查看器" />
-                        <TextBlock Margin="0,2,0,0"
-                                   FontSize="11"
-                                   Foreground="{StaticResource ShellMutedTextBrush}"
-                                   Text="open.db.viewer" />
-                    </StackPanel>
+                    <TextBlock Margin="6,0,0,0"
+                               VerticalAlignment="Center"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Text="数据库查看器" />
                 </StackPanel>
             </ui:TitleBar.Header>
 
             <ui:TitleBar.TrailingContent>
-                <ui:Button x:Name="ThemeToggleButton"
-                           Click="ToggleThemeMode"
-                           Style="{StaticResource TitleBarActionButtonStyle}"
-                           ToolTipService.ToolTip="切换到深色模式">
-                    <ui:SymbolIcon x:Name="ThemeToggleIcon"
-                                   Symbol="WeatherMoon24" />
-                </ui:Button>
+                <StackPanel Orientation="Horizontal">
+                    <ui:Button x:Name="ThemeToggleButton"
+                               Click="ToggleThemeMode"
+                               Style="{StaticResource TitleBarActionButtonStyle}"
+                               ToolTipService.ToolTip="切换到深色模式">
+                        <ui:SymbolIcon x:Name="ThemeToggleIcon"
+                                       Symbol="WeatherMoon24" />
+                    </ui:Button>
+                </StackPanel>
             </ui:TitleBar.TrailingContent>
         </ui:TitleBar>
 
-        <Grid Grid.Row="1"
-              Margin="16,12,16,16">
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="266" />
-                <ColumnDefinition Width="18" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Border Padding="16"
-                    Background="{StaticResource ShellRailBrush}"
-                    BorderBrush="{StaticResource ShellRailBorderBrush}"
+            <ui:NavigationView x:Name="RootNavigation"
+                               Width="Auto"
+                               MinWidth="48"
+                               PaneDisplayMode="Left">
+                <ui:NavigationView.MenuItems>
+                    <ui:NavigationViewItem x:Name="HomeNavItem"
+                                           Click="NavItem_Click"
+                                           Content="首页"
+                                           Icon="{ui:SymbolIcon Home24}"
+                                           Tag="home" />
+                    <ui:NavigationViewItem x:Name="RecentNavItem"
+                                           Click="NavItem_Click"
+                                           Content="最近使用"
+                                           Icon="{ui:SymbolIcon History24}"
+                                           Tag="recent" />
+                    <ui:NavigationViewItem x:Name="PinnedNavItem"
+                                           Click="NavItem_Click"
+                                           Content="已固定"
+                                           Icon="{ui:SymbolIcon Pin24}"
+                                           Tag="pinned" />
+                    <ui:NavigationViewItem x:Name="WorkspaceNavItem"
+                                           Click="NavItem_Click"
+                                           Content="数据库工作台"
+                                           Icon="{ui:SymbolIcon Database24}"
+                                           Tag="workspace" />
+                </ui:NavigationView.MenuItems>
+
+                <ui:NavigationView.FooterMenuItems>
+                    <ui:NavigationViewItem x:Name="SettingsNavItem"
+                                           Click="NavItem_Click"
+                                           Content="设置"
+                                           Icon="{ui:SymbolIcon Settings24}"
+                                           Tag="settings" />
+                    <ui:NavigationViewItem x:Name="AboutNavItem"
+                                           Click="NavItem_Click"
+                                           Content="关于"
+                                           Icon="{ui:SymbolIcon Info24}"
+                                           Tag="about" />
+                </ui:NavigationView.FooterMenuItems>
+            </ui:NavigationView>
+
+            <Border Grid.Column="1"
+                    Margin="16,0,16,16"
+                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                    BorderBrush="{DynamicResource CardBorderBrush}"
                     BorderThickness="1"
                     CornerRadius="28">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="18" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="20" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-
-                    <Border Padding="14"
-                            Background="{StaticResource ShellBadgeBrush}"
-                            BorderBrush="{StaticResource ShellAccentSoftBrush}"
-                            BorderThickness="1"
-                            CornerRadius="20">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-
-                            <Border Width="42"
-                                    Height="42"
-                                    Background="{StaticResource ShellSelectedBackgroundBrush}"
-                                    CornerRadius="14">
-                                <svgc:SvgViewbox Width="24"
-                                                 Height="24"
-                                                 Margin="9"
-                                                 Source="/Assets/Icons/open-db-viewer-icon.svg" />
-                            </Border>
-
-                            <StackPanel Grid.Column="1"
-                                        Margin="12,0,0,0"
-                                        VerticalAlignment="Center">
-                                <TextBlock FontSize="15"
-                                           FontWeight="SemiBold"
-                                           Text="数据库查看器" />
-                                <TextBlock Margin="0,3,0,0"
-                                           Foreground="{StaticResource ShellMutedTextBrush}"
-                                           Text="轻量桌面工作台" />
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-
-                    <ui:Button Grid.Row="2"
-                               Height="56"
-                               Padding="18,0"
-                               Appearance="Primary"
-                               BorderThickness="0"
-                               Command="{Binding OpenDatabaseCommand}"
-                               CornerRadius="18"
-                               Foreground="White"
-                               HorizontalContentAlignment="Stretch">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="26" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-
-                            <ui:SymbolIcon VerticalAlignment="Center"
-                                           Foreground="White"
-                                           Symbol="Add24" />
-                            <TextBlock Grid.Column="1"
-                                       Margin="12,0,0,0"
-                                       VerticalAlignment="Center"
-                                       FontSize="13"
-                                       FontWeight="SemiBold"
-                                       Foreground="White"
-                                       Text="打开数据库 SQLite 文件" />
-                        </Grid>
-                    </ui:Button>
-
-                    <StackPanel Grid.Row="4">
-                        <TextBlock Margin="4,0,0,10"
-                                   FontSize="11"
-                                   FontWeight="SemiBold"
-                                   Foreground="{StaticResource ShellMutedTextBrush}"
-                                   Text="工作区" />
-
-                        <ui:Button Style="{StaticResource HomeNavigationButtonStyle}"
-                                   Command="{Binding NavigateToSectionCommand}"
-                                   CommandParameter="{x:Static shell:ShellSection.Home}"
-                                   Icon="{ui:SymbolIcon Home24}"
-                                   Content="首页" />
-                        <ui:Button Style="{StaticResource RecentNavigationButtonStyle}"
-                                   Command="{Binding NavigateToSectionCommand}"
-                                   CommandParameter="{x:Static shell:ShellSection.Recent}"
-                                   Icon="{ui:SymbolIcon History24}"
-                                   Content="最近使用" />
-                        <ui:Button Style="{StaticResource PinnedNavigationButtonStyle}"
-                                   Command="{Binding NavigateToSectionCommand}"
-                                   CommandParameter="{x:Static shell:ShellSection.Pinned}"
-                                   Icon="{ui:SymbolIcon Pin24}"
-                                   Content="已固定" />
-                        <ui:Button Style="{StaticResource WorkspaceNavigationButtonStyle}"
-                                   Command="{Binding NavigateToSectionCommand}"
-                                   CommandParameter="{x:Static shell:ShellSection.Workspace}"
-                                   Icon="{ui:SymbolIcon Database24}"
-                                   Content="数据库工作台" />
-                    </StackPanel>
-
-                    <StackPanel Grid.Row="5">
-                        <TextBlock Margin="4,0,0,10"
-                                   FontSize="11"
-                                   FontWeight="SemiBold"
-                                   Foreground="{StaticResource ShellMutedTextBrush}"
-                                   Text="更多" />
-
-                        <ui:Button Style="{StaticResource SettingsNavigationButtonStyle}"
-                                   Command="{Binding NavigateToSectionCommand}"
-                                   CommandParameter="{x:Static shell:ShellSection.Settings}"
-                                   Icon="{ui:SymbolIcon Settings24}"
-                                   Content="设置" />
-
-                        <ui:Button Style="{StaticResource AboutNavigationButtonStyle}"
-                                   Margin="0"
-                                   Command="{Binding NavigateToSectionCommand}"
-                                   CommandParameter="{x:Static shell:ShellSection.About}"
-                                   Icon="{ui:SymbolIcon Info24}"
-                                   Content="关于" />
-                    </StackPanel>
-                </Grid>
-            </Border>
-
-            <Border Grid.Column="2"
-                    Background="{StaticResource ShellChromeBrush}"
-                    BorderBrush="{StaticResource ShellRailBorderBrush}"
-                    BorderThickness="1"
-                    CornerRadius="32">
                 <ContentControl Content="{Binding CurrentContentViewModel}"
                                 ContentTemplateSelector="{StaticResource PageTemplateSelector}" />
             </Border>

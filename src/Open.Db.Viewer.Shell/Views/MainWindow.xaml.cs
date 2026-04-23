@@ -1,10 +1,12 @@
-using Wpf.Ui.Controls;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using Open.Db.Viewer.Shell.ViewModels;
 using Open.Db.Viewer.Shell.ViewModels.Navigation;
+using Open.Db.Viewer.Shell.ViewModels.Shell;
 using Open.Db.Viewer.Shell.ViewModels.Workspace;
 using Wpf.Ui.Appearance;
+using Wpf.Ui.Controls;
 
 namespace Open.Db.Viewer.Shell.Views;
 
@@ -14,9 +16,35 @@ public partial class MainWindow : FluentWindow
     {
         InitializeComponent();
         DataContext = viewModel;
+        viewModel.PropertyChanged += OnShellViewModelPropertyChanged;
         UpdateThemeToggleVisual(ApplicationThemeManager.GetAppTheme());
+        UpdateNavigationSelection();
         ApplicationThemeManager.Changed += OnApplicationThemeChanged;
         Closed += OnClosed;
+    }
+
+    private void NavItem_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is not ShellViewModel shell || sender is not NavigationViewItem item || item.Tag is not string routeKey)
+        {
+            return;
+        }
+
+        var section = routeKey switch
+        {
+            "home" => ShellSection.Home,
+            "recent" => ShellSection.Recent,
+            "pinned" => ShellSection.Pinned,
+            "workspace" => ShellSection.Workspace,
+            "settings" => ShellSection.Settings,
+            "about" => ShellSection.About,
+            _ => (ShellSection?)null
+        };
+
+        if (section is ShellSection targetSection)
+        {
+            shell.NavigateToSection(targetSection);
+        }
     }
 
     private void ToggleThemeMode(object sender, RoutedEventArgs e)
@@ -36,8 +64,21 @@ public partial class MainWindow : FluentWindow
 
     private void OnClosed(object? sender, EventArgs e)
     {
+        if (DataContext is ShellViewModel shell)
+        {
+            shell.PropertyChanged -= OnShellViewModelPropertyChanged;
+        }
+
         ApplicationThemeManager.Changed -= OnApplicationThemeChanged;
         Closed -= OnClosed;
+    }
+
+    private void OnShellViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName is nameof(ShellViewModel.CurrentSection) or null or "")
+        {
+            UpdateNavigationSelection();
+        }
     }
 
     private void UpdateThemeToggleVisual(ApplicationTheme applicationTheme)
@@ -50,6 +91,22 @@ public partial class MainWindow : FluentWindow
         var isDarkTheme = applicationTheme == ApplicationTheme.Dark;
         ThemeToggleIcon.Symbol = isDarkTheme ? SymbolRegular.WeatherMoon24 : SymbolRegular.WeatherSunny24;
         ThemeToggleButton.ToolTip = isDarkTheme ? "当前为深色模式" : "当前为浅色模式";
+    }
+
+    private void UpdateNavigationSelection()
+    {
+        if (DataContext is not ShellViewModel shell || RootNavigation is null)
+        {
+            return;
+        }
+
+        HomeNavItem.IsActive = shell.CurrentSection == ShellSection.Home;
+        RecentNavItem.IsActive = shell.CurrentSection == ShellSection.Recent;
+        PinnedNavItem.IsActive = shell.CurrentSection == ShellSection.Pinned;
+        WorkspaceNavItem.IsActive = shell.CurrentSection == ShellSection.Workspace;
+        SettingsNavItem.IsActive = shell.CurrentSection == ShellSection.Settings;
+        AboutNavItem.IsActive = shell.CurrentSection == ShellSection.About;
+
     }
 }
 

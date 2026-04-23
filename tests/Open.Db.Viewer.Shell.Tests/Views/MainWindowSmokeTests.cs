@@ -29,6 +29,18 @@ public class MainWindowSmokeTests
                 var application = EnsureApplicationResources();
                 ApplicationThemeManager.Apply(ApplicationTheme.Light);
                 var repository = new InMemoryDatabaseEntryRepository();
+                repository.SeedRecent(new DatabaseEntry(
+                    Guid.NewGuid(),
+                    "app",
+                    @"C:\data\demo\app.db",
+                    new DateTimeOffset(2026, 4, 23, 1, 58, 0, TimeSpan.Zero),
+                    false));
+                repository.SeedPinned(new DatabaseEntry(
+                    Guid.NewGuid(),
+                    "northwind",
+                    @"C:\data\demo\northwind.db",
+                    new DateTimeOffset(2026, 4, 23, 1, 30, 0, TimeSpan.Zero),
+                    true));
                 var databaseEntryService = new DatabaseEntryService(repository, _ => Task.FromResult(true));
                 var home = new HomeViewModel(databaseEntryService, new FakeFileDialogService());
                 var workspace = new DatabaseWorkspaceViewModel(
@@ -75,6 +87,24 @@ public class MainWindowSmokeTests
                 DoEvents();
                 ApplicationThemeManager.GetAppTheme().Should().Be(ApplicationTheme.Dark);
 
+                var rootNavigation = window.FindName("RootNavigation").Should().BeOfType<WpfUiControls.NavigationView>().Subject;
+                var homeNavItem = window.FindName("HomeNavItem").Should().BeOfType<WpfUiControls.NavigationViewItem>().Subject;
+                var recentNavItem = window.FindName("RecentNavItem").Should().BeOfType<WpfUiControls.NavigationViewItem>().Subject;
+                var settingsNavItem = window.FindName("SettingsNavItem").Should().BeOfType<WpfUiControls.NavigationViewItem>().Subject;
+
+                rootNavigation.MenuItems.Should().NotBeNull();
+                homeNavItem.IsActive.Should().BeTrue();
+                settingsNavItem.Content.Should().Be("设置");
+
+                shell.NavigateToSection(Open.Db.Viewer.Shell.ViewModels.Shell.ShellSection.Recent);
+                DoEvents();
+                homeNavItem.IsActive.Should().BeFalse();
+                recentNavItem.IsActive.Should().BeTrue();
+
+                shell.NavigateToSection(Open.Db.Viewer.Shell.ViewModels.Shell.ShellSection.Home);
+                DoEvents();
+                homeNavItem.IsActive.Should().BeTrue();
+
                 var contentControl = EnumerateVisualTree(window)
                     .OfType<ContentControl>()
                     .Single(control => ReferenceEquals(control.Content, shell.CurrentContentViewModel));
@@ -89,10 +119,20 @@ public class MainWindowSmokeTests
                     .ToArray();
 
                 renderedTexts.Should().Contain("数据库查看器");
+                renderedTexts.Count(text => text == "数据库查看器").Should().Be(1);
                 renderedTexts.Should().Contain("首页");
                 renderedTexts.Should().Contain("最近使用");
                 renderedTexts.Should().Contain("数据库工作台");
+                renderedTexts.Should().Contain("设置");
+                renderedTexts.Should().Contain("关于");
                 renderedTexts.Should().Contain("快速打开");
+                renderedTexts.Should().Contain("已固定的数据库");
+                renderedTexts.Should().Contain("查看全部");
+                renderedTexts.Should().Contain(@"C:\data\demo\app.db");
+                renderedTexts.Should().Contain(@"C:\data\demo\northwind.db");
+                renderedTexts.Should().NotContain("open.db.viewer");
+                renderedTexts.Should().NotContain("轻量桌面工作台");
+                renderedTexts.Should().NotContain("HOME");
 
                 window.Close();
                 application.Shutdown();
@@ -187,16 +227,35 @@ public class MainWindowSmokeTests
 
     private sealed class InMemoryDatabaseEntryRepository : IDatabaseEntryRepository
     {
+        private readonly List<DatabaseEntry> _recentEntries = [];
+        private readonly List<DatabaseEntry> _pinnedEntries = [];
+
+        public void SeedRecent(DatabaseEntry entry) => _recentEntries.Add(entry);
+
+        public void SeedPinned(DatabaseEntry entry) => _pinnedEntries.Add(entry);
+
         public Task<IReadOnlyList<DatabaseEntry>> GetRecentAsync(CancellationToken cancellationToken = default) =>
-            Task.FromResult<IReadOnlyList<DatabaseEntry>>(Array.Empty<DatabaseEntry>());
+            Task.FromResult<IReadOnlyList<DatabaseEntry>>(_recentEntries.ToArray());
 
         public Task<IReadOnlyList<DatabaseEntry>> GetPinnedAsync(CancellationToken cancellationToken = default) =>
-            Task.FromResult<IReadOnlyList<DatabaseEntry>>(Array.Empty<DatabaseEntry>());
+            Task.FromResult<IReadOnlyList<DatabaseEntry>>(_pinnedEntries.ToArray());
 
-        public Task SaveRecentAsync(DatabaseEntry entry, CancellationToken cancellationToken = default) => Task.CompletedTask;
+        public Task SaveRecentAsync(DatabaseEntry entry, CancellationToken cancellationToken = default)
+        {
+            _recentEntries.Add(entry);
+            return Task.CompletedTask;
+        }
 
-        public Task SavePinnedAsync(DatabaseEntry entry, CancellationToken cancellationToken = default) => Task.CompletedTask;
+        public Task SavePinnedAsync(DatabaseEntry entry, CancellationToken cancellationToken = default)
+        {
+            _pinnedEntries.Add(entry);
+            return Task.CompletedTask;
+        }
 
-        public Task RemovePinnedAsync(Guid id, CancellationToken cancellationToken = default) => Task.CompletedTask;
+        public Task RemovePinnedAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            _pinnedEntries.RemoveAll(item => item.Id == id);
+            return Task.CompletedTask;
+        }
     }
 }

@@ -94,6 +94,47 @@ public sealed partial class HomeLandingViewModel : ObservableObject
         }
     }
 
+    [RelayCommand]
+    public async Task OpenEntryAsync(DatabaseEntry? entry, CancellationToken cancellationToken = default)
+    {
+        if (entry is null)
+        {
+            return;
+        }
+
+        var result = await _databaseEntryService.OpenAsync(entry.FilePath, cancellationToken);
+        StatusMessage = result.Message;
+
+        if (result.IsSuccess)
+        {
+            await LoadAsync(cancellationToken);
+            if (DatabaseOpenedAsync is not null)
+            {
+                await DatabaseOpenedAsync(entry.FilePath, cancellationToken);
+            }
+        }
+    }
+
+    [RelayCommand]
+    public async Task TogglePinAsync(DatabaseEntry? entry, CancellationToken cancellationToken = default)
+    {
+        if (entry is null)
+        {
+            return;
+        }
+
+        if (entry.IsPinned)
+        {
+            await _databaseEntryService.UnpinAsync(entry, cancellationToken);
+        }
+        else
+        {
+            await _databaseEntryService.PinAsync(entry, cancellationToken);
+        }
+
+        await LoadAsync(cancellationToken);
+    }
+
     private static void Refresh(ObservableCollection<DatabaseEntry> target, IEnumerable<DatabaseEntry> source)
     {
         target.Clear();
