@@ -87,11 +87,11 @@
         <Style x:Key="NavigationButtonStyle"
                TargetType="ui:Button"
                BasedOn="{StaticResource {x:Type ui:Button}}">
-            <Setter Property="Height" Value="48" />
-            <Setter Property="Margin" Value="0,0,0,8" />
+            <Setter Property="Height" Value="50" />
+            <Setter Property="Margin" Value="0,0,0,10" />
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
             <Setter Property="Appearance" Value="Transparent" />
-            <Setter Property="Padding" Value="14,0" />
+            <Setter Property="Padding" Value="16,0" />
             <Setter Property="CornerRadius" Value="16" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="BorderBrush" Value="Transparent" />
@@ -101,6 +101,58 @@
             <Setter Property="MouseOverBorderBrush" Value="Transparent" />
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                    <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource ShellSelectedBorderBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="HomeNavigationButtonStyle"
+               TargetType="ui:Button"
+               BasedOn="{StaticResource NavigationButtonStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
+                             Value="{x:Static shell:ShellSection.Home}">
+                    <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource ShellSelectedBorderBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="RecentNavigationButtonStyle"
+               TargetType="ui:Button"
+               BasedOn="{StaticResource NavigationButtonStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
+                             Value="{x:Static shell:ShellSection.Recent}">
+                    <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource ShellSelectedBorderBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="PinnedNavigationButtonStyle"
+               TargetType="ui:Button"
+               BasedOn="{StaticResource NavigationButtonStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
+                             Value="{x:Static shell:ShellSection.Pinned}">
+                    <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
+                    <Setter Property="BorderBrush" Value="{StaticResource ShellSelectedBorderBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="WorkspaceNavigationButtonStyle"
+               TargetType="ui:Button"
+               BasedOn="{StaticResource NavigationButtonStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding CurrentSection, RelativeSource={RelativeSource AncestorType=Window}}"
+                             Value="{x:Static shell:ShellSection.Workspace}">
                     <Setter Property="Background" Value="{StaticResource ShellSelectedBackgroundBrush}" />
                     <Setter Property="BorderBrush" Value="{StaticResource ShellSelectedBorderBrush}" />
                     <Setter Property="Foreground" Value="{StaticResource ShellAccentBrush}" />
@@ -181,7 +233,7 @@
         </ui:TitleBar>
 
         <Grid Grid.Row="1"
-              Margin="16,16,16,16">
+              Margin="16,12,16,16">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="236" />
                 <ColumnDefinition Width="20" />
@@ -238,8 +290,8 @@
                     </Border>
 
                     <ui:Button Grid.Row="2"
-                               Height="50"
-                               Padding="14,0"
+                               Height="54"
+                               Padding="16,0"
                                Appearance="Primary"
                                BorderThickness="0"
                                Command="{Binding OpenDatabaseCommand}"
@@ -248,27 +300,20 @@
                                HorizontalContentAlignment="Stretch">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="24" />
+                                <ColumnDefinition Width="28" />
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock VerticalAlignment="Center"
-                                       FontSize="15"
-                                       FontWeight="SemiBold"
-                                       Foreground="White"
-                                       Text="+" />
+                            <ui:SymbolIcon VerticalAlignment="Center"
+                                           Foreground="White"
+                                           Symbol="Database24" />
                             <TextBlock Grid.Column="1"
-                                       Margin="10,0,0,0"
+                                       Margin="12,0,0,0"
                                        VerticalAlignment="Center"
                                        FontSize="14"
                                        FontWeight="SemiBold"
                                        Foreground="White"
-                                       Text="打开数据库" />
-                            <TextBlock Grid.Column="2"
-                                       VerticalAlignment="Center"
-                                       Foreground="#CCFFFFFF"
-                                       Text="选择 SQLite 文件" />
+                                       Text="打开数据库 SQLite 文件" />
                         </Grid>
                     </ui:Button>
 
@@ -279,54 +324,26 @@
                                    Foreground="{StaticResource ShellMutedTextBrush}"
                                    Text="工作区" />
 
-                        <ItemsControl ItemsSource="{Binding NavigationItems}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <ui:Button Style="{StaticResource NavigationButtonStyle}"
-                                               Command="{Binding DataContext.NavigateToSectionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                               CommandParameter="{Binding Section}">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="24" />
-                                                <ColumnDefinition Width="*" />
-                                            </Grid.ColumnDefinitions>
-
-                                            <TextBlock x:Name="NavigationGlyph"
-                                                       VerticalAlignment="Center"
-                                                       FontSize="15"
-                                                       FontWeight="SemiBold"
-                                                       Text="⌂">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Setter Property="Text" Value="⌂" />
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Section}"
-                                                                         Value="{x:Static shell:ShellSection.Recent}">
-                                                                <Setter Property="Text" Value="◷" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Section}"
-                                                                         Value="{x:Static shell:ShellSection.Pinned}">
-                                                                <Setter Property="Text" Value="✦" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Section}"
-                                                                         Value="{x:Static shell:ShellSection.Workspace}">
-                                                                <Setter Property="Text" Value="▦" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
-                                            <TextBlock Grid.Column="1"
-                                                       Margin="12,0,0,0"
-                                                       VerticalAlignment="Center"
-                                                       FontSize="14"
-                                                       FontWeight="SemiBold"
-                                                       Text="{Binding Title}" />
-                                        </Grid>
-                                    </ui:Button>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                        <ui:Button Style="{StaticResource HomeNavigationButtonStyle}"
+                                   Command="{Binding NavigateToSectionCommand}"
+                                   CommandParameter="{x:Static shell:ShellSection.Home}"
+                                   Icon="{ui:SymbolIcon Home24}"
+                                   Content="首页" />
+                        <ui:Button Style="{StaticResource RecentNavigationButtonStyle}"
+                                   Command="{Binding NavigateToSectionCommand}"
+                                   CommandParameter="{x:Static shell:ShellSection.Recent}"
+                                   Icon="{ui:SymbolIcon History24}"
+                                   Content="最近使用" />
+                        <ui:Button Style="{StaticResource PinnedNavigationButtonStyle}"
+                                   Command="{Binding NavigateToSectionCommand}"
+                                   CommandParameter="{x:Static shell:ShellSection.Pinned}"
+                                   Icon="{ui:SymbolIcon Pin24}"
+                                   Content="已固定" />
+                        <ui:Button Style="{StaticResource WorkspaceNavigationButtonStyle}"
+                                   Command="{Binding NavigateToSectionCommand}"
+                                   CommandParameter="{x:Static shell:ShellSection.Workspace}"
+                                   Icon="{ui:SymbolIcon Database24}"
+                                   Content="数据库工作台" />
                     </StackPanel>
 
                     <StackPanel Grid.Row="5">
@@ -338,48 +355,16 @@
 
                         <ui:Button Style="{StaticResource SettingsNavigationButtonStyle}"
                                    Command="{Binding NavigateToSectionCommand}"
-                                   CommandParameter="{x:Static shell:ShellSection.Settings}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="24" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock VerticalAlignment="Center"
-                                           FontSize="15"
-                                           FontWeight="SemiBold"
-                                           Text="⚙" />
-                                <TextBlock Grid.Column="1"
-                                           Margin="12,0,0,0"
-                                           VerticalAlignment="Center"
-                                           FontSize="14"
-                                           FontWeight="SemiBold"
-                                           Text="设置" />
-                            </Grid>
-                        </ui:Button>
+                                   CommandParameter="{x:Static shell:ShellSection.Settings}"
+                                   Icon="{ui:SymbolIcon Settings24}"
+                                   Content="设置" />
 
                         <ui:Button Style="{StaticResource AboutNavigationButtonStyle}"
                                    Margin="0"
                                    Command="{Binding NavigateToSectionCommand}"
-                                   CommandParameter="{x:Static shell:ShellSection.About}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="24" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock VerticalAlignment="Center"
-                                           FontSize="15"
-                                           FontWeight="SemiBold"
-                                           Text="ⓘ" />
-                                <TextBlock Grid.Column="1"
-                                           Margin="12,0,0,0"
-                                           VerticalAlignment="Center"
-                                           FontSize="14"
-                                           FontWeight="SemiBold"
-                                           Text="关于" />
-                            </Grid>
-                        </ui:Button>
+                                   CommandParameter="{x:Static shell:ShellSection.About}"
+                                   Icon="{ui:SymbolIcon Info24}"
+                                   Content="关于" />
                     </StackPanel>
                 </Grid>
             </Border>
