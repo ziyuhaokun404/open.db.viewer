@@ -1,7 +1,6 @@
 using FluentAssertions;
 using Open.Db.Viewer.Application.Services;
 using Open.Db.Viewer.Application.Tests.Support;
-using Open.Db.Viewer.Domain.Models;
 
 namespace Open.Db.Viewer.Application.Tests.Services;
 

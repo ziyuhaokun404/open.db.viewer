@@ -1,4 +1,3 @@
-using System.Data.Common;
 using Open.Db.Viewer.Application.Abstractions;
 using Open.Db.Viewer.Domain.Models;
 

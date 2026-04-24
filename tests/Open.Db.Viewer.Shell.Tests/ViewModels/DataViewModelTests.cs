@@ -1,7 +1,6 @@
 using FluentAssertions;
 using Open.Db.Viewer.Application.Abstractions;
 using Open.Db.Viewer.Application.Services;
-using Open.Db.Viewer.Domain.Models;
 using Open.Db.Viewer.Shell.Services;
 using Open.Db.Viewer.Infrastructure.Sqlite.Sqlite;
 using Open.Db.Viewer.Shell.ViewModels;
