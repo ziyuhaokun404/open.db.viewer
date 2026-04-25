@@ -6,22 +6,15 @@
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d">
     <UserControl.Resources>
-        <SolidColorBrush x:Key="RecentPageBrush" Color="#F7F3EE" />
-        <SolidColorBrush x:Key="RecentCardBrush" Color="#FFFCF8" />
-        <SolidColorBrush x:Key="RecentCardBorderBrush" Color="#E6DDD3" />
-        <SolidColorBrush x:Key="RecentSubtleBrush" Color="#736C64" />
-        <SolidColorBrush x:Key="RecentAccentBrush" Color="#1567D8" />
-        <SolidColorBrush x:Key="RecentAccentSoftBrush" Color="#E9F1FF" />
-
         <DropShadowEffect x:Key="RecentShadowEffect"
                           BlurRadius="22"
-                          Color="#E7DDD5"
-                          Opacity="0.28"
+                          Color="#000000"
+                          Opacity="0.14"
                           ShadowDepth="0" />
 
         <Style x:Key="PageSurfaceCardStyle" TargetType="Border">
-            <Setter Property="Background" Value="{StaticResource RecentCardBrush}" />
-            <Setter Property="BorderBrush" Value="{StaticResource RecentCardBorderBrush}" />
+            <Setter Property="Background" Value="{DynamicResource ExplorerCardBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ExplorerCardBorderBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="24" />
             <Setter Property="Effect" Value="{StaticResource RecentShadowEffect}" />
@@ -35,12 +28,12 @@
             <Setter Property="Padding" Value="0" />
             <Setter Property="CornerRadius" Value="14" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="BorderBrush" Value="{StaticResource RecentCardBorderBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ExplorerCardBorderBrush}" />
             <Setter Property="Appearance" Value="Secondary" />
         </Style>
     </UserControl.Resources>
 
-    <Border Background="{StaticResource RecentPageBrush}">
+    <Border Background="{DynamicResource ExplorerPageBackgroundBrush}">
         <Grid Margin="20,18,20,20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -55,7 +48,7 @@
                                FontWeight="SemiBold"
                                Text="最近使用" />
                     <TextBlock Margin="0,8,0,0"
-                               Foreground="{StaticResource RecentSubtleBrush}"
+                               Foreground="{DynamicResource ExplorerSubtleBrush}"
                                Text="最近打开的数据库会出现在这里，方便你继续上一次的工作。" />
                     <TextBox Margin="0,16,0,0"
                              Height="42"
@@ -73,8 +66,8 @@
                             <DataTemplate>
                                 <Border Margin="0,0,0,12"
                                         Padding="14"
-                                        Background="#FBF8F4"
-                                        BorderBrush="{StaticResource RecentCardBorderBrush}"
+                                        Background="{DynamicResource ExplorerListItemBrush}"
+                                        BorderBrush="{DynamicResource ExplorerCardBorderBrush}"
                                         BorderThickness="1"
                                         CornerRadius="18">
                                     <Grid>
@@ -87,11 +80,11 @@
 
                                         <Border Width="54"
                                                 Height="54"
-                                                Background="{StaticResource RecentAccentSoftBrush}"
+                                                Background="{DynamicResource ExplorerAccentSoftBrush}"
                                                 CornerRadius="27">
                                             <ui:SymbolIcon HorizontalAlignment="Center"
                                                            VerticalAlignment="Center"
-                                                           Foreground="{StaticResource RecentAccentBrush}"
+                                                           Foreground="{DynamicResource ExplorerAccentBrush}"
                                                            Symbol="Database24" />
                                         </Border>
 
@@ -102,7 +95,7 @@
                                                        FontWeight="SemiBold"
                                                        Text="{Binding Name}" />
                                             <TextBlock Margin="0,5,0,0"
-                                                       Foreground="{StaticResource RecentSubtleBrush}"
+                                                       Foreground="{DynamicResource ExplorerSubtleBrush}"
                                                        Text="{Binding FilePath}"
                                                        TextTrimming="CharacterEllipsis" />
                                         </StackPanel>
@@ -114,7 +107,7 @@
                                                    CommandParameter="{Binding}"
                                                    Style="{StaticResource MiniButtonStyle}"
                                                    ToolTip="固定或取消固定">
-                                            <ui:SymbolIcon Foreground="{StaticResource RecentSubtleBrush}"
+                                            <ui:SymbolIcon Foreground="{DynamicResource ExplorerSubtleBrush}"
                                                            Symbol="Pin24" />
                                         </ui:Button>
 
@@ -124,7 +117,7 @@
                                                    CommandParameter="{Binding}"
                                                    Style="{StaticResource MiniButtonStyle}"
                                                    ToolTip="打开此数据库">
-                                            <ui:SymbolIcon Foreground="{StaticResource RecentSubtleBrush}"
+                                            <ui:SymbolIcon Foreground="{DynamicResource ExplorerSubtleBrush}"
                                                            Symbol="ArrowEnterLeft24" />
                                         </ui:Button>
                                     </Grid>

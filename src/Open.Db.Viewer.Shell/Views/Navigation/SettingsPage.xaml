@@ -1,7 +1,14 @@
 <UserControl x:Class="Open.Db.Viewer.Shell.Views.Navigation.SettingsPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
     <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
         <Border Padding="24"
                 CornerRadius="20"
                 Background="{DynamicResource ControlFillColorSecondaryBrush}"
@@ -10,11 +17,87 @@
             <StackPanel>
                 <TextBlock FontSize="28"
                            FontWeight="SemiBold"
-                           Text="设置" />
+                           Text="{Binding Title}" />
                 <TextBlock Margin="0,12,0,0"
                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                           Text="第一阶段保留轻量设置页面，占住统一 Shell 的结构位。" />
+                           Text="切换应用外观，主页、列表页和数据库工作区都会跟着一起切换。" />
+                <TextBlock Margin="0,16,0,0"
+                           FontWeight="SemiBold"
+                           Text="{Binding ThemeSummary}" />
             </StackPanel>
         </Border>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Padding="20"
+                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                    BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
+                    BorderThickness="1"
+                    CornerRadius="18">
+                <StackPanel>
+                    <ui:SymbolIcon Symbol="Desktop24" />
+                    <TextBlock Margin="0,14,0,0"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Text="跟随系统" />
+                    <TextBlock Margin="0,8,0,0"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               Text="读取 Windows 的应用主题设置，在浅色和深色之间自动同步。" />
+                    <ui:Button Margin="0,18,0,0"
+                               Appearance="Primary"
+                               Command="{Binding UseSystemThemeCommand}"
+                               Content="使用当前系统主题" />
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="2"
+                    Padding="20"
+                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                    BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
+                    BorderThickness="1"
+                    CornerRadius="18">
+                <StackPanel>
+                    <ui:SymbolIcon Symbol="WeatherSunny24" />
+                    <TextBlock Margin="0,14,0,0"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Text="浅色模式" />
+                    <TextBlock Margin="0,8,0,0"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               Text="适合明亮环境，保留当前产品的浅暖色层次。" />
+                    <ui:Button Margin="0,18,0,0"
+                               Command="{Binding UseLightThemeCommand}"
+                               Content="切换到浅色" />
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="4"
+                    Padding="20"
+                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                    BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
+                    BorderThickness="1"
+                    CornerRadius="18">
+                <StackPanel>
+                    <ui:SymbolIcon Symbol="WeatherMoon24" />
+                    <TextBlock Margin="0,14,0,0"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Text="深色模式" />
+                    <TextBlock Margin="0,8,0,0"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               Text="降低夜间眩光，把工作区和卡片层次切到更克制的暗色界面。" />
+                    <ui:Button Margin="0,18,0,0"
+                               Command="{Binding UseDarkThemeCommand}"
+                               Content="切换到深色" />
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>

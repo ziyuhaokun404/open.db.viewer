@@ -23,6 +23,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<Func<string, Task<bool>>>(_ => path => Task.FromResult(File.Exists(path)));
 
         services.AddSingleton<IDatabaseEntryRepository>(_ => new FileDatabaseEntryRepository(appDataPath));
+        services.AddSingleton<ThemeService>();
         services.AddSingleton<DatabaseEntryService>();
         services.AddSingleton<ISqliteConnectionFactory, SqliteConnectionFactory>();
         services.AddSingleton<SqliteDatabaseInspector>();

@@ -33,9 +33,15 @@ public class DatabaseWorkspaceViewModelTests
         viewModel.ObjectExplorer.SelectedNode!.Name.Should().Be("orders");
         viewModel.Schema.TableName.Should().Be("orders");
         viewModel.Schema.Columns.Should().HaveCount(3);
+        viewModel.Schema.RowCount.Should().Be(2);
+        viewModel.Schema.Indexes.Should().ContainSingle(index => index.Name == "idx_orders_user_id");
+        viewModel.Schema.SqliteVersion.Should().NotBeNullOrWhiteSpace();
+        viewModel.Schema.EncodingSummary.Should().NotBe("-");
         viewModel.Data.Columns.Should().Equal("id", "user_id", "total");
         viewModel.Data.Rows.Should().HaveCount(2);
         viewModel.Data.PageNumber.Should().Be(1);
+        viewModel.DatabaseFileName.Should().Be("sample.db");
+        viewModel.ConnectionStatusText.Should().Be("连接正常");
     }
 
     [Fact]
@@ -171,6 +177,21 @@ public class DatabaseWorkspaceViewModelTests
         viewModel.HasOpenDatabase.Should().BeFalse();
         viewModel.EmptyStateTitle.Should().Be("尚未打开数据库");
         viewModel.EmptyStateDescription.Should().Contain("打开一个 SQLite 数据库");
+    }
+
+    [Fact]
+    public async Task ObjectExplorer_ShouldFilterTablesBySearchText()
+    {
+        await using var db = await SqliteTestDb.CreateAsync();
+        var connectionFactory = new SqliteConnectionFactory();
+        var viewModel = new ObjectExplorerViewModel(new SqliteDatabaseInspector(connectionFactory));
+
+        await viewModel.LoadAsync(db.FilePath);
+        viewModel.SearchText = "user";
+
+        viewModel.FilteredTables.Should().ContainSingle(node => node.Name == "users");
+        viewModel.ObjectCountSummary.Should().Be("显示 1 / 2 个表");
+        viewModel.SelectedNode?.Name.Should().Be("users");
     }
 
     private sealed class FakeFileDialogService : Open.Db.Viewer.Shell.Services.IFileDialogService

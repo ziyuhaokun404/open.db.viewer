@@ -1,10 +1,15 @@
 using System.ComponentModel;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using Open.Db.Viewer.Shell.Services;
 using Open.Db.Viewer.Shell.ViewModels;
 using Open.Db.Viewer.Shell.ViewModels.Navigation;
 using Open.Db.Viewer.Shell.ViewModels.Shell;
 using Open.Db.Viewer.Shell.ViewModels.Workspace;
+using SharpVectors.Converters;
+using SharpVectors.Renderers.Wpf;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
@@ -12,14 +17,22 @@ namespace Open.Db.Viewer.Shell.Views;
 
 public partial class MainWindow : FluentWindow
 {
-    public MainWindow(ViewModels.ShellViewModel viewModel)
+    private const string LogoAppName = "Open.Db.Viewer.Shell";
+    private static readonly MethodInfo? SvgGetImageMethod = typeof(SvgImageExtension)
+        .BaseType?
+        .GetMethod("GetImage", BindingFlags.Instance | BindingFlags.NonPublic);
+    private readonly ThemeService _themeService;
+
+    public MainWindow(ViewModels.ShellViewModel viewModel, ThemeService themeService)
     {
         InitializeComponent();
+        _themeService = themeService;
         DataContext = viewModel;
         viewModel.PropertyChanged += OnShellViewModelPropertyChanged;
-        UpdateThemeToggleVisual(ApplicationThemeManager.GetAppTheme());
+        UpdateLogoVisual();
+        UpdateThemeToggleVisual(_themeService.EffectiveTheme);
         UpdateNavigationSelection();
-        ApplicationThemeManager.Changed += OnApplicationThemeChanged;
+        _themeService.ThemeChanged += OnThemeChanged;
         Closed += OnClosed;
     }
 
@@ -49,17 +62,13 @@ public partial class MainWindow : FluentWindow
 
     private void ToggleThemeMode(object sender, RoutedEventArgs e)
     {
-        var nextTheme = ApplicationThemeManager.GetAppTheme() == ApplicationTheme.Dark
-            ? ApplicationTheme.Light
-            : ApplicationTheme.Dark;
-
-        ApplicationThemeManager.Apply(nextTheme);
-        UpdateThemeToggleVisual(nextTheme);
+        _themeService.ToggleTheme();
     }
 
-    private void OnApplicationThemeChanged(ApplicationTheme applicationTheme, System.Windows.Media.Color systemAccent)
+    private void OnThemeChanged(object? sender, EventArgs e)
     {
-        UpdateThemeToggleVisual(applicationTheme);
+        UpdateLogoVisual();
+        UpdateThemeToggleVisual(_themeService.EffectiveTheme);
     }
 
     private void OnClosed(object? sender, EventArgs e)
@@ -69,7 +78,7 @@ public partial class MainWindow : FluentWindow
             shell.PropertyChanged -= OnShellViewModelPropertyChanged;
         }
 
-        ApplicationThemeManager.Changed -= OnApplicationThemeChanged;
+        _themeService.ThemeChanged -= OnThemeChanged;
         Closed -= OnClosed;
     }
 
@@ -81,7 +90,7 @@ public partial class MainWindow : FluentWindow
         }
     }
 
-    private void UpdateThemeToggleVisual(ApplicationTheme applicationTheme)
+    private void UpdateThemeToggleVisual(Wpf.Ui.Appearance.ApplicationTheme applicationTheme)
     {
         if (ThemeToggleButton is null || ThemeToggleIcon is null)
         {
@@ -89,8 +98,68 @@ public partial class MainWindow : FluentWindow
         }
 
         var isDarkTheme = applicationTheme == ApplicationTheme.Dark;
-        ThemeToggleIcon.Symbol = isDarkTheme ? SymbolRegular.WeatherMoon24 : SymbolRegular.WeatherSunny24;
-        ThemeToggleButton.ToolTip = isDarkTheme ? "当前为深色模式" : "当前为浅色模式";
+        ThemeToggleIcon.Symbol = isDarkTheme ? SymbolRegular.WeatherSunny24 : SymbolRegular.WeatherMoon24;
+        ThemeToggleButton.ToolTip = isDarkTheme ? "切换到浅色模式" : "切换到深色模式";
+    }
+
+    private void UpdateLogoVisual()
+    {
+        var logoPath = TryFindResource("AppLogoSvgPath") as string
+            ?? (_themeService.EffectiveTheme == ApplicationTheme.Dark
+                ? "/Assets/Icons/open_db_viewer_logo_light.svg"
+                : "/Assets/Icons/open_db_viewer_logo_transparent.svg");
+
+        if (AppIconImage is not null)
+        {
+            AppIconImage.Source = CreateLogoResourceUri(logoPath);
+        }
+
+        Icon = CreateWindowIcon(logoPath);
+    }
+
+    private static ImageSource? CreateWindowIcon(string logoPath)
+    {
+        var logoUri = CreateLogoResourceUri(logoPath);
+
+        if (SvgGetImageMethod is not null)
+        {
+            var svgImage = new SvgImageExtension
+            {
+                AppName = LogoAppName
+            };
+
+            if (SvgGetImageMethod.Invoke(svgImage, [logoUri]) is ImageSource imageSource)
+            {
+                return imageSource;
+            }
+        }
+
+        try
+        {
+            var drawingSettings = new WpfDrawingSettings();
+            var svgReader = new FileSvgReader(drawingSettings, false);
+            if (svgReader.Read(logoUri) is DrawingGroup drawingGroup)
+            {
+                var drawingImage = new DrawingImage(drawingGroup);
+                if (drawingImage.CanFreeze)
+                {
+                    drawingImage.Freeze();
+                }
+
+                return drawingImage;
+            }
+        }
+        catch
+        {
+            // Keep a non-null icon so window initialization stays resilient in tests and at runtime.
+        }
+
+        return new DrawingImage();
+    }
+
+    private static Uri CreateLogoResourceUri(string logoPath)
+    {
+        return new Uri($"pack://application:,,,/{LogoAppName};component{logoPath}", UriKind.Absolute);
     }
 
     private void UpdateNavigationSelection()

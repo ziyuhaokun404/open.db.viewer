@@ -59,7 +59,9 @@ public class MainWindowSmokeTests
                     new PinnedDatabasesViewModel(databaseEntryService),
                     new SettingsViewModel(),
                     new AboutViewModel());
-                var window = new MainWindow(shell);
+                var themeService = new ThemeService();
+                themeService.ApplyPreference(ThemePreference.Light);
+                var window = new MainWindow(shell, themeService);
 
                 window.Show();
                 window.ApplyTemplate();
@@ -83,9 +85,11 @@ public class MainWindowSmokeTests
                 appIconElement.ActualHeight.Should().BeGreaterThan(0);
 
                 var themeToggleButton = window.FindName("ThemeToggleButton").Should().BeOfType<WpfUiControls.Button>().Subject;
+                themeToggleButton.ToolTip.Should().Be("切换到深色模式");
                 themeToggleButton.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Button.ClickEvent));
                 DoEvents();
                 ApplicationThemeManager.GetAppTheme().Should().Be(ApplicationTheme.Dark);
+                themeToggleButton.ToolTip.Should().Be("切换到浅色模式");
 
                 var rootNavigation = window.FindName("RootNavigation").Should().BeOfType<WpfUiControls.NavigationView>().Subject;
                 var homeNavItem = window.FindName("HomeNavItem").Should().BeOfType<WpfUiControls.NavigationViewItem>().Subject;
@@ -118,23 +122,23 @@ public class MainWindowSmokeTests
                     .Where(text => !string.IsNullOrWhiteSpace(text))
                     .ToArray();
 
-                renderedTexts.Should().Contain("数据库查看器");
-                renderedTexts.Count(text => text == "数据库查看器").Should().Be(1);
+                renderedTexts.Should().Contain("Open.db.viewer");
+                renderedTexts.Count(text => text == "Open.db.viewer").Should().Be(1);
                 renderedTexts.Should().Contain("首页");
                 renderedTexts.Should().Contain("最近使用");
                 renderedTexts.Should().Contain("数据库工作台");
                 renderedTexts.Should().Contain("设置");
                 renderedTexts.Should().Contain("关于");
                 renderedTexts.Should().Contain("快速打开");
-                renderedTexts.Should().Contain("已固定的数据库");
                 renderedTexts.Should().Contain("查看全部");
                 renderedTexts.Should().Contain(@"C:\data\demo\app.db");
-                renderedTexts.Should().Contain(@"C:\data\demo\northwind.db");
-                renderedTexts.Should().NotContain("open.db.viewer");
                 renderedTexts.Should().NotContain("轻量桌面工作台");
                 renderedTexts.Should().NotContain("HOME");
+                renderedTexts.Should().NotContain("已固定的数据库");
+                renderedTexts.Should().NotContain(@"C:\data\demo\northwind.db");
 
                 window.Close();
+                themeService.Dispose();
                 application.Shutdown();
             }
             catch (Exception exception)

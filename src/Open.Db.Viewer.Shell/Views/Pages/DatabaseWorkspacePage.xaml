@@ -4,22 +4,184 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-             xmlns:mw="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
-        <Style x:Key="PanelBorderStyle"
-               TargetType="Border">
-            <Setter Property="Padding" Value="18" />
-            <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
+        <DropShadowEffect x:Key="WorkspaceShadowEffect"
+                          BlurRadius="16"
+                          Color="#000000"
+                          Opacity="0.12"
+                          ShadowDepth="0" />
+
+        <Style x:Key="WorkspaceSurfaceStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource WorkspaceSurfaceBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource WorkspaceSurfaceBorderBrush}" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="18" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Effect" Value="{StaticResource WorkspaceShadowEffect}" />
         </Style>
 
-        <Style x:Key="HideWhenTableSelectedStyle"
-               TargetType="StackPanel">
+        <Style x:Key="WorkspacePanelStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource WorkspaceSurfaceBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource WorkspaceSurfaceBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="10" />
+        </Style>
+
+        <Style x:Key="WorkspaceSectionTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+        </Style>
+
+        <Style x:Key="WorkspaceCaptionStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{DynamicResource WorkspaceSubtleBrush}" />
+        </Style>
+
+        <Style x:Key="WorkspaceInputBorderStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource WorkspaceInputBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource WorkspaceSurfaceBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="10,0" />
+            <Setter Property="Height" Value="38" />
+        </Style>
+
+        <Style x:Key="WorkspaceMetricCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource WorkspaceMetricBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource WorkspaceSurfaceBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Margin" Value="0,0,10,0" />
+            <Setter Property="Padding" Value="12,10" />
+        </Style>
+
+        <Style x:Key="WorkspaceTabItemStyle" TargetType="TabItem">
+            <Setter Property="Foreground" Value="{DynamicResource WorkspaceSubtleBrush}" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0,0,18,0" />
+            <Setter Property="MinWidth" Value="72" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border x:Name="TabBorder"
+                                Padding="0,8,6,10"
+                                BorderBrush="Transparent"
+                                BorderThickness="0,0,0,2"
+                                Background="Transparent">
+                            <ContentPresenter HorizontalAlignment="Left"
+                                              VerticalAlignment="Center"
+                                              ContentSource="Header" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="TabBorder" Property="BorderBrush" Value="{DynamicResource WorkspaceTabUnderlineBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="WorkspaceDataGridStyle" TargetType="DataGrid">
+            <Setter Property="Background" Value="{DynamicResource WorkspacePanelBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource WorkspaceSurfaceBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="GridLinesVisibility" Value="Horizontal" />
+            <Setter Property="HeadersVisibility" Value="Column" />
+            <Setter Property="RowHeaderWidth" Value="0" />
+            <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource WorkspaceSurfaceBorderBrush}" />
+            <Setter Property="VerticalGridLinesBrush" Value="{DynamicResource WorkspaceSurfaceBorderBrush}" />
+            <Setter Property="CanUserResizeRows" Value="False" />
+            <Setter Property="CanUserReorderColumns" Value="False" />
+            <Setter Property="CanUserDeleteRows" Value="False" />
+            <Setter Property="SelectionMode" Value="Extended" />
+            <Setter Property="SelectionUnit" Value="FullRow" />
+        </Style>
+
+        <Style x:Key="WorkspaceDataGridColumnHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="{DynamicResource WorkspaceMetricBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource WorkspaceSurfaceBorderBrush}" />
+            <Setter Property="BorderThickness" Value="0,0,1,1" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+            <Setter Property="Padding" Value="12,10" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+
+        <Style x:Key="WorkspaceDataGridCellStyle" TargetType="DataGridCell">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="{DynamicResource WorkspaceSurfaceBorderBrush}" />
+            <Setter Property="BorderThickness" Value="0,0,1,1" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Padding" Value="12,10" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource WorkspaceSurfaceBorderBrush}" />
+                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                </Trigger>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource WorkspaceSurfaceBorderBrush}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="WorkspaceDataGridRowStyle" TargetType="DataGridRow">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource WorkspaceSurfaceBorderBrush}" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                </Trigger>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="Background" Value="Transparent" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ObjectListBoxItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="ItemBorder"
+                                Margin="0,0,0,3"
+                                Padding="8,6"
+                                Background="{DynamicResource WorkspaceListItemBrush}"
+                                BorderBrush="Transparent"
+                                BorderThickness="1"
+                                CornerRadius="7">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="{DynamicResource WorkspaceListItemHoverBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="ItemBorder" Property="Background" Value="{DynamicResource WorkspaceListItemSelectedBrush}" />
+                                <Setter TargetName="ItemBorder" Property="BorderBrush" Value="{DynamicResource WorkspaceAccentBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="HideWhenTableSelectedStyle" TargetType="StackPanel">
             <Setter Property="Visibility" Value="Visible" />
             <Style.Triggers>
                 <DataTrigger Binding="{Binding HasTableSelection}" Value="True">
@@ -27,340 +189,1114 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+
+        <Style x:Key="ShowWhenNoFilteredTablesStyle" TargetType="StackPanel">
+            <Setter Property="Visibility" Value="Collapsed" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ObjectExplorer.HasFilteredTables}" Value="False">
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ShowWhenSearchEmptyStyle" TargetType="TextBlock">
+            <Setter Property="Visibility" Value="Visible" />
+            <Setter Property="Foreground" Value="{DynamicResource WorkspaceSubtleBrush}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ObjectExplorer.SearchText}" Value="">
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ObjectExplorer.SearchText}" Value="{x:Null}">
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+                <Trigger Property="Text" Value="">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
-    <Grid Margin="24">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="20" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+    <Border Background="{DynamicResource WorkspacePageBackgroundBrush}">
+        <Grid Margin="14">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="8" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <Border Style="{StaticResource PanelBorderStyle}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="20" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-
-                <StackPanel>
-                    <TextBlock FontSize="26"
-                               FontWeight="SemiBold"
-                               Text="{Binding Title}" />
-                    <TextBlock Margin="0,6,0,0"
-                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                               Text="{Binding DatabasePath}"
-                               TextTrimming="CharacterEllipsis" />
-                    <TextBlock Margin="0,10,0,0"
-                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                               Text="{Binding StatusMessage}" />
-                </StackPanel>
-
-                <StackPanel Grid.Column="2"
-                            Orientation="Horizontal"
-                            VerticalAlignment="Top">
-                    <ui:Button Content="返回首页"
-                               Command="{Binding ReturnHomeCommand}"
-                               Icon="{mw:SymbolIcon ArrowReply24}" />
-                    <ui:Button Margin="8,0,0,0"
-                               Content="刷新"
-                               Command="{Binding RefreshCommand}"
-                               Icon="{mw:SymbolIcon ArrowClockwise24}" />
-                </StackPanel>
-            </Grid>
-        </Border>
-
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300" />
-                <ColumnDefinition Width="20" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <Border Style="{StaticResource PanelBorderStyle}">
-                <DockPanel>
-                    <StackPanel DockPanel.Dock="Top"
-                                Margin="0,0,0,14">
-                        <TextBlock FontSize="18"
-                                   FontWeight="SemiBold"
-                                   Text="对象" />
-                        <TextBlock Margin="0,4,0,0"
-                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                   Text="浏览当前数据库中的数据表。" />
-                    </StackPanel>
-
-                    <TreeView x:Name="ObjectTree"
-                              ItemsSource="{Binding ObjectExplorer.RootNodes}"
-                              SelectedItemChanged="ObjectTree_OnSelectedItemChanged">
-                        <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                                <TextBlock Text="{Binding Name}" />
-                            </HierarchicalDataTemplate>
-                        </TreeView.ItemTemplate>
-                    </TreeView>
-                </DockPanel>
-            </Border>
-
-            <Border Grid.Column="2"
-                    Style="{StaticResource PanelBorderStyle}">
+            <Border Padding="16"
+                    Style="{StaticResource WorkspaceSurfaceStyle}">
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="16" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
                     <StackPanel>
                         <TextBlock FontSize="22"
                                    FontWeight="SemiBold"
-                                   Text="{Binding SelectedObjectTitle}" />
-                        <TextBlock Margin="0,6,0,0"
-                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                   Text="{Binding SelectedObjectSubtitle}" />
+                                   Text="{Binding Title}" />
+                        <TextBlock Margin="0,4,0,0"
+                                   Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                   Text="{Binding DatabasePath}"
+                                   TextTrimming="CharacterEllipsis" />
                     </StackPanel>
 
-                    <TabControl Grid.Row="2"
-                                Visibility="{Binding HasTableSelection, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <TabItem Header="结构">
-                            <Grid Margin="12">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="12" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Top">
+                        <ui:Button Margin="0,0,10,0"
+                                   Appearance="Secondary"
+                                   Command="{Binding ReturnHomeCommand}"
+                                   Content="返回首页"
+                                   CornerRadius="8"
+                                   Icon="{ui:SymbolIcon ArrowReply24}" />
+                        <ui:Button Margin="0,0,10,0"
+                                   Appearance="Secondary"
+                                   Command="{Binding RefreshCommand}"
+                                   Content="刷新"
+                                   CornerRadius="8"
+                                   Icon="{ui:SymbolIcon ArrowClockwise24}" />
+                        <Border Width="280"
+                                Style="{StaticResource WorkspaceInputBorderStyle}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
 
-                                <Border Padding="14"
-                                        Background="{DynamicResource ControlFillColorTertiaryBrush}"
-                                        BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="14">
-                                    <StackPanel>
-                                        <TextBlock FontSize="18"
-                                                   FontWeight="SemiBold"
-                                                   Text="{Binding Schema.TableName}" />
-                                        <TextBlock Margin="0,6,0,0"
-                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                   Text="{Binding Schema.ColumnCountSummary}" />
-                                    </StackPanel>
-                                </Border>
-
-                                <Border Grid.Row="2"
-                                        Padding="12"
-                                        Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                                        BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="14">
-                                    <DataGrid AutoGenerateColumns="False"
-                                              CanUserAddRows="False"
-                                              IsReadOnly="True"
-                                              ItemsSource="{Binding Schema.Columns}">
-                                        <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding Name}" Header="列名" />
-                                            <DataGridTextColumn Binding="{Binding DataType}" Header="类型" />
-                                            <DataGridCheckBoxColumn Binding="{Binding IsNullable}" Header="可为空" />
-                                            <DataGridCheckBoxColumn Binding="{Binding IsPrimaryKey}" Header="主键" />
-                                            <DataGridTextColumn Binding="{Binding DefaultValue}" Header="默认值" />
-                                        </DataGrid.Columns>
-                                    </DataGrid>
-                                </Border>
+                                <ui:SymbolIcon VerticalAlignment="Center"
+                                               Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                               Symbol="Search24" />
+                                <TextBlock Grid.Column="1"
+                                           Margin="10,0,0,0"
+                                           VerticalAlignment="Center"
+                                           IsHitTestVisible="False"
+                                           Text="搜索对象 (Ctrl+F)">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock" BasedOn="{StaticResource WorkspaceCaptionStyle}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ObjectExplorer.SearchText}" Value="">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ObjectExplorer.SearchText}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <TextBox Grid.Column="1"
+                                         Margin="10,0"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                         Text="{Binding ObjectExplorer.SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                         VerticalContentAlignment="Center" />
+                                <ui:Button Grid.Column="2"
+                                           Width="28"
+                                           Height="28"
+                                           Padding="0"
+                                           Appearance="Transparent"
+                                           Command="{Binding ObjectExplorer.ClearSearchCommand}"
+                                           Visibility="{Binding ObjectExplorer.HasSearchText, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                           Icon="{ui:SymbolIcon Dismiss24}" />
                             </Grid>
-                        </TabItem>
-                        <TabItem Header="数据">
-                            <Grid Margin="12">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="12" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
+                        </Border>
+                        <ui:Button Width="38"
+                                   Height="38"
+                                   Margin="10,0,0,0"
+                                   Appearance="Secondary"
+                                   CornerRadius="8"
+                                   Icon="{ui:SymbolIcon Filter24}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
 
-                                <Border Padding="14"
-                                        Background="{DynamicResource ControlFillColorTertiaryBrush}"
-                                        BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="14">
-                                    <WrapPanel>
-                                        <ui:Button Content="上一页"
-                                                   Command="{Binding Data.LoadPreviousPageCommand}"
-                                                   Icon="{mw:SymbolIcon ArrowLeft24}" />
-                                        <ui:Button Margin="8,0,0,0"
-                                                   Content="下一页"
-                                                   Command="{Binding Data.LoadNextPageCommand}"
-                                                   Icon="{mw:SymbolIcon ArrowRight24}" />
-                                        <ui:Button Margin="8,0,0,0"
-                                                   Content="刷新"
-                                                   Command="{Binding Data.RefreshCurrentPageCommand}"
-                                                   Icon="{mw:SymbolIcon ArrowClockwise24}" />
-                                        <ui:Button Margin="8,0,0,0"
-                                                   Content="导出 CSV"
-                                                   Command="{Binding Data.ExportCurrentPageCommand}"
-                                                   Icon="{mw:SymbolIcon ArrowExportLtr24}" />
-                                        <TextBlock Margin="16,0,0,0"
-                                                   VerticalAlignment="Center"
-                                                   Text="每页行数" />
-                                        <ComboBox Margin="8,0,0,0"
-                                                  Width="96"
-                                                  ItemsSource="{Binding Data.PageSizeOptions}"
-                                                  SelectionChanged="PageSizeComboBox_OnSelectionChanged"
-                                                  SelectedItem="{Binding Data.PageSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                        <TextBlock Margin="16,0,0,0"
-                                                   VerticalAlignment="Center"
-                                                   FontWeight="SemiBold"
-                                                   Text="{Binding Data.ResultSummary}" />
-                                        <TextBlock Margin="16,0,0,0"
-                                                   VerticalAlignment="Center"
-                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                   Text="{Binding Data.SortSummary}" />
-                                    </WrapPanel>
-                                </Border>
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="280" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-                                <Border Grid.Row="2"
-                                        Padding="12"
-                                        Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                                        BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="14">
-                                    <Grid>
+                <Border Padding="14"
+                        Style="{StaticResource WorkspacePanelStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="10" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="8" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <StackPanel>
+                            <TextBlock FontSize="17"
+                                       FontWeight="SemiBold"
+                                       Text="对象" />
+                            <TextBlock Margin="0,4,0,0"
+                                       Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                       Text="浏览当前数据库中的数据表。" />
+                        </StackPanel>
+
+                        <Border Grid.Row="2"
+                                Style="{StaticResource WorkspaceInputBorderStyle}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <ui:SymbolIcon VerticalAlignment="Center"
+                                               Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                               Symbol="Search24" />
+                                <TextBlock Grid.Column="1"
+                                           Margin="10,0,0,0"
+                                           VerticalAlignment="Center"
+                                           IsHitTestVisible="False"
+                                           Text="筛选表名...">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock" BasedOn="{StaticResource WorkspaceCaptionStyle}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ObjectExplorer.SearchText}" Value="">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ObjectExplorer.SearchText}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <TextBox Grid.Column="1"
+                                         Margin="10,0"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                         Text="{Binding ObjectExplorer.SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                         VerticalContentAlignment="Center" />
+                                <ui:Button Grid.Column="2"
+                                           Width="28"
+                                           Height="28"
+                                           Margin="6,0,0,0"
+                                           Padding="0"
+                                           Appearance="Transparent"
+                                           Command="{Binding ObjectExplorer.ClearSearchCommand}"
+                                           Visibility="{Binding ObjectExplorer.HasSearchText, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                           Icon="{ui:SymbolIcon Dismiss24}" />
+                                <ui:Button Grid.Column="3"
+                                           Width="28"
+                                           Height="28"
+                                           Margin="6,0,0,0"
+                                           Padding="0"
+                                           Appearance="Transparent"
+                                           Icon="{ui:SymbolIcon Filter24}" />
+                            </Grid>
+                        </Border>
+
+                        <DockPanel Grid.Row="4"
+                                   LastChildFill="False">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon Width="13"
+                                               Height="13"
+                                               Margin="0,2,5,0"
+                                               Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                               Symbol="ChevronDown16" />
+                                <TextBlock FontSize="13"
+                                           FontWeight="SemiBold"
+                                           Text="{Binding ObjectExplorer.GroupTitle}" />
+                            </StackPanel>
+                            <Border DockPanel.Dock="Right"
+                                    Padding="7,2"
+                                    Background="{DynamicResource WorkspaceAccentSoftBrush}"
+                                    CornerRadius="999">
+                                <TextBlock FontSize="12"
+                                           FontWeight="SemiBold"
+                                           Foreground="{DynamicResource WorkspaceAccentBrush}"
+                                           Text="{Binding ObjectExplorer.FilteredObjectCount}" />
+                            </Border>
+                        </DockPanel>
+
+                        <Border Grid.Row="6"
+                                Padding="4"
+                                Background="{DynamicResource WorkspacePanelBrush}"
+                                BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="10">
+                            <Grid>
+                                <ListBox x:Name="ObjectList"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         ItemContainerStyle="{StaticResource ObjectListBoxItemStyle}"
+                                         ItemsSource="{Binding ObjectExplorer.FilteredTables}"
+                                         SelectedItem="{Binding ObjectExplorer.SelectedNode, Mode=TwoWay}"
+                                         SelectionChanged="ObjectList_OnSelectionChanged">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="8" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <ui:SymbolIcon Width="16"
+                                                               Height="16"
+                                                               Margin="0,1,0,0"
+                                                               VerticalAlignment="Top"
+                                                               Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                                               Symbol="TableSimple24" />
+                                                <StackPanel Grid.Column="2">
+                                                    <TextBlock FontSize="13"
+                                                               FontWeight="SemiBold"
+                                                               Text="{Binding Name}" />
+                                                    <TextBlock Margin="0,1,0,0"
+                                                               FontSize="11"
+                                                               Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                                               Text="SQLite 表" />
+                                                </StackPanel>
+                                                <ui:SymbolIcon x:Name="ItemStarIcon"
+                                                               Grid.Column="3"
+                                                               Width="14"
+                                                               Height="14"
+                                                               VerticalAlignment="Center"
+                                                               Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                                               Opacity="0"
+                                                               Symbol="Star24" />
+                                            </Grid>
+                                            <DataTemplate.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected}" Value="True">
+                                                    <Setter TargetName="ItemStarIcon" Property="Opacity" Value="1" />
+                                                    <Setter TargetName="ItemStarIcon" Property="Foreground" Value="{DynamicResource WorkspaceAccentBrush}" />
+                                                </DataTrigger>
+                                            </DataTemplate.Triggers>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+
+                                <StackPanel HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Style="{StaticResource ShowWhenNoFilteredTablesStyle}">
+                                    <ui:SymbolIcon HorizontalAlignment="Center"
+                                                   Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                                   Symbol="Search24" />
+                                    <TextBlock Margin="0,10,0,0"
+                                               FontWeight="SemiBold"
+                                               Text="没有匹配的表" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <TextBlock Grid.Row="7"
+                                   Margin="0,8,0,0"
+                                   Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                   Text="{Binding ObjectExplorer.FooterSummary}" />
+                    </Grid>
+                </Border>
+
+                <Border Grid.Column="2"
+                        Padding="0"
+                        Style="{StaticResource WorkspacePanelStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="1" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Grid Margin="16,14,16,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontSize="20"
+                                               FontWeight="SemiBold"
+                                               Text="{Binding SelectedObjectTitle}" />
+                                    <Border Margin="10,3,0,0"
+                                            Padding="10,3"
+                                            Background="{DynamicResource WorkspaceMetricBrush}"
+                                            BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="999">
+                                        <TextBlock FontWeight="SemiBold"
+                                                   Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                                   Text="{Binding SelectedObjectKindLabel}" />
+                                    </Border>
+                                </StackPanel>
+                                <TextBlock Margin="0,6,0,0"
+                                           Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                           Text="{Binding SelectedObjectSubtitle}" />
+                            </StackPanel>
+
+                            <Border Grid.Column="1"
+                                    Padding="12,10"
+                                    Background="{DynamicResource WorkspaceMetricBrush}"
+                                    BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="10">
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource WorkspaceCaptionStyle}" Text="数据库引擎" />
+                                    <TextBlock Margin="0,4,0,0"
+                                               FontSize="15"
+                                               FontWeight="SemiBold"
+                                               Text="{Binding Schema.SqliteVersion, StringFormat=SQLite {0}}" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <Border Grid.Row="1"
+                                Background="{DynamicResource WorkspaceSurfaceBorderBrush}" />
+
+                        <Grid Grid.Row="2"
+                              Visibility="{Binding HasTableSelection, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TabControl Margin="16,8,16,14"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        ItemContainerStyle="{StaticResource WorkspaceTabItemStyle}">
+                                <TabItem>
+                                    <TabItem.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <ui:SymbolIcon Width="16"
+                                                           Height="16"
+                                                           Margin="0,0,6,0"
+                                                           Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}"
+                                                           Symbol="Document24" />
+                                            <TextBlock Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}"
+                                                       Text="结构" />
+                                        </StackPanel>
+                                    </TabItem.Header>
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <Grid Margin="0,10,0,0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="10" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="10" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+
+                                            <Border Padding="10"
+                                                    Background="{DynamicResource WorkspacePanelBrush}"
+                                                    BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
+                                                    BorderThickness="1"
+                                                    CornerRadius="10">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="8" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="8" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="8" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="8" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="8" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Border Grid.Column="0" Style="{StaticResource WorkspaceMetricCardStyle}">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="34" />
+                                                                <ColumnDefinition Width="*" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <Border Width="28"
+                                                                    Height="28"
+                                                                    Background="{DynamicResource WorkspaceAccentSoftBrush}"
+                                                                    CornerRadius="7">
+                                                                <ui:SymbolIcon HorizontalAlignment="Center"
+                                                                               VerticalAlignment="Center"
+                                                                               Foreground="{DynamicResource WorkspaceAccentBrush}"
+                                                                               Symbol="TableSimple24" />
+                                                            </Border>
+                                                            <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                                                <TextBlock Style="{StaticResource WorkspaceCaptionStyle}" Text="表类型" />
+                                                                <TextBlock Margin="0,3,0,0"
+                                                                           FontSize="12"
+                                                                           FontWeight="SemiBold"
+                                                                           Text="{Binding SelectedObjectKindLabel}"
+                                                                           TextTrimming="CharacterEllipsis" />
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border Grid.Column="2" Style="{StaticResource WorkspaceMetricCardStyle}">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="34" />
+                                                                <ColumnDefinition Width="*" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <Border Width="28"
+                                                                    Height="28"
+                                                                    Background="{DynamicResource WorkspaceAccentSoftBrush}"
+                                                                    CornerRadius="7">
+                                                                <ui:SymbolIcon HorizontalAlignment="Center"
+                                                                               VerticalAlignment="Center"
+                                                                               Foreground="{DynamicResource WorkspaceAccentBrush}"
+                                                                               Symbol="History24" />
+                                                            </Border>
+                                                            <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                                                <TextBlock Style="{StaticResource WorkspaceCaptionStyle}" Text="行数" />
+                                                                <TextBlock Margin="0,3,0,0" FontSize="12" FontWeight="SemiBold" Text="{Binding MetricRowCountText}" />
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border Grid.Column="4" Style="{StaticResource WorkspaceMetricCardStyle}">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="34" />
+                                                                <ColumnDefinition Width="*" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <Border Width="28"
+                                                                    Height="28"
+                                                                    Background="{DynamicResource WorkspaceAccentSoftBrush}"
+                                                                    CornerRadius="7">
+                                                                <ui:SymbolIcon HorizontalAlignment="Center"
+                                                                               VerticalAlignment="Center"
+                                                                               Foreground="{DynamicResource WorkspaceAccentBrush}"
+                                                                               Symbol="AppsList24" />
+                                                            </Border>
+                                                            <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                                                <TextBlock Style="{StaticResource WorkspaceCaptionStyle}" Text="列数" />
+                                                                <TextBlock Margin="0,3,0,0" FontSize="12" FontWeight="SemiBold" Text="{Binding MetricColumnCountText}" />
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border Grid.Column="6" Style="{StaticResource WorkspaceMetricCardStyle}">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="34" />
+                                                                <ColumnDefinition Width="*" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <Border Width="28"
+                                                                    Height="28"
+                                                                    Background="{DynamicResource WorkspaceAccentSoftBrush}"
+                                                                    CornerRadius="7">
+                                                                <ui:SymbolIcon HorizontalAlignment="Center"
+                                                                               VerticalAlignment="Center"
+                                                                               Foreground="{DynamicResource WorkspaceAccentBrush}"
+                                                                               Symbol="DocumentWidth24" />
+                                                            </Border>
+                                                            <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                                                <TextBlock Style="{StaticResource WorkspaceCaptionStyle}" Text="页大小" />
+                                                                <TextBlock Margin="0,3,0,0" FontSize="12" FontWeight="SemiBold" Text="{Binding MetricPageSizeText}" />
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border Grid.Column="8" Style="{StaticResource WorkspaceMetricCardStyle}">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="34" />
+                                                                <ColumnDefinition Width="*" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <Border Width="28"
+                                                                    Height="28"
+                                                                    Background="{DynamicResource WorkspaceAccentSoftBrush}"
+                                                                    CornerRadius="7">
+                                                                <ui:SymbolIcon HorizontalAlignment="Center"
+                                                                               VerticalAlignment="Center"
+                                                                               Foreground="{DynamicResource WorkspaceAccentBrush}"
+                                                                               Symbol="Clock24" />
+                                                            </Border>
+                                                            <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                                                <TextBlock Style="{StaticResource WorkspaceCaptionStyle}" Text="创建时间" />
+                                                                <TextBlock Margin="0,3,0,0"
+                                                                           FontSize="12"
+                                                                           FontWeight="SemiBold"
+                                                                           Text="{Binding MetricCreatedDateText}"
+                                                                           TextTrimming="CharacterEllipsis" />
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </Border>
+                                                    <Border Grid.Column="10"
+                                                            Margin="0"
+                                                            Style="{StaticResource WorkspaceMetricCardStyle}">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="34" />
+                                                                <ColumnDefinition Width="*" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <Border Width="28"
+                                                                    Height="28"
+                                                                    Background="{DynamicResource WorkspaceAccentSoftBrush}"
+                                                                    CornerRadius="7">
+                                                                <ui:SymbolIcon HorizontalAlignment="Center"
+                                                                               VerticalAlignment="Center"
+                                                                               Foreground="{DynamicResource WorkspaceAccentBrush}"
+                                                                               Symbol="ArrowClockwise24" />
+                                                            </Border>
+                                                            <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                                                <TextBlock Style="{StaticResource WorkspaceCaptionStyle}" Text="更新时间" />
+                                                                <TextBlock Margin="0,3,0,0"
+                                                                           FontSize="12"
+                                                                           FontWeight="SemiBold"
+                                                                           Text="{Binding MetricUpdatedDateText}"
+                                                                           TextTrimming="CharacterEllipsis" />
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </Border>
+                                                </Grid>
+                                            </Border>
+
+                                            <Border Grid.Row="2"
+                                                    Padding="12"
+                                                    Background="{DynamicResource WorkspacePanelBrush}"
+                                                    BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
+                                                    BorderThickness="1"
+                                                    CornerRadius="10">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="12" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
+
+                                                    <TextBlock Style="{StaticResource WorkspaceSectionTitleStyle}"
+                                                               Text="{Binding Schema.ColumnCountSummary, StringFormat=列定义 ({0})}" />
+
+                                                    <DataGrid Grid.Row="2"
+                                                              AutoGenerateColumns="False"
+                                                              CanUserAddRows="False"
+                                                              CellStyle="{StaticResource WorkspaceDataGridCellStyle}"
+                                                              ColumnHeaderStyle="{StaticResource WorkspaceDataGridColumnHeaderStyle}"
+                                                              Focusable="False"
+                                                              IsReadOnly="True"
+                                                              ItemsSource="{Binding Schema.ColumnItems}"
+                                                              RowStyle="{StaticResource WorkspaceDataGridRowStyle}"
+                                                              Style="{StaticResource WorkspaceDataGridStyle}">
+                                                        <DataGrid.Columns>
+                                                            <DataGridTextColumn Width="60" Binding="{Binding Ordinal}" Header="#" />
+                                                            <DataGridTextColumn Width="*" Binding="{Binding Name}" Header="列名" />
+                                                            <DataGridTextColumn Width="120" Binding="{Binding DataType}" Header="类型" />
+                                                            <DataGridTextColumn Width="100" Binding="{Binding Nullability}" Header="可为空" />
+                                                            <DataGridTextColumn Width="100" Binding="{Binding PrimaryKey}" Header="主键" />
+                                                            <DataGridTextColumn Width="120" Binding="{Binding DefaultValue}" Header="默认值" />
+                                                            <DataGridTextColumn Width="180" Binding="{Binding Description}" Header="说明" />
+                                                        </DataGrid.Columns>
+                                                    </DataGrid>
+                                                </Grid>
+                                            </Border>
+
+                                            <Border Grid.Row="4"
+                                                    Padding="16"
+                                                    Background="{DynamicResource WorkspacePanelBrush}"
+                                                    BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
+                                                    BorderThickness="1"
+                                                    CornerRadius="10">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="1.1*" />
+                                                        <ColumnDefinition Width="1" />
+                                                        <ColumnDefinition Width="20" />
+                                                        <ColumnDefinition Width="1.3*" />
+                                                        <ColumnDefinition Width="1" />
+                                                        <ColumnDefinition Width="20" />
+                                                        <ColumnDefinition Width="0.9*" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <StackPanel>
+                                                        <TextBlock Style="{StaticResource WorkspaceSectionTitleStyle}" Text="表信息" />
+                                                        <Grid Margin="0,12,0,0">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="110" />
+                                                                <ColumnDefinition Width="*" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="Auto" />
+                                                                <RowDefinition Height="8" />
+                                                                <RowDefinition Height="Auto" />
+                                                                <RowDefinition Height="8" />
+                                                                <RowDefinition Height="Auto" />
+                                                                <RowDefinition Height="8" />
+                                                                <RowDefinition Height="Auto" />
+                                                                <RowDefinition Height="8" />
+                                                                <RowDefinition Height="Auto" />
+                                                            </Grid.RowDefinitions>
+                                                            <TextBlock Foreground="{DynamicResource WorkspaceSubtleBrush}" Text="表名" />
+                                                            <TextBlock Grid.Column="1" Text="{Binding Schema.TableName}" />
+                                                            <TextBlock Grid.Row="2" Foreground="{DynamicResource WorkspaceSubtleBrush}" Text="对象类型" />
+                                                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SelectedObjectKindLabel}" />
+                                                            <TextBlock Grid.Row="4" Foreground="{DynamicResource WorkspaceSubtleBrush}" Text="所属数据库" />
+                                                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding DatabaseFileName}" />
+                                                            <TextBlock Grid.Row="6" Foreground="{DynamicResource WorkspaceSubtleBrush}" Text="索引" />
+                                                            <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Schema.IndexSummary}" />
+                                                            <TextBlock Grid.Row="8" Foreground="{DynamicResource WorkspaceSubtleBrush}" Text="触发器" />
+                                                            <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding Schema.TriggerSummary}" />
+                                                        </Grid>
+                                                    </StackPanel>
+
+                                                    <Border Grid.Column="1"
+                                                            Background="{DynamicResource WorkspaceSurfaceBorderBrush}" />
+
+                                                    <StackPanel Grid.Column="3">
+                                                        <TextBlock Style="{StaticResource WorkspaceSectionTitleStyle}" Text="数据库信息" />
+                                                        <Grid Margin="0,12,0,0">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="110" />
+                                                                <ColumnDefinition Width="*" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="Auto" />
+                                                                <RowDefinition Height="8" />
+                                                                <RowDefinition Height="Auto" />
+                                                                <RowDefinition Height="8" />
+                                                                <RowDefinition Height="Auto" />
+                                                                <RowDefinition Height="8" />
+                                                                <RowDefinition Height="Auto" />
+                                                                <RowDefinition Height="8" />
+                                                                <RowDefinition Height="Auto" />
+                                                                <RowDefinition Height="8" />
+                                                                <RowDefinition Height="Auto" />
+                                                            </Grid.RowDefinitions>
+                                                            <TextBlock Foreground="{DynamicResource WorkspaceSubtleBrush}" Text="数据库文件" />
+                                                            <TextBlock Grid.Column="1" Text="{Binding DatabasePath}" TextTrimming="CharacterEllipsis" />
+                                                            <TextBlock Grid.Row="2" Foreground="{DynamicResource WorkspaceSubtleBrush}" Text="文件大小" />
+                                                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding DatabaseFileSizeSummary}" />
+                                                            <TextBlock Grid.Row="4" Foreground="{DynamicResource WorkspaceSubtleBrush}" Text="SQLite 版本" />
+                                                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Schema.SqliteVersion}" />
+                                                            <TextBlock Grid.Row="6" Foreground="{DynamicResource WorkspaceSubtleBrush}" Text="用户版本" />
+                                                            <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Schema.UserVersionSummary}" />
+                                                            <TextBlock Grid.Row="8" Foreground="{DynamicResource WorkspaceSubtleBrush}" Text="编码" />
+                                                            <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding Schema.EncodingSummary}" />
+                                                            <TextBlock Grid.Row="10" Foreground="{DynamicResource WorkspaceSubtleBrush}" Text="页大小" />
+                                                            <TextBlock Grid.Row="10" Grid.Column="1" Text="{Binding Schema.PageSizeSummary}" />
+                                                        </Grid>
+                                                    </StackPanel>
+
+                                                    <Border Grid.Column="4"
+                                                            Background="{DynamicResource WorkspaceSurfaceBorderBrush}" />
+
+                                                    <StackPanel Grid.Column="6"
+                                                                VerticalAlignment="Top">
+                                                        <TextBlock Style="{StaticResource WorkspaceSectionTitleStyle}"
+                                                                   HorizontalAlignment="Center"
+                                                                   Text="连接状态" />
+                                                        <Border Margin="0,12,0,0"
+                                                                Padding="16,9"
+                                                                Background="{DynamicResource WorkspaceMetricBrush}"
+                                                                BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
+                                                                BorderThickness="1"
+                                                                CornerRadius="10">
+                                                            <StackPanel Orientation="Horizontal"
+                                                                        HorizontalAlignment="Center">
+                                                                <TextBlock FontSize="16"
+                                                                           Foreground="{DynamicResource WorkspaceSuccessBrush}"
+                                                                           Text="✓" />
+                                                                <TextBlock Margin="10,0,0,0"
+                                                                           FontWeight="SemiBold"
+                                                                           Text="{Binding ConnectionStatusText}" />
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                        </Grid>
+                                    </ScrollViewer>
+                                </TabItem>
+
+                                <TabItem>
+                                    <TabItem.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <ui:SymbolIcon Width="16"
+                                                           Height="16"
+                                                           Margin="0,0,6,0"
+                                                           Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}"
+                                                           Symbol="Database24" />
+                                            <TextBlock Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}"
+                                                       Text="数据" />
+                                        </StackPanel>
+                                    </TabItem.Header>
+                                    <Grid Margin="0,12,0,0">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="12" />
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
 
-                                        <TextBlock Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                   Text="{Binding Data.StatusMessage}" />
+                                        <Border Padding="12"
+                                                Background="{DynamicResource WorkspacePanelBrush}"
+                                                BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="10">
+                                            <WrapPanel>
+                                                <ui:Button Content="上一页"
+                                                           Command="{Binding Data.LoadPreviousPageCommand}"
+                                                           Icon="{ui:SymbolIcon ArrowLeft24}" />
+                                                <ui:Button Margin="8,0,0,0"
+                                                           Content="下一页"
+                                                           Command="{Binding Data.LoadNextPageCommand}"
+                                                           Icon="{ui:SymbolIcon ArrowRight24}" />
+                                                <ui:Button Margin="8,0,0,0"
+                                                           Content="刷新"
+                                                           Command="{Binding Data.RefreshCurrentPageCommand}"
+                                                           Icon="{ui:SymbolIcon ArrowClockwise24}" />
+                                                <ui:Button Margin="8,0,0,0"
+                                                           Content="导出 CSV"
+                                                           Command="{Binding Data.ExportCurrentPageCommand}"
+                                                           Icon="{ui:SymbolIcon ArrowExportLtr24}" />
+                                                <TextBlock Margin="18,0,0,0"
+                                                           VerticalAlignment="Center"
+                                                           Text="每页行数" />
+                                                <ComboBox Width="96"
+                                                          Margin="8,0,0,0"
+                                                          ItemsSource="{Binding Data.PageSizeOptions}"
+                                                          SelectedItem="{Binding Data.PageSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                          SelectionChanged="PageSizeComboBox_OnSelectionChanged" />
+                                                <TextBlock Margin="18,0,0,0"
+                                                           VerticalAlignment="Center"
+                                                           FontWeight="SemiBold"
+                                                           Text="{Binding Data.ResultSummary}" />
+                                                <TextBlock Margin="18,0,0,0"
+                                                           VerticalAlignment="Center"
+                                                           Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                                           Text="{Binding Data.SortSummary}" />
+                                            </WrapPanel>
+                                        </Border>
 
-                                        <DataGrid Grid.Row="2"
-                                                  x:Name="DataGridView"
-                                                  AutoGenerateColumns="True"
-                                                  CanUserAddRows="False"
-                                                  IsReadOnly="True"
-                                                  Sorting="DataGridView_OnSorting"
-                                                  ItemsSource="{Binding Data.TableView}" />
+                                        <Border Grid.Row="2"
+                                                Padding="14"
+                                                Background="{DynamicResource WorkspacePanelBrush}"
+                                                BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="10">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="12" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                                           Text="{Binding Data.StatusMessage}" />
+                                                <DataGrid Grid.Row="2"
+                                                          x:Name="DataGridView"
+                                                          AutoGenerateColumns="True"
+                                                          CanUserAddRows="False"
+                                                          CellStyle="{StaticResource WorkspaceDataGridCellStyle}"
+                                                          ColumnHeaderStyle="{StaticResource WorkspaceDataGridColumnHeaderStyle}"
+                                                          IsReadOnly="True"
+                                                          ItemsSource="{Binding Data.TableView}"
+                                                          RowStyle="{StaticResource WorkspaceDataGridRowStyle}"
+                                                          Sorting="DataGridView_OnSorting"
+                                                          Style="{StaticResource WorkspaceDataGridStyle}" />
+                                            </Grid>
+                                        </Border>
                                     </Grid>
-                                </Border>
-                            </Grid>
-                        </TabItem>
-                        <TabItem Header="查询">
-                            <Grid Margin="12">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="12" />
-                                    <RowDefinition Height="140" />
-                                    <RowDefinition Height="12" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="12" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
+                                </TabItem>
 
-                                <Border Padding="14"
-                                        Background="{DynamicResource ControlFillColorTertiaryBrush}"
-                                        BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="14">
-                                    <WrapPanel>
-                                        <ui:Button Content="执行"
-                                                   Command="{Binding Query.ExecuteQueryCommand}"
-                                                   Icon="{mw:SymbolIcon Play24}" />
-                                        <ui:Button Margin="8,0,0,0"
-                                                   Content="导出 CSV"
-                                                   Command="{Binding Query.ExportResultsCommand}"
-                                                   Icon="{mw:SymbolIcon ArrowExportLtr24}" />
-                                        <TextBlock Margin="16,0,0,0"
-                                                   VerticalAlignment="Center"
-                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                   Text="{Binding Query.CurrentTableName, StringFormat=当前数据表：{0}}" />
-                                    </WrapPanel>
-                                </Border>
-
-                                <Border Grid.Row="2"
-                                        Padding="12"
-                                        Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                                        BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="14">
-                                    <Grid>
+                                <TabItem>
+                                    <TabItem.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <ui:SymbolIcon Width="16"
+                                                           Height="16"
+                                                           Margin="0,0,6,0"
+                                                           Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}"
+                                                           Symbol="Search24" />
+                                            <TextBlock Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}"
+                                                       Text="查询" />
+                                        </StackPanel>
+                                    </TabItem.Header>
+                                    <Grid Margin="0,12,0,0">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="10" />
+                                            <RowDefinition Height="12" />
+                                            <RowDefinition Height="170" />
+                                            <RowDefinition Height="12" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="12" />
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
 
+                                        <Border Padding="12"
+                                                Background="{DynamicResource WorkspacePanelBrush}"
+                                                BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="10">
+                                            <WrapPanel>
+                                                <ui:Button Content="执行"
+                                                           Command="{Binding Query.ExecuteQueryCommand}"
+                                                           Icon="{ui:SymbolIcon Play24}" />
+                                                <ui:Button Margin="8,0,0,0"
+                                                           Content="导出 CSV"
+                                                           Command="{Binding Query.ExportResultsCommand}"
+                                                           Icon="{ui:SymbolIcon ArrowExportLtr24}" />
+                                                <TextBlock Margin="16,0,0,0"
+                                                           VerticalAlignment="Center"
+                                                           Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                                           Text="{Binding Query.CurrentTableName, StringFormat=当前数据表：{0}}" />
+                                            </WrapPanel>
+                                        </Border>
+
+                                        <Border Grid.Row="2"
+                                                Padding="14"
+                                                Background="{DynamicResource WorkspacePanelBrush}"
+                                                BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="10">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="10" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+
+                                                <StackPanel Orientation="Horizontal">
+                                                    <ui:Button Content="查询前 100 行"
+                                                               Command="{Binding Query.UseSelectTemplateCommand}" />
+                                                    <ui:Button Margin="8,0,0,0"
+                                                               Content="统计行数"
+                                                               Command="{Binding Query.UseCountTemplateCommand}" />
+                                                    <ui:Button Margin="8,0,0,0"
+                                                               Content="表结构"
+                                                               Command="{Binding Query.UseSchemaTemplateCommand}" />
+                                                </StackPanel>
+
+                                                <TextBox Grid.Row="2"
+                                                         AcceptsReturn="True"
+                                                         Background="{DynamicResource WorkspaceInputBrush}"
+                                                         BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
+                                                         BorderThickness="1"
+                                                         FontFamily="Consolas"
+                                                         FontSize="14"
+                                                         Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                         HorizontalScrollBarVisibility="Auto"
+                                                         Text="{Binding Query.QueryText, UpdateSourceTrigger=PropertyChanged}"
+                                                         TextWrapping="NoWrap"
+                                                         VerticalScrollBarVisibility="Auto" />
+                                            </Grid>
+                                        </Border>
+
+                                        <Border Grid.Row="4"
+                                                Padding="12"
+                                                Background="{DynamicResource WorkspacePanelBrush}"
+                                                BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="10">
+                                            <StackPanel>
+                                                <TextBlock FontWeight="SemiBold"
+                                                           Text="{Binding Query.ResultSummary}" />
+                                                <TextBlock Margin="0,6,0,0"
+                                                           Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                                           Text="{Binding Query.StatusMessage}" />
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Border Grid.Row="6"
+                                                Padding="14"
+                                                Background="{DynamicResource WorkspacePanelBrush}"
+                                                BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="10">
+                                            <Grid>
+                                                <DataGrid AutoGenerateColumns="True"
+                                                          CanUserAddRows="False"
+                                                          CellStyle="{StaticResource WorkspaceDataGridCellStyle}"
+                                                          ColumnHeaderStyle="{StaticResource WorkspaceDataGridColumnHeaderStyle}"
+                                                          IsReadOnly="True"
+                                                          ItemsSource="{Binding Query.ResultView}"
+                                                          RowStyle="{StaticResource WorkspaceDataGridRowStyle}"
+                                                          Style="{StaticResource WorkspaceDataGridStyle}"
+                                                          Visibility="{Binding Query.ShowResultGrid, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                                <StackPanel HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            Visibility="{Binding Query.ShowEmptyResultState, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                    <TextBlock FontSize="18"
+                                                               FontWeight="SemiBold"
+                                                               Text="暂无查询结果" />
+                                                    <TextBlock Margin="0,8,0,0"
+                                                               Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                                               Text="执行当前 SQL 后，这里会显示数据行或命令反馈。" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+                                </TabItem>
+
+                                <TabItem>
+                                    <TabItem.Header>
                                         <StackPanel Orientation="Horizontal">
-                                            <ui:Button Content="查询前 100 行"
-                                                       Command="{Binding Query.UseSelectTemplateCommand}" />
-                                            <ui:Button Margin="8,0,0,0"
-                                                       Content="统计行数"
-                                                       Command="{Binding Query.UseCountTemplateCommand}" />
-                                            <ui:Button Margin="8,0,0,0"
-                                                       Content="表结构"
-                                                       Command="{Binding Query.UseSchemaTemplateCommand}" />
+                                            <ui:SymbolIcon Width="16"
+                                                           Height="16"
+                                                           Margin="0,0,6,0"
+                                                           Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}"
+                                                           Symbol="Pin24" />
+                                            <TextBlock Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}"
+                                                       Text="索引" />
                                         </StackPanel>
+                                    </TabItem.Header>
+                                    <Border Margin="0,12,0,0"
+                                            Padding="14"
+                                            Background="{DynamicResource WorkspacePanelBrush}"
+                                            BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="10">
+                                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                            <ItemsControl ItemsSource="{Binding Schema.Indexes}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border Margin="0,0,0,10"
+                                                                Padding="12"
+                                                                Background="{DynamicResource WorkspaceMetricBrush}"
+                                                                BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
+                                                                BorderThickness="1"
+                                                                CornerRadius="8">
+                                                            <StackPanel>
+                                                                <TextBlock FontWeight="SemiBold"
+                                                                           Text="{Binding Name}" />
+                                                                <TextBlock Margin="0,6,0,0"
+                                                                           Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                                                           Text="{Binding Sql}"
+                                                                           TextWrapping="Wrap" />
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+                                    </Border>
+                                </TabItem>
 
-                                        <TextBox Grid.Row="2"
-                                                 AcceptsReturn="True"
-                                                 HorizontalScrollBarVisibility="Auto"
-                                                 Text="{Binding Query.QueryText, UpdateSourceTrigger=PropertyChanged}"
-                                                 VerticalScrollBarVisibility="Auto"
+                                <TabItem>
+                                    <TabItem.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <ui:SymbolIcon Width="16"
+                                                           Height="16"
+                                                           Margin="0,0,6,0"
+                                                           Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}"
+                                                           Symbol="Flash24" />
+                                            <TextBlock Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}"
+                                                       Text="触发器" />
+                                        </StackPanel>
+                                    </TabItem.Header>
+                                    <Border Margin="0,12,0,0"
+                                            Padding="14"
+                                            Background="{DynamicResource WorkspacePanelBrush}"
+                                            BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="10">
+                                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                            <ItemsControl ItemsSource="{Binding Schema.Triggers}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border Margin="0,0,0,10"
+                                                                Padding="12"
+                                                                Background="{DynamicResource WorkspaceMetricBrush}"
+                                                                BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
+                                                                BorderThickness="1"
+                                                                CornerRadius="8">
+                                                            <StackPanel>
+                                                                <TextBlock FontWeight="SemiBold"
+                                                                           Text="{Binding Name}" />
+                                                                <TextBlock Margin="0,6,0,0"
+                                                                           Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                                                           Text="{Binding Sql}"
+                                                                           TextWrapping="Wrap" />
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+                                    </Border>
+                                </TabItem>
+
+                                <TabItem>
+                                    <TabItem.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <ui:SymbolIcon Width="16"
+                                                           Height="16"
+                                                           Margin="0,0,6,0"
+                                                           Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}"
+                                                           Symbol="Document24" />
+                                            <TextBlock Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}"
+                                                       Text="DDL" />
+                                        </StackPanel>
+                                    </TabItem.Header>
+                                    <Border Margin="0,12,0,0"
+                                            Padding="14"
+                                            Background="{DynamicResource WorkspacePanelBrush}"
+                                            BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="10">
+                                        <TextBox AcceptsReturn="True"
+                                                 Background="{DynamicResource WorkspaceInputBrush}"
+                                                 BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
+                                                 BorderThickness="1"
                                                  FontFamily="Consolas"
-                                                 FontSize="14"
-                                                 TextWrapping="NoWrap" />
-                                    </Grid>
-                                </Border>
+                                                 FontSize="13"
+                                                 Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                 IsReadOnly="True"
+                                                 Text="{Binding Schema.CreateSql}"
+                                                 TextWrapping="NoWrap"
+                                                 VerticalScrollBarVisibility="Auto"
+                                                 HorizontalScrollBarVisibility="Auto" />
+                                    </Border>
+                                </TabItem>
+                            </TabControl>
+                        </Grid>
 
-                                <Border Grid.Row="4"
-                                        Padding="12"
-                                        Background="{DynamicResource ControlFillColorTertiaryBrush}"
-                                        BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="14">
-                                    <StackPanel>
-                                        <TextBlock FontWeight="SemiBold"
-                                                   Text="{Binding Query.ResultSummary}" />
-                                        <TextBlock Margin="0,6,0,0"
-                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                   Text="{Binding Query.StatusMessage}" />
-                                    </StackPanel>
-                                </Border>
+                        <StackPanel Grid.Row="2"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource HideWhenTableSelectedStyle}">
+                            <ui:SymbolIcon HorizontalAlignment="Center"
+                                           Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                           Symbol="Database24" />
+                            <TextBlock Margin="0,14,0,0"
+                                       FontSize="20"
+                                       FontWeight="SemiBold"
+                                       Text="请先选择一个表" />
+                            <TextBlock Margin="0,8,0,0"
+                                       Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                       Text="左侧会列出当前数据库中的全部对象。" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
 
-                                <Border Grid.Row="6"
-                                        Padding="12"
-                                        Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                                        BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="14">
-                                    <Grid>
-                                        <DataGrid AutoGenerateColumns="True"
-                                                  CanUserAddRows="False"
-                                                  IsReadOnly="True"
-                                                  ItemsSource="{Binding Query.ResultView}"
-                                                  Visibility="{Binding Query.ShowResultGrid, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <Border Grid.Row="4"
+                    Padding="10,8"
+                    Style="{StaticResource WorkspacePanelStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-                                        <StackPanel Visibility="{Binding Query.ShowEmptyResultState, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                            <TextBlock FontSize="18"
-                                                       FontWeight="SemiBold"
-                                                       Text="暂无查询结果" />
-                                            <TextBlock Margin="0,8,0,0"
-                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                                       Text="执行当前 SQL 后，这里会显示数据行或命令反馈。" />
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
-                            </Grid>
-                        </TabItem>
-                    </TabControl>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                   Text="{Binding FooterStatusText}" />
+                        <TextBlock Margin="18,0,0,0"
+                                   Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                   Text="{Binding FooterEngineText}" />
+                        <TextBlock Margin="18,0,0,0"
+                                   Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                   Text="{Binding FooterAccessModeText}" />
+                    </StackPanel>
 
-                    <StackPanel Grid.Row="2"
-                                Style="{StaticResource HideWhenTableSelectedStyle}">
-                        <TextBlock FontSize="20"
-                                   FontWeight="SemiBold"
-                                   Text="请先从左侧选择一个表" />
-                        <TextBlock Margin="0,8,0,0"
-                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                                   Text="选择数据表后，这里会显示结构、数据和查询工具。" />
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal">
+                        <TextBlock Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                   Text="{Binding FooterRowCountText}" />
+                        <TextBlock Margin="18,0,0,0"
+                                   Foreground="{DynamicResource WorkspaceSubtleBrush}"
+                                   Text="{Binding FooterColumnCountText}" />
                     </StackPanel>
                 </Grid>
             </Border>
         </Grid>
-    </Grid>
+    </Border>
 </UserControl>

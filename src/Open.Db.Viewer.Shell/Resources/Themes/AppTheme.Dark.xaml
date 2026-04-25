@@ -1,0 +1,79 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:svgc="http://sharpvectors.codeplex.com/svgc/">
+    <sys:String x:Key="AppLogoSvgPath">/Assets/Icons/open_db_viewer_logo_light.svg</sys:String>
+
+    <StaticResource x:Key="ShellWindowBrush" ResourceKey="ApplicationBackgroundBrush" />
+    <StaticResource x:Key="ShellContentBrush" ResourceKey="ApplicationBackgroundBrush" />
+    <StaticResource x:Key="ShellContentBorderBrush" ResourceKey="SurfaceStrokeColorDefaultBrush" />
+    <StaticResource x:Key="TitleBarActionHoverBrush" ResourceKey="SubtleFillColorSecondaryBrush" />
+    <StaticResource x:Key="TitleBarActionPressedBrush" ResourceKey="ControlFillColorSecondaryBrush" />
+
+    <StaticResource x:Key="ExplorerPageBackgroundBrush" ResourceKey="ApplicationBackgroundBrush" />
+    <StaticResource x:Key="ExplorerCardBrush" ResourceKey="ControlFillColorSecondaryBrush" />
+    <StaticResource x:Key="ExplorerCardBorderBrush" ResourceKey="CardStrokeColorDefaultBrush" />
+    <StaticResource x:Key="ExplorerSubtleBrush" ResourceKey="TextFillColorSecondaryBrush" />
+    <StaticResource x:Key="ExplorerAccentBrush" ResourceKey="AccentFillColorDefaultBrush" />
+    <StaticResource x:Key="ExplorerAccentSoftBrush" ResourceKey="AccentFillColorSecondaryBrush" />
+    <StaticResource x:Key="ExplorerPanelBrush" ResourceKey="ControlFillColorSecondaryBrush" />
+    <StaticResource x:Key="ExplorerListItemBrush" ResourceKey="SubtleFillColorTransparentBrush" />
+
+    <StaticResource x:Key="WorkspacePageBackgroundBrush" ResourceKey="ApplicationBackgroundBrush" />
+    <StaticResource x:Key="WorkspaceSurfaceBrush" ResourceKey="ControlFillColorDefaultBrush" />
+    <StaticResource x:Key="WorkspaceSurfaceBorderBrush" ResourceKey="CardStrokeColorDefaultBrush" />
+    <StaticResource x:Key="WorkspacePanelBrush" ResourceKey="ControlFillColorSecondaryBrush" />
+    <StaticResource x:Key="WorkspaceMetricBrush" ResourceKey="ControlFillColorTertiaryBrush" />
+    <StaticResource x:Key="WorkspaceInputBrush" ResourceKey="ControlFillColorInputActiveBrush" />
+    <StaticResource x:Key="WorkspaceListItemBrush" ResourceKey="SubtleFillColorTransparentBrush" />
+    <StaticResource x:Key="WorkspaceListItemHoverBrush" ResourceKey="SubtleFillColorSecondaryBrush" />
+    <StaticResource x:Key="WorkspaceListItemSelectedBrush" ResourceKey="ControlFillColorSecondaryBrush" />
+    <StaticResource x:Key="WorkspaceSubtleBrush" ResourceKey="TextFillColorSecondaryBrush" />
+    <StaticResource x:Key="WorkspaceAccentBrush" ResourceKey="AccentFillColorDefaultBrush" />
+    <StaticResource x:Key="WorkspaceAccentSoftBrush" ResourceKey="AccentFillColorSecondaryBrush" />
+    <StaticResource x:Key="WorkspaceTabUnderlineBrush" ResourceKey="AccentFillColorDefaultBrush" />
+    <StaticResource x:Key="WorkspaceSuccessBrush" ResourceKey="SystemFillColorSuccessBrush" />
+    <StaticResource x:Key="WorkspaceArtTopBrush" ResourceKey="SolidBackgroundFillColorTertiaryBrush" />
+    <StaticResource x:Key="WorkspaceArtMidBrush" ResourceKey="SolidBackgroundFillColorSecondaryBrush" />
+    <StaticResource x:Key="WorkspaceArtBottomBrush" ResourceKey="SolidBackgroundFillColorBaseBrush" />
+
+    <SolidColorBrush x:Key="LandingAccentLineBrush" Color="#4E72A5" />
+    <SolidColorBrush x:Key="LandingHeroTitleBrush" Color="#F5F2EE" />
+    <SolidColorBrush x:Key="LandingHeroSectionIconBrush" Color="#E4DED8" />
+    <SolidColorBrush x:Key="LandingHeroBackdropBrush" Color="#2A2724" />
+    <SolidColorBrush x:Key="LandingHeroDotBrush" Color="#4A4540" />
+    <SolidColorBrush x:Key="LandingHeroDocumentBrush" Color="#252D38" />
+    <SolidColorBrush x:Key="LandingHeroDocumentIconBrush" Color="#ABC5F5" />
+    <SolidColorBrush x:Key="LandingHeroDocumentLineStrongBrush" Color="#5A79A7" />
+    <SolidColorBrush x:Key="LandingHeroDocumentLineSoftBrush" Color="#6885B0" />
+    <SolidColorBrush x:Key="LandingHeroDocumentLineBrush" Color="#4E6A93" />
+    <SolidColorBrush x:Key="LandingHeroCylinderTopBrush" Color="#31425A" />
+    <SolidColorBrush x:Key="LandingHeroCylinderTopStrokeBrush" Color="#49627F" />
+    <LinearGradientBrush x:Key="LandingHeroCylinderBodyBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Offset="0" Color="#3C5373" />
+        <GradientStop Offset="0.5" Color="#6C85A7" />
+        <GradientStop Offset="1" Color="#3C5373" />
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="LandingHeroCylinderMidBrush" Color="#30445F" />
+    <SolidColorBrush x:Key="LandingHeroCylinderMidStrokeBrush" Color="#49627F" />
+    <SolidColorBrush x:Key="LandingHeroCylinderBottomBrush" Color="#37506C" />
+    <SolidColorBrush x:Key="LandingHeroCylinderBottomStrokeBrush" Color="#55708F" />
+
+    <SolidColorBrush x:Key="LandingDashboardPageBackgroundBrush" Color="#0B0F14" />
+    <SolidColorBrush x:Key="LandingDashboardHeroBrush" Color="#0C1118" />
+    <SolidColorBrush x:Key="LandingDashboardPanelBrush" Color="#151B24" />
+    <SolidColorBrush x:Key="LandingDashboardListItemBrush" Color="#101720" />
+    <SolidColorBrush x:Key="LandingDashboardPreviewBrush" Color="#111925" />
+    <SolidColorBrush x:Key="LandingDashboardPanelBorderBrush" Color="#293240" />
+    <SolidColorBrush x:Key="LandingDashboardPanelBorderStrongBrush" Color="#344052" />
+    <SolidColorBrush x:Key="LandingDashboardPrimaryTextBrush" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="LandingDashboardSecondaryTextBrush" Color="#B7C3D4" />
+    <SolidColorBrush x:Key="LandingDashboardMutedTextBrush" Color="#8B97AB" />
+    <SolidColorBrush x:Key="LandingDashboardAccentBrush" Color="#2F7DFF" />
+    <SolidColorBrush x:Key="LandingDashboardAccentSoftBrush" Color="#112846" />
+    <SolidColorBrush x:Key="LandingDashboardIconShellBrush" Color="#182131" />
+    <SolidColorBrush x:Key="LandingDashboardBadgeBrush" Color="#142031" />
+    <SolidColorBrush x:Key="LandingDashboardBadgeBorderBrush" Color="#28405C" />
+    <SolidColorBrush x:Key="LandingDashboardPreviewLineStrongBrush" Color="#4A89E8" />
+    <SolidColorBrush x:Key="LandingDashboardPreviewLineBrush" Color="#2F4058" />
+</ResourceDictionary>

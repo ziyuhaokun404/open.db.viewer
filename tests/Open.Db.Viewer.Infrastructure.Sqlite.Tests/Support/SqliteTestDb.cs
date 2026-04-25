@@ -52,6 +52,14 @@ public sealed class SqliteTestDb : IAsyncDisposable
                 INSERT INTO orders (id, user_id, total) VALUES
                     (10, 1, 12.5),
                     (11, 2, 18.75);
+
+                CREATE INDEX idx_orders_user_id ON orders(user_id);
+
+                CREATE TRIGGER trg_users_after_insert
+                AFTER INSERT ON users
+                BEGIN
+                    SELECT NEW.id;
+                END;
                 """;
 
             await using var command = connection.CreateCommand();

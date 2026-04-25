@@ -36,6 +36,25 @@ public class SqliteInspectionTests
     }
 
     [Fact]
+    public async Task GetTableMetadataAsync_ReturnsCountsAndScripts()
+    {
+        await using var db = await SqliteTestDb.CreateAsync();
+        var factory = new SqliteConnectionFactory();
+        var inspector = new SqliteDatabaseInspector(factory);
+
+        var metadata = await inspector.GetTableMetadataAsync(db.FilePath, "orders");
+
+        metadata.RowCount.Should().Be(2);
+        metadata.PageSizeBytes.Should().BePositive();
+        metadata.SqliteVersion.Should().NotBeNullOrWhiteSpace();
+        metadata.Encoding.Should().NotBeNullOrWhiteSpace();
+        metadata.UserVersion.Should().Be(0);
+        metadata.CreateSql.Should().Contain("CREATE TABLE orders");
+        metadata.Indexes.Should().ContainSingle(index => index.Name == "idx_orders_user_id");
+        metadata.Triggers.Should().BeEmpty();
+    }
+
+    [Fact]
     public async Task ReadPageAsync_ReturnsRequestedPageAndHasNextPageWhenMoreRowsExist()
     {
         await using var db = await SqliteTestDb.CreateAsync();

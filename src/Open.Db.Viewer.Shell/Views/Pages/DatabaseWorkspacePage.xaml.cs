@@ -13,10 +13,17 @@ public partial class DatabaseWorkspacePage : UserControl
         InitializeComponent();
     }
 
-    private async void ObjectTree_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    private async void ObjectList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (DataContext is not DatabaseWorkspaceViewModel viewModel ||
-            e.NewValue is not DatabaseObjectNode node)
+            e.AddedItems.Count == 0 ||
+            e.AddedItems[0] is not DatabaseObjectNode node)
+        {
+            return;
+        }
+
+        if (string.Equals(viewModel.Schema.TableName, node.Name, StringComparison.OrdinalIgnoreCase) &&
+            string.Equals(viewModel.ObjectExplorer.SelectedNode?.Name, node.Name, StringComparison.OrdinalIgnoreCase))
         {
             return;
         }
