@@ -33,7 +33,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<QueryService>();
         services.AddSingleton<ExportService>();
         services.AddSingleton<IFileDialogService, FileDialogService>();
-        services.AddSingleton<HomeViewModel>();
         services.AddSingleton<HomeLandingViewModel>();
         services.AddSingleton<RecentDatabasesViewModel>();
         services.AddSingleton<PinnedDatabasesViewModel>();

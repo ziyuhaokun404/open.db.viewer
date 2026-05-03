@@ -20,7 +20,7 @@ public sealed partial class PinnedDatabasesViewModel : ObservableObject
     private string searchText = string.Empty;
 
     [ObservableProperty]
-    private string statusMessage = HomeViewModel.DefaultStatusMessage;
+    private string statusMessage = StatusMessages.DefaultReady;
 
     public ObservableCollection<DatabaseEntry> Entries { get; } = new();
 

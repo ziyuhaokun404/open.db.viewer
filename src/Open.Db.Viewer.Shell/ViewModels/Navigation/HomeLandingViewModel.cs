@@ -25,7 +25,7 @@ public sealed partial class HomeLandingViewModel : ObservableObject
     private DatabaseEntry? quickOpenEntry;
 
     [ObservableProperty]
-    private string statusMessage = HomeViewModel.DefaultStatusMessage;
+    private string statusMessage = StatusMessages.DefaultReady;
 
     public ObservableCollection<DatabaseEntry> RecentSummary { get; } = new();
 

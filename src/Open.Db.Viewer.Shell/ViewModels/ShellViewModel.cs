@@ -19,7 +19,6 @@ public sealed partial class ShellViewModel : ObservableObject
     private string currentDatabasePath = string.Empty;
 
     public ShellViewModel(
-        HomeViewModel homeViewModel,
         DatabaseWorkspaceViewModel databaseWorkspaceViewModel,
         HomeLandingViewModel homeLandingViewModel,
         RecentDatabasesViewModel recentDatabasesViewModel,
@@ -27,7 +26,6 @@ public sealed partial class ShellViewModel : ObservableObject
         SettingsViewModel settingsViewModel,
         AboutViewModel aboutViewModel)
     {
-        Home = homeViewModel;
         Workspace = databaseWorkspaceViewModel;
         HomeLanding = homeLandingViewModel;
         RecentPage = recentDatabasesViewModel;
@@ -47,19 +45,15 @@ public sealed partial class ShellViewModel : ObservableObject
         CurrentContentViewModel = HomeLanding;
         UpdateNavigationSelection();
 
-        Home.DatabaseOpenedAsync = OpenWorkspaceAsync;
         HomeLanding.DatabaseOpenedAsync = OpenWorkspaceAsync;
         RecentPage.DatabaseOpenedAsync = OpenWorkspaceAsync;
         PinnedPage.DatabaseOpenedAsync = OpenWorkspaceAsync;
         Workspace.RequestReturnHomeAsync = ReturnHomeAsync;
 
-        _ = Home.LoadAsync();
         _ = HomeLanding.LoadAsync();
     }
 
     public ObservableCollection<ShellNavigationItem> NavigationItems { get; }
-
-    public HomeViewModel Home { get; }
 
     public HomeLandingViewModel HomeLanding { get; }
 
@@ -95,7 +89,7 @@ public sealed partial class ShellViewModel : ObservableObject
 
     [RelayCommand]
     public Task OpenDatabaseAsync(CancellationToken cancellationToken = default) =>
-        Home.OpenDatabaseAsync(cancellationToken);
+        HomeLanding.OpenDatabaseAsync(cancellationToken);
 
     [RelayCommand]
     public async Task LoadCurrentSectionAsync(CancellationToken cancellationToken = default)

@@ -54,9 +54,9 @@
             BasedOn="{StaticResource {x:Type ui:Button}}"
             TargetType="{x:Type ui:Button}">
             <Setter Property="Width" Value="36" />
-            <Setter Property="Height" Value="36" />
             <Setter Property="Margin" Value="0" />
             <Setter Property="Padding" Value="0" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
             <Setter Property="Appearance" Value="Transparent" />
             <Setter Property="Foreground" Value="{Binding Path=ButtonsForeground, RelativeSource={RelativeSource AncestorType={x:Type ui:TitleBar}}}" />
             <Setter Property="PressedForeground" Value="{Binding Path=ButtonsForeground, RelativeSource={RelativeSource AncestorType={x:Type ui:TitleBar}}}" />
@@ -72,7 +72,6 @@
 
         <Style BasedOn="{StaticResource {x:Type ui:TitleBarButton}}" TargetType="{x:Type ui:TitleBarButton}">
             <Setter Property="Width" Value="36" />
-            <Setter Property="Height" Value="36" />
         </Style>
     </ui:FluentWindow.Resources>
 
@@ -85,7 +84,7 @@
         <ui:TitleBar
             x:Name="MainTitleBar"
             Grid.Row="0"
-            Height="48"
+            Height="46"
             Background="{DynamicResource ShellWindowBrush}"
             CloseWindowByDoubleClickOnIcon="True">
             <ui:TitleBar.Header>
@@ -107,13 +106,21 @@
             </ui:TitleBar.Header>
 
             <ui:TitleBar.TrailingContent>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel
+                    Height="30"
+                    Margin="0"
+                    VerticalAlignment="Top"
+                    Orientation="Horizontal">
                     <ui:Button
                         x:Name="ThemeToggleButton"
                         Click="ToggleThemeMode"
                         Style="{StaticResource TitleBarActionButtonStyle}"
                         ToolTipService.ToolTip="切换到深色模式">
-                        <ui:SymbolIcon x:Name="ThemeToggleIcon" Symbol="WeatherMoon24" />
+                        <ui:SymbolIcon
+                            x:Name="ThemeToggleIcon"
+                            FontSize="16"
+                            Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type ui:Button}}}"
+                            Symbol="WeatherMoon24" />
                     </ui:Button>
                 </StackPanel>
             </ui:TitleBar.TrailingContent>

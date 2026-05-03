@@ -42,7 +42,6 @@ public class MainWindowSmokeTests
                     new DateTimeOffset(2026, 4, 23, 1, 30, 0, TimeSpan.Zero),
                     true));
                 var databaseEntryService = new DatabaseEntryService(repository, _ => Task.FromResult(true));
-                var home = new HomeViewModel(databaseEntryService, new FakeFileDialogService());
                 var workspace = new DatabaseWorkspaceViewModel(
                     new ObjectExplorerViewModel(),
                     new SchemaViewModel(),
@@ -52,7 +51,6 @@ public class MainWindowSmokeTests
                         new ExportService(new NoopCsvExportWriter()),
                         new FakeFileDialogService()));
                 var shell = new ShellViewModel(
-                    home,
                     workspace,
                     new HomeLandingViewModel(databaseEntryService, new FakeFileDialogService()),
                     new RecentDatabasesViewModel(databaseEntryService),

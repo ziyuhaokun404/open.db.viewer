@@ -100,9 +100,7 @@ public class ShellViewModelTests
         var repository = new InMemoryDatabaseEntryRepository();
         var databaseEntryService = new DatabaseEntryService(repository, _ => Task.FromResult(databaseExists));
         var workspace = new FakeDatabaseWorkspaceViewModel();
-        var home = new HomeViewModel(databaseEntryService, new FakeFileDialogService(filePath));
         return new ShellViewModel(
-            home,
             workspace,
             new HomeLandingViewModel(databaseEntryService, new FakeFileDialogService(filePath)),
             new RecentDatabasesViewModel(databaseEntryService),
