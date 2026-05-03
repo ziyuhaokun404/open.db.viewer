@@ -1,4 +1,5 @@
 /archive/
+/.vs/
 /src/**/bin/
 /src/**/obj/
 /tests/**/bin/
