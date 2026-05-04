@@ -31,6 +31,10 @@ public sealed partial class HomeLandingViewModel : ObservableObject
 
     public ObservableCollection<DatabaseEntry> PinnedSummary { get; } = new();
 
+    public bool HasPinnedEntries => PinnedSummary.Count > 0;
+
+    public bool HasRecentEntries => RecentSummary.Count > 0;
+
     public Func<string, CancellationToken, Task>? DatabaseOpenedAsync { get; set; }
 
     public async Task LoadAsync(CancellationToken cancellationToken = default)
@@ -135,12 +139,15 @@ public sealed partial class HomeLandingViewModel : ObservableObject
         await LoadAsync(cancellationToken);
     }
 
-    private static void Refresh(ObservableCollection<DatabaseEntry> target, IEnumerable<DatabaseEntry> source)
+    private void Refresh(ObservableCollection<DatabaseEntry> target, IEnumerable<DatabaseEntry> source)
     {
         target.Clear();
         foreach (var item in source)
         {
             target.Add(item);
         }
+
+        OnPropertyChanged(nameof(HasPinnedEntries));
+        OnPropertyChanged(nameof(HasRecentEntries));
     }
 }

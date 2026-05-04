@@ -59,21 +59,26 @@
     <SolidColorBrush x:Key="LandingHeroCylinderBottomBrush" Color="#37506C" />
     <SolidColorBrush x:Key="LandingHeroCylinderBottomStrokeBrush" Color="#55708F" />
 
-    <SolidColorBrush x:Key="LandingDashboardPageBackgroundBrush" Color="#0B0F14" />
-    <SolidColorBrush x:Key="LandingDashboardHeroBrush" Color="#0C1118" />
-    <SolidColorBrush x:Key="LandingDashboardPanelBrush" Color="#151B24" />
-    <SolidColorBrush x:Key="LandingDashboardListItemBrush" Color="#101720" />
-    <SolidColorBrush x:Key="LandingDashboardPreviewBrush" Color="#111925" />
-    <SolidColorBrush x:Key="LandingDashboardPanelBorderBrush" Color="#293240" />
-    <SolidColorBrush x:Key="LandingDashboardPanelBorderStrongBrush" Color="#344052" />
-    <SolidColorBrush x:Key="LandingDashboardPrimaryTextBrush" Color="#FFFFFF" />
-    <SolidColorBrush x:Key="LandingDashboardSecondaryTextBrush" Color="#B7C3D4" />
-    <SolidColorBrush x:Key="LandingDashboardMutedTextBrush" Color="#8B97AB" />
-    <SolidColorBrush x:Key="LandingDashboardAccentBrush" Color="#2F7DFF" />
-    <SolidColorBrush x:Key="LandingDashboardAccentSoftBrush" Color="#112846" />
-    <SolidColorBrush x:Key="LandingDashboardIconShellBrush" Color="#182131" />
-    <SolidColorBrush x:Key="LandingDashboardBadgeBrush" Color="#142031" />
-    <SolidColorBrush x:Key="LandingDashboardBadgeBorderBrush" Color="#28405C" />
-    <SolidColorBrush x:Key="LandingDashboardPreviewLineStrongBrush" Color="#4A89E8" />
-    <SolidColorBrush x:Key="LandingDashboardPreviewLineBrush" Color="#2F4058" />
+    <SolidColorBrush x:Key="LandingDashboardPageBackgroundBrush" Color="#1A1A1C" />
+    <LinearGradientBrush x:Key="LandingDashboardHeroGradientBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="#252528" />
+        <GradientStop Offset="1" Color="#1E1E21" />
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="LandingDashboardPanelBrush" Color="#B8202123" />
+    <SolidColorBrush x:Key="LandingDashboardListItemBrush" Color="#661E1E21" />
+    <SolidColorBrush x:Key="LandingDashboardPreviewBrush" Color="#B8202123" />
+    <SolidColorBrush x:Key="LandingDashboardPanelBorderBrush" Color="#14FFFFFF" />
+    <SolidColorBrush x:Key="LandingDashboardPanelBorderStrongBrush" Color="#1AFFFFFF" />
+    <SolidColorBrush x:Key="LandingDashboardPrimaryTextBrush" Color="#F1F1F1" />
+    <SolidColorBrush x:Key="LandingDashboardSecondaryTextBrush" Color="#B6B6B6" />
+    <SolidColorBrush x:Key="LandingDashboardMutedTextBrush" Color="#7D7D7D" />
+    <SolidColorBrush x:Key="LandingDashboardAccentBrush" Color="#D4D4D4" />
+    <SolidColorBrush x:Key="LandingDashboardAccentSoftBrush" Color="#1EFFFFFF" />
+    <SolidColorBrush x:Key="LandingDashboardIconShellBrush" Color="#252528" />
+    <SolidColorBrush x:Key="LandingDashboardBadgeBrush" Color="#1E1F22" />
+    <SolidColorBrush x:Key="LandingDashboardBadgeBorderBrush" Color="#1AFFFFFF" />
+    <SolidColorBrush x:Key="LandingDashboardPreviewLineStrongBrush" Color="#555555" />
+    <SolidColorBrush x:Key="LandingDashboardPreviewLineBrush" Color="#333333" />
+    <SolidColorBrush x:Key="LandingDashboardStatusGreenBrush" Color="#4CAF50" />
+    <SolidColorBrush x:Key="LandingDashboardHeroBrush" Color="#B8202123" />
 </ResourceDictionary>

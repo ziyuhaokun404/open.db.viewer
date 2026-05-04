@@ -6,342 +6,440 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:shell="clr-namespace:Open.Db.Viewer.Shell.ViewModels.Shell"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    d:Height="820"
-    d:Width="1180"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <Style x:Key="DashboardPanelStyle" TargetType="Border">
-            <Setter Property="Padding" Value="16" />
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+
+        <DropShadowEffect
+            x:Key="CardShadow"
+            BlurRadius="24"
+            Opacity="0.18"
+            ShadowDepth="0"
+            Color="#000000" />
+
+        <DropShadowEffect
+            x:Key="SubtleShadow"
+            BlurRadius="12"
+            Opacity="0.10"
+            ShadowDepth="0"
+            Color="#000000" />
+
+        <!--  Panel card: used for recent/pinned panels  -->
+        <Style x:Key="PanelCardStyle" TargetType="Border">
+            <Setter Property="Padding" Value="20" />
             <Setter Property="Background" Value="{DynamicResource LandingDashboardPanelBrush}" />
             <Setter Property="BorderBrush" Value="{DynamicResource LandingDashboardPanelBorderBrush}" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="12" />
-            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="CornerRadius" Value="14" />
+            <Setter Property="Effect" Value="{StaticResource SubtleShadow}" />
         </Style>
 
-        <Style
-            x:Key="DashboardHeroPanelStyle"
-            BasedOn="{StaticResource DashboardPanelStyle}"
-            TargetType="Border">
-            <Setter Property="Padding" Value="28,22" />
-            <Setter Property="Background" Value="{DynamicResource LandingDashboardHeroBrush}" />
+        <!--  Hero card  -->
+        <Style x:Key="HeroCardStyle" TargetType="Border">
+            <Setter Property="Padding" Value="28,26" />
+            <Setter Property="Background" Value="{DynamicResource LandingDashboardHeroGradientBrush}" />
             <Setter Property="BorderBrush" Value="{DynamicResource LandingDashboardPanelBorderStrongBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="16" />
+            <Setter Property="Effect" Value="{StaticResource CardShadow}" />
         </Style>
 
-        <Style
-            x:Key="DashboardSidePanelStyle"
-            BasedOn="{StaticResource DashboardPanelStyle}"
-            TargetType="Border">
-            <Setter Property="Padding" Value="14" />
+        <!--  Side card: current entry  -->
+        <Style x:Key="SideCardStyle" TargetType="Border">
+            <Setter Property="Padding" Value="18" />
+            <Setter Property="Background" Value="{DynamicResource LandingDashboardPanelBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource LandingDashboardPanelBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="14" />
+            <Setter Property="Effect" Value="{StaticResource SubtleShadow}" />
         </Style>
 
-        <Style x:Key="DashboardListItemStyle" TargetType="Border">
-            <Setter Property="Margin" Value="0,0,0,10" />
+        <!--  List item  -->
+        <Style x:Key="ListItemCardStyle" TargetType="Border">
+            <Setter Property="Margin" Value="0,0,0,8" />
             <Setter Property="Padding" Value="12" />
             <Setter Property="Background" Value="{DynamicResource LandingDashboardListItemBrush}" />
             <Setter Property="BorderBrush" Value="{DynamicResource LandingDashboardPanelBorderBrush}" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="CornerRadius" Value="12" />
         </Style>
 
-        <Style x:Key="DashboardPrimaryTitleStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="26" />
+        <!--  Status bar  -->
+        <Style x:Key="StatusBarStyle" TargetType="Border">
+            <Setter Property="Padding" Value="14,10" />
+            <Setter Property="Background" Value="{DynamicResource LandingDashboardPanelBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource LandingDashboardPanelBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="12" />
+        </Style>
+
+        <!--  Hero title  -->
+        <Style x:Key="HeroTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="34" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Foreground" Value="{DynamicResource LandingDashboardPrimaryTextBrush}" />
             <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
 
-        <Style x:Key="DashboardSecondaryTextStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="12" />
-            <Setter Property="LineHeight" Value="17" />
+        <!--  Section title  -->
+        <Style x:Key="SectionTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource LandingDashboardPrimaryTextBrush}" />
+        </Style>
+
+        <!--  Secondary text  -->
+        <Style x:Key="SecondaryTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12.5" />
+            <Setter Property="LineHeight" Value="18" />
             <Setter Property="Foreground" Value="{DynamicResource LandingDashboardSecondaryTextBrush}" />
             <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
 
-        <Style x:Key="DashboardMutedTextStyle" TargetType="TextBlock">
+        <!--  Muted text  -->
+        <Style x:Key="MutedTextStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="11.5" />
             <Setter Property="LineHeight" Value="16" />
             <Setter Property="Foreground" Value="{DynamicResource LandingDashboardMutedTextBrush}" />
             <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
 
-        <Style x:Key="DashboardSectionTitleStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Foreground" Value="{DynamicResource LandingDashboardPrimaryTextBrush}" />
-        </Style>
-
-        <Style x:Key="DashboardBadgeStyle" TargetType="Border">
+        <!--  Badge capsule  -->
+        <Style x:Key="BadgeCapsuleStyle" TargetType="Border">
             <Setter Property="Margin" Value="0,0,8,8" />
-            <Setter Property="Padding" Value="8,4" />
+            <Setter Property="Padding" Value="10,5" />
             <Setter Property="Background" Value="{DynamicResource LandingDashboardBadgeBrush}" />
             <Setter Property="BorderBrush" Value="{DynamicResource LandingDashboardBadgeBorderBrush}" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="999" />
+            <Setter Property="CornerRadius" Value="6" />
         </Style>
 
-        <Style x:Key="DashboardIconShellStyle" TargetType="Border">
+        <!--  Icon shell (container for icons in lists)  -->
+        <Style x:Key="IconShellStyle" TargetType="Border">
+            <Setter Property="Width" Value="44" />
+            <Setter Property="Height" Value="44" />
+            <Setter Property="Background" Value="{DynamicResource LandingDashboardIconShellBrush}" />
+            <Setter Property="CornerRadius" Value="12" />
+        </Style>
+
+        <!--  Large icon shell (for side card)  -->
+        <Style x:Key="LargeIconShellStyle" TargetType="Border">
+            <Setter Property="Width" Value="48" />
+            <Setter Property="Height" Value="48" />
+            <Setter Property="Background" Value="{DynamicResource LandingDashboardIconShellBrush}" />
+            <Setter Property="CornerRadius" Value="14" />
+        </Style>
+
+        <!--  Primary action button (light fill)  -->
+        <Style
+            x:Key="PrimaryActionButtonStyle"
+            BasedOn="{StaticResource {x:Type ui:Button}}"
+            TargetType="ui:Button">
+            <Setter Property="Height" Value="42" />
+            <Setter Property="MinWidth" Value="140" />
+            <Setter Property="Padding" Value="18,0" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Appearance" Value="Primary" />
+        </Style>
+
+        <!--  Secondary action button (dark outline)  -->
+        <Style
+            x:Key="SecondaryActionButtonStyle"
+            BasedOn="{StaticResource {x:Type ui:Button}}"
+            TargetType="ui:Button">
+            <Setter Property="Height" Value="42" />
+            <Setter Property="MinWidth" Value="120" />
+            <Setter Property="Padding" Value="18,0" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Appearance" Value="Secondary" />
+            <Setter Property="BorderBrush" Value="{DynamicResource LandingDashboardPanelBorderStrongBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+
+        <!--  Icon action button (40x40)  -->
+        <Style
+            x:Key="IconActionButtonStyle"
+            BasedOn="{StaticResource {x:Type ui:Button}}"
+            TargetType="ui:Button">
             <Setter Property="Width" Value="40" />
             <Setter Property="Height" Value="40" />
-            <Setter Property="Background" Value="{DynamicResource LandingDashboardIconShellBrush}" />
-            <Setter Property="CornerRadius" Value="10" />
-        </Style>
-
-        <Style
-            x:Key="DashboardActionButtonStyle"
-            BasedOn="{StaticResource {x:Type ui:Button}}"
-            TargetType="ui:Button">
-            <Setter Property="Height" Value="40" />
-            <Setter Property="Padding" Value="12,0" />
-            <Setter Property="CornerRadius" Value="8" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-        </Style>
-
-        <Style
-            x:Key="DashboardIconButtonStyle"
-            BasedOn="{StaticResource {x:Type ui:Button}}"
-            TargetType="ui:Button">
-            <Setter Property="Width" Value="38" />
-            <Setter Property="Height" Value="38" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="Appearance" Value="Secondary" />
             <Setter Property="BorderBrush" Value="{DynamicResource LandingDashboardPanelBorderBrush}" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Background" Value="{DynamicResource LandingDashboardIconShellBrush}" />
         </Style>
 
+        <!--  Link button  -->
         <Style
-            x:Key="DashboardLinkButtonStyle"
+            x:Key="LinkButtonStyle"
             BasedOn="{StaticResource {x:Type ui:Button}}"
             TargetType="ui:Button">
             <Setter Property="Appearance" Value="Transparent" />
             <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Padding" Value="0" />
-            <Setter Property="Foreground" Value="{DynamicResource LandingDashboardAccentBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource LandingDashboardMutedTextBrush}" />
             <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="12" />
         </Style>
     </UserControl.Resources>
 
     <Grid Background="{DynamicResource LandingDashboardPageBackgroundBrush}">
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-            <Grid
-                MaxWidth="1260"
-                Margin="16,10,16,18"
-                HorizontalAlignment="Center">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="12" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="16" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+        <Grid Margin="0,6" HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="8" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-                <!--  Row 0: Hero + side panel  -->
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="12" />
-                        <ColumnDefinition Width="300" />
-                    </Grid.ColumnDefinitions>
+            <!--  Row 0: Hero + Quick Entry  -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2.4*" />
+                    <ColumnDefinition Width="8" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-                    <Border Style="{StaticResource DashboardHeroPanelStyle}">
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Style="{StaticResource DashboardPrimaryTitleStyle}" Text="SQLite 数据工作台" />
-                            <TextBlock
-                                Margin="0,8,0,0"
-                                Style="{StaticResource DashboardSecondaryTextStyle}"
-                                Text="轻量打开 SQLite 数据库，快速进入表结构、数据浏览和 SQL 查询工作流。" />
+                <!--  Hero card  -->
+                <Border Style="{StaticResource HeroCardStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
 
-                            <StackPanel Margin="0,18,0,0" Orientation="Horizontal">
-                                <ui:Button
-                                    Width="150"
-                                    Appearance="Primary"
-                                    Command="{Binding OpenDatabaseCommand}"
-                                    Content="打开数据库"
-                                    Icon="{ui:SymbolIcon Database24}"
-                                    Style="{StaticResource DashboardActionButtonStyle}" />
-                                <ui:Button
-                                    Width="140"
-                                    Margin="10,0,0,0"
-                                    Command="{Binding OpenQuickOpenCommand}"
-                                    Content="快速打开"
-                                    Icon="{ui:SymbolIcon Flash24}"
-                                    Style="{StaticResource DashboardActionButtonStyle}" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource HeroTitleStyle}" Text="SQLite 数据工作台" />
+                                <TextBlock
+                                    MaxWidth="480"
+                                    Margin="0,10,0,0"
+                                    Style="{StaticResource SecondaryTextStyle}"
+                                    Text="轻量打开 SQLite 数据库，快速进入表结构、数据浏览和 SQL 查询工作流。" />
                             </StackPanel>
 
-                            <WrapPanel Margin="0,18,0,0">
-                                <Border Style="{StaticResource DashboardBadgeStyle}">
-                                    <TextBlock Style="{StaticResource DashboardMutedTextStyle}" Text="Schema" />
+                            <WrapPanel
+                                Grid.Column="1"
+                                Width="220"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center">
+                                <Border Style="{StaticResource BadgeCapsuleStyle}">
+                                    <TextBlock Style="{StaticResource MutedTextStyle}" Text="Schema" />
                                 </Border>
-                                <Border Style="{StaticResource DashboardBadgeStyle}">
-                                    <TextBlock Style="{StaticResource DashboardMutedTextStyle}" Text="Data Grid" />
+                                <Border Style="{StaticResource BadgeCapsuleStyle}">
+                                    <TextBlock Style="{StaticResource MutedTextStyle}" Text="Data Grid" />
                                 </Border>
-                                <Border Style="{StaticResource DashboardBadgeStyle}">
-                                    <TextBlock Style="{StaticResource DashboardMutedTextStyle}" Text="Query" />
+                                <Border Style="{StaticResource BadgeCapsuleStyle}">
+                                    <TextBlock Style="{StaticResource MutedTextStyle}" Text="Query" />
                                 </Border>
-                                <Border Style="{StaticResource DashboardBadgeStyle}">
-                                    <TextBlock Style="{StaticResource DashboardMutedTextStyle}" Text="Pinned DB" />
+                                <Border Style="{StaticResource BadgeCapsuleStyle}">
+                                    <TextBlock Style="{StaticResource MutedTextStyle}" Text="Pinned DB" />
                                 </Border>
                             </WrapPanel>
-                        </StackPanel>
-                    </Border>
+                        </Grid>
 
-                    <Border Grid.Column="2" Style="{StaticResource DashboardSidePanelStyle}">
-                        <StackPanel>
+                        <StackPanel
+                            Grid.Row="1"
+                            Margin="0,22,0,0"
+                            Orientation="Horizontal">
+                            <ui:Button
+                                Command="{Binding OpenDatabaseCommand}"
+                                Content="打开数据库"
+                                Icon="{ui:SymbolIcon FolderOpen24}"
+                                Style="{StaticResource PrimaryActionButtonStyle}" />
+                            <ui:Button
+                                Margin="10,0,0,0"
+                                Command="{Binding OpenQuickOpenCommand}"
+                                Content="快速打开"
+                                Icon="{ui:SymbolIcon Flash24}"
+                                Style="{StaticResource SecondaryActionButtonStyle}" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!--  Quick entry card  -->
+                <Border Grid.Column="2" Style="{StaticResource SideCardStyle}">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Style="{StaticResource SectionTitleStyle}" Text="当前入口" />
+                            <ui:SymbolIcon
+                                Grid.Column="1"
+                                Foreground="{DynamicResource LandingDashboardMutedTextBrush}"
+                                Symbol="DataUsage24" />
+                        </Grid>
+
+                        <!--  Database info  -->
+                        <Border
+                            Margin="0,14,0,0"
+                            Padding="12"
+                            Background="{DynamicResource LandingDashboardListItemBrush}"
+                            BorderBrush="{DynamicResource LandingDashboardPanelBorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="12">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Style="{StaticResource DashboardSectionTitleStyle}" Text="当前入口" />
-                                <ui:SymbolIcon
+                                <Border Style="{StaticResource LargeIconShellStyle}">
+                                    <ui:SymbolIcon
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Foreground="{DynamicResource LandingDashboardMutedTextBrush}"
+                                        Symbol="Database24" />
+                                </Border>
+                                <StackPanel
                                     Grid.Column="1"
-                                    Foreground="{DynamicResource LandingDashboardAccentBrush}"
-                                    Symbol="DataUsage24" />
+                                    Margin="14,0,0,0"
+                                    VerticalAlignment="Center">
+                                    <TextBlock
+                                        FontSize="13"
+                                        FontWeight="SemiBold"
+                                        Foreground="{DynamicResource LandingDashboardPrimaryTextBrush}"
+                                        Text="{Binding QuickOpenEntry.Name, FallbackValue=app, TargetNullValue=app}" />
+                                    <TextBlock
+                                        Margin="0,4,0,0"
+                                        Style="{StaticResource MutedTextStyle}"
+                                        Text="{Binding QuickOpenEntry.FilePath, TargetNullValue=等待选择数据库}"
+                                        TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
                             </Grid>
+                        </Border>
+
+                        <!--  Stats  -->
+                        <Grid Margin="0,14,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="12" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
 
                             <Border
-                                Margin="0,14,0,0"
                                 Padding="12"
                                 Background="{DynamicResource LandingDashboardListItemBrush}"
                                 BorderBrush="{DynamicResource LandingDashboardPanelBorderBrush}"
                                 BorderThickness="1"
                                 CornerRadius="10">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <Border Style="{StaticResource DashboardIconShellStyle}">
-                                        <ui:SymbolIcon
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Foreground="{DynamicResource LandingDashboardAccentBrush}"
-                                            Symbol="Database24" />
-                                    </Border>
-                                    <StackPanel
-                                        Grid.Column="1"
-                                        Margin="12,0,0,0"
-                                        VerticalAlignment="Center">
-                                        <TextBlock
-                                            FontSize="13"
-                                            FontWeight="SemiBold"
-                                            Foreground="{DynamicResource LandingDashboardPrimaryTextBrush}"
-                                            Text="{Binding QuickOpenEntry.Name, FallbackValue=app, TargetNullValue=app}" />
-                                        <TextBlock
-                                            Margin="0,4,0,0"
-                                            Style="{StaticResource DashboardMutedTextStyle}"
-                                            Text="{Binding QuickOpenEntry.FilePath, TargetNullValue=等待选择数据库}"
-                                            TextTrimming="CharacterEllipsis" />
-                                    </StackPanel>
-                                </Grid>
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource MutedTextStyle}" Text="最近" />
+                                    <TextBlock
+                                        Margin="0,4,0,0"
+                                        FontSize="22"
+                                        FontWeight="Bold"
+                                        Foreground="{DynamicResource LandingDashboardPrimaryTextBrush}"
+                                        Text="{Binding RecentSummary.Count}" />
+                                </StackPanel>
                             </Border>
 
-                            <Grid Margin="0,14,0,0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="12" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-
-                                <Border
-                                    Padding="12"
-                                    Background="{DynamicResource LandingDashboardListItemBrush}"
-                                    BorderBrush="{DynamicResource LandingDashboardPanelBorderBrush}"
-                                    BorderThickness="1"
-                                    CornerRadius="10">
-                                    <StackPanel>
-                                        <TextBlock Style="{StaticResource DashboardMutedTextStyle}" Text="最近" />
-                                        <TextBlock
-                                            Margin="0,4,0,0"
-                                            FontSize="22"
-                                            FontWeight="Bold"
-                                            Foreground="{DynamicResource LandingDashboardPrimaryTextBrush}"
-                                            Text="{Binding RecentSummary.Count}" />
-                                    </StackPanel>
-                                </Border>
-
-                                <Border
-                                    Grid.Column="2"
-                                    Padding="12"
-                                    Background="{DynamicResource LandingDashboardListItemBrush}"
-                                    BorderBrush="{DynamicResource LandingDashboardPanelBorderBrush}"
-                                    BorderThickness="1"
-                                    CornerRadius="10">
-                                    <StackPanel>
-                                        <TextBlock Style="{StaticResource DashboardMutedTextStyle}" Text="固定" />
-                                        <TextBlock
-                                            Margin="0,4,0,0"
-                                            FontSize="22"
-                                            FontWeight="Bold"
-                                            Foreground="{DynamicResource LandingDashboardPrimaryTextBrush}"
-                                            Text="{Binding PinnedSummary.Count}" />
-                                    </StackPanel>
-                                </Border>
-                            </Grid>
-
-                            <TextBlock
-                                Margin="0,14,0,0"
-                                Style="{StaticResource DashboardMutedTextStyle}"
-                                Text="{Binding StatusMessage}" />
-                        </StackPanel>
-                    </Border>
-                </Grid>
-
-                <!--  Row 2: Recent + Pinned panels  -->
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="12" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-
-                    <Border Style="{StaticResource DashboardPanelStyle}">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="12" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-
-                                <StackPanel Orientation="Horizontal">
-                                    <ui:SymbolIcon
-                                        Margin="0,1,8,0"
-                                        Foreground="{DynamicResource LandingDashboardAccentBrush}"
-                                        Symbol="History24" />
-                                    <TextBlock Style="{StaticResource DashboardSectionTitleStyle}" Text="最近使用" />
+                            <Border
+                                Grid.Column="2"
+                                Padding="12"
+                                Background="{DynamicResource LandingDashboardListItemBrush}"
+                                BorderBrush="{DynamicResource LandingDashboardPanelBorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="10">
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource MutedTextStyle}" Text="固定" />
+                                    <TextBlock
+                                        Margin="0,4,0,0"
+                                        FontSize="22"
+                                        FontWeight="Bold"
+                                        Foreground="{DynamicResource LandingDashboardPrimaryTextBrush}"
+                                        Text="{Binding PinnedSummary.Count}" />
                                 </StackPanel>
+                            </Border>
+                        </Grid>
 
-                                <ui:Button Grid.Column="1" Style="{StaticResource DashboardLinkButtonStyle}">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock FontWeight="SemiBold" Text="查看全部" />
-                                        <ui:SymbolIcon
-                                            Margin="6,1,0,0"
-                                            Foreground="{DynamicResource LandingDashboardAccentBrush}"
-                                            Symbol="ChevronRight24" />
-                                    </StackPanel>
-                                    <ui:Button.Command>
-                                        <Binding Path="DataContext.NavigateToSectionCommand" RelativeSource="{RelativeSource AncestorType=Window}" />
-                                    </ui:Button.Command>
-                                    <ui:Button.CommandParameter>
-                                        <x:Static Member="shell:ShellSection.Recent" />
-                                    </ui:Button.CommandParameter>
-                                </ui:Button>
-                            </Grid>
+                        <!--  Status  -->
+                        <Grid Margin="0,14,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Ellipse
+                                Width="8"
+                                Height="8"
+                                Fill="{DynamicResource LandingDashboardStatusGreenBrush}" />
+                            <TextBlock
+                                Grid.Column="1"
+                                Margin="8,0,0,0"
+                                Style="{StaticResource MutedTextStyle}"
+                                Text="{Binding StatusMessage}" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </Grid>
 
-                            <ItemsControl Grid.Row="2" ItemsSource="{Binding RecentSummary}">
+            <!--  Row 2: Recent + Pinned  -->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="16" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!--  Recent panel  -->
+                <Border Style="{StaticResource PanelCardStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="14" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon
+                                    Margin="0,1,8,0"
+                                    Foreground="{DynamicResource LandingDashboardMutedTextBrush}"
+                                    Symbol="History24" />
+                                <TextBlock Style="{StaticResource SectionTitleStyle}" Text="最近使用" />
+                            </StackPanel>
+                            <ui:Button Grid.Column="1" Style="{StaticResource LinkButtonStyle}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="查看全部" />
+                                    <ui:SymbolIcon
+                                        Margin="6,1,0,0"
+                                        Foreground="{DynamicResource LandingDashboardMutedTextBrush}"
+                                        Symbol="ChevronRight24" />
+                                </StackPanel>
+                                <ui:Button.Command>
+                                    <Binding Path="DataContext.NavigateToSectionCommand" RelativeSource="{RelativeSource AncestorType=Window}" />
+                                </ui:Button.Command>
+                                <ui:Button.CommandParameter>
+                                    <x:Static Member="shell:ShellSection.Recent" />
+                                </ui:Button.CommandParameter>
+                            </ui:Button>
+                        </Grid>
+
+                        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding RecentSummary}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Style="{StaticResource DashboardListItemStyle}">
+                                        <Border Style="{StaticResource ListItemCardStyle}">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="Auto" />
@@ -350,11 +448,11 @@
                                                     <ColumnDefinition Width="Auto" />
                                                 </Grid.ColumnDefinitions>
 
-                                                <Border Style="{StaticResource DashboardIconShellStyle}">
+                                                <Border Style="{StaticResource IconShellStyle}">
                                                     <ui:SymbolIcon
                                                         HorizontalAlignment="Center"
                                                         VerticalAlignment="Center"
-                                                        Foreground="{DynamicResource LandingDashboardAccentBrush}"
+                                                        Foreground="{DynamicResource LandingDashboardMutedTextBrush}"
                                                         Symbol="Database24" />
                                                 </Border>
 
@@ -369,17 +467,17 @@
                                                         Text="{Binding Name}" />
                                                     <TextBlock
                                                         Margin="0,4,0,0"
-                                                        Style="{StaticResource DashboardMutedTextStyle}"
+                                                        Style="{StaticResource MutedTextStyle}"
                                                         Text="{Binding FilePath}"
                                                         TextTrimming="CharacterEllipsis" />
                                                 </StackPanel>
 
                                                 <ui:Button
                                                     Grid.Column="2"
-                                                    Margin="10,0,8,0"
+                                                    Margin="8,0,8,0"
                                                     Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                                     CommandParameter="{Binding}"
-                                                    Style="{StaticResource DashboardIconButtonStyle}"
+                                                    Style="{StaticResource IconActionButtonStyle}"
                                                     ToolTip="固定或取消固定">
                                                     <ui:SymbolIcon Foreground="{DynamicResource LandingDashboardMutedTextBrush}" Symbol="Pin24" />
                                                 </ui:Button>
@@ -388,7 +486,7 @@
                                                     Grid.Column="3"
                                                     Command="{Binding DataContext.OpenEntryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                                     CommandParameter="{Binding}"
-                                                    Style="{StaticResource DashboardIconButtonStyle}"
+                                                    Style="{StaticResource IconActionButtonStyle}"
                                                     ToolTip="打开此数据库">
                                                     <ui:SymbolIcon Foreground="{DynamicResource LandingDashboardMutedTextBrush}" Symbol="ArrowEnterLeft24" />
                                                 </ui:Button>
@@ -397,121 +495,209 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                        </Grid>
-                    </Border>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
 
-                    <Border Grid.Column="2" Style="{StaticResource DashboardPanelStyle}">
+                <!--  Pinned panel  -->
+                <Border Grid.Column="2" Style="{StaticResource PanelCardStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="14" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
                         <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="12" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon
+                                    Margin="0,1,8,0"
+                                    Foreground="{DynamicResource LandingDashboardMutedTextBrush}"
+                                    Symbol="Pin24" />
+                                <TextBlock Style="{StaticResource SectionTitleStyle}" Text="已固定" />
+                            </StackPanel>
+                            <ui:Button Grid.Column="1" Style="{StaticResource LinkButtonStyle}">
                                 <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="查看全部" />
                                     <ui:SymbolIcon
-                                        Margin="0,1,8,0"
-                                        Foreground="{DynamicResource LandingDashboardAccentBrush}"
-                                        Symbol="Pin24" />
-                                    <TextBlock Style="{StaticResource DashboardSectionTitleStyle}" Text="已固定" />
+                                        Margin="6,1,0,0"
+                                        Foreground="{DynamicResource LandingDashboardMutedTextBrush}"
+                                        Symbol="ChevronRight24" />
                                 </StackPanel>
-
-                                <ui:Button Grid.Column="1" Style="{StaticResource DashboardLinkButtonStyle}">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock FontWeight="SemiBold" Text="查看全部" />
-                                        <ui:SymbolIcon
-                                            Margin="6,1,0,0"
-                                            Foreground="{DynamicResource LandingDashboardAccentBrush}"
-                                            Symbol="ChevronRight24" />
-                                    </StackPanel>
-                                    <ui:Button.Command>
-                                        <Binding Path="DataContext.NavigateToSectionCommand" RelativeSource="{RelativeSource AncestorType=Window}" />
-                                    </ui:Button.Command>
-                                    <ui:Button.CommandParameter>
-                                        <x:Static Member="shell:ShellSection.Pinned" />
-                                    </ui:Button.CommandParameter>
-                                </ui:Button>
-                            </Grid>
-
-                            <ItemsControl Grid.Row="2" ItemsSource="{Binding PinnedSummary}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border Style="{StaticResource DashboardListItemStyle}">
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto" />
-                                                    <ColumnDefinition Width="*" />
-                                                    <ColumnDefinition Width="Auto" />
-                                                    <ColumnDefinition Width="Auto" />
-                                                </Grid.ColumnDefinitions>
-
-                                                <Border Style="{StaticResource DashboardIconShellStyle}">
-                                                    <ui:SymbolIcon
-                                                        HorizontalAlignment="Center"
-                                                        VerticalAlignment="Center"
-                                                        Foreground="{DynamicResource LandingDashboardAccentBrush}"
-                                                        Symbol="Database24" />
-                                                </Border>
-
-                                                <StackPanel
-                                                    Grid.Column="1"
-                                                    Margin="12,0,0,0"
-                                                    VerticalAlignment="Center">
-                                                    <TextBlock
-                                                        FontSize="13"
-                                                        FontWeight="SemiBold"
-                                                        Foreground="{DynamicResource LandingDashboardPrimaryTextBrush}"
-                                                        Text="{Binding Name}" />
-                                                    <TextBlock
-                                                        Margin="0,4,0,0"
-                                                        Style="{StaticResource DashboardMutedTextStyle}"
-                                                        Text="固定在首页快捷访问"
-                                                        TextTrimming="CharacterEllipsis" />
-                                                </StackPanel>
-
-                                                <ui:Button
-                                                    Grid.Column="2"
-                                                    Margin="10,0,8,0"
-                                                    Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                    CommandParameter="{Binding}"
-                                                    Style="{StaticResource DashboardIconButtonStyle}"
-                                                    ToolTip="取消固定">
-                                                    <ui:SymbolIcon Foreground="{DynamicResource LandingDashboardMutedTextBrush}" Symbol="Pin24" />
-                                                </ui:Button>
-
-                                                <ui:Button
-                                                    Grid.Column="3"
-                                                    Command="{Binding DataContext.OpenEntryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                    CommandParameter="{Binding}"
-                                                    Style="{StaticResource DashboardIconButtonStyle}"
-                                                    ToolTip="打开此数据库">
-                                                    <ui:SymbolIcon Foreground="{DynamicResource LandingDashboardMutedTextBrush}" Symbol="ArrowEnterLeft24" />
-                                                </ui:Button>
-                                            </Grid>
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                                <ui:Button.Command>
+                                    <Binding Path="DataContext.NavigateToSectionCommand" RelativeSource="{RelativeSource AncestorType=Window}" />
+                                </ui:Button.Command>
+                                <ui:Button.CommandParameter>
+                                    <x:Static Member="shell:ShellSection.Pinned" />
+                                </ui:Button.CommandParameter>
+                            </ui:Button>
                         </Grid>
-                    </Border>
-                </Grid>
 
-                <Border
-                    Grid.Row="4"
-                    Padding="14"
-                    Background="{DynamicResource LandingDashboardPanelBrush}"
-                    BorderBrush="{DynamicResource LandingDashboardPanelBorderBrush}"
-                    BorderThickness="1"
-                    CornerRadius="14">
-                    <TextBlock Style="{StaticResource DashboardMutedTextStyle}" Text="{Binding StatusMessage}" />
+                        <Grid Grid.Row="2">
+                            <!--  Empty state  -->
+                            <Border>
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding HasPinnedEntries}" Value="True">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <!--  Decorative circle with pin icon  -->
+                                    <Grid HorizontalAlignment="Center">
+                                        <!--  Star dots  -->
+                                        <Ellipse
+                                            Width="6"
+                                            Height="6"
+                                            Margin="-28,-24,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Fill="{DynamicResource LandingDashboardPreviewLineStrongBrush}" />
+                                        <Ellipse
+                                            Width="4"
+                                            Height="4"
+                                            Margin="22,-32,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Fill="{DynamicResource LandingDashboardPreviewLineBrush}" />
+                                        <Ellipse
+                                            Width="5"
+                                            Height="5"
+                                            Margin="30,8,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Fill="{DynamicResource LandingDashboardPreviewLineStrongBrush}" />
+
+                                        <!--  Circle background  -->
+                                        <Border
+                                            Width="72"
+                                            Height="72"
+                                            Background="{DynamicResource LandingDashboardIconShellBrush}"
+                                            CornerRadius="36">
+                                            <ui:SymbolIcon
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Foreground="{DynamicResource LandingDashboardMutedTextBrush}"
+                                                Symbol="Pin24" />
+                                        </Border>
+                                    </Grid>
+
+                                    <TextBlock
+                                        Margin="0,20,0,0"
+                                        HorizontalAlignment="Center"
+                                        FontSize="14"
+                                        FontWeight="SemiBold"
+                                        Foreground="{DynamicResource LandingDashboardPrimaryTextBrush}"
+                                        Text="您还没有固定的数据库" />
+                                    <TextBlock
+                                        Margin="0,6,0,0"
+                                        HorizontalAlignment="Center"
+                                        Style="{StaticResource MutedTextStyle}"
+                                        Text="将常用数据库固定，方便快速访问。" />
+                                </StackPanel>
+                            </Border>
+
+                            <!--  Pinned list  -->
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <ScrollViewer.Style>
+                                    <Style TargetType="ScrollViewer">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding HasPinnedEntries}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ScrollViewer.Style>
+                                <ItemsControl ItemsSource="{Binding PinnedSummary}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Style="{StaticResource ListItemCardStyle}">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Border Style="{StaticResource IconShellStyle}">
+                                                        <ui:SymbolIcon
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            Foreground="{DynamicResource LandingDashboardMutedTextBrush}"
+                                                            Symbol="Database24" />
+                                                    </Border>
+
+                                                    <StackPanel
+                                                        Grid.Column="1"
+                                                        Margin="12,0,0,0"
+                                                        VerticalAlignment="Center">
+                                                        <TextBlock
+                                                            FontSize="13"
+                                                            FontWeight="SemiBold"
+                                                            Foreground="{DynamicResource LandingDashboardPrimaryTextBrush}"
+                                                            Text="{Binding Name}" />
+                                                        <TextBlock
+                                                            Margin="0,4,0,0"
+                                                            Style="{StaticResource MutedTextStyle}"
+                                                            Text="固定在首页快捷访问"
+                                                            TextTrimming="CharacterEllipsis" />
+                                                    </StackPanel>
+
+                                                    <ui:Button
+                                                        Grid.Column="2"
+                                                        Margin="8,0,8,0"
+                                                        Command="{Binding DataContext.TogglePinCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                        CommandParameter="{Binding}"
+                                                        Style="{StaticResource IconActionButtonStyle}"
+                                                        ToolTip="取消固定">
+                                                        <ui:SymbolIcon Foreground="{DynamicResource LandingDashboardMutedTextBrush}" Symbol="Pin24" />
+                                                    </ui:Button>
+
+                                                    <ui:Button
+                                                        Grid.Column="3"
+                                                        Command="{Binding DataContext.OpenEntryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                        CommandParameter="{Binding}"
+                                                        Style="{StaticResource IconActionButtonStyle}"
+                                                        ToolTip="打开此数据库">
+                                                        <ui:SymbolIcon Foreground="{DynamicResource LandingDashboardMutedTextBrush}" Symbol="ArrowEnterLeft24" />
+                                                    </ui:Button>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Grid>
+                    </Grid>
                 </Border>
             </Grid>
-        </ScrollViewer>
+
+            <!--  Row 4: Status bar  -->
+            <Border Grid.Row="4" Style="{StaticResource StatusBarStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <ui:SymbolIcon Foreground="{DynamicResource LandingDashboardMutedTextBrush}" Symbol="Info24" />
+                    <TextBlock
+                        Grid.Column="1"
+                        Margin="8,0,0,0"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource MutedTextStyle}"
+                        Text="就绪。选择或打开数据库以开始工作。" />
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>
