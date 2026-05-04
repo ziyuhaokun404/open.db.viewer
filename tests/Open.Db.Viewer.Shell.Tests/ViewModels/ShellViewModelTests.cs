@@ -21,8 +21,6 @@ public class ShellViewModelTests
         shell.NavigationItems.Select(item => item.Section)
             .Should().ContainInOrder(
                 ShellSection.Home,
-                ShellSection.Recent,
-                ShellSection.Pinned,
                 ShellSection.Workspace);
     }
 
@@ -31,10 +29,10 @@ public class ShellViewModelTests
     {
         var shell = CreateShell();
 
-        shell.NavigateToSection(ShellSection.Pinned);
+        shell.NavigateToSection(ShellSection.Settings);
 
-        shell.CurrentSection.Should().Be(ShellSection.Pinned);
-        shell.NavigationItems.Single(item => item.Section == ShellSection.Pinned).IsSelected.Should().BeTrue();
+        shell.CurrentSection.Should().Be(ShellSection.Settings);
+        shell.NavigationItems.Single(item => item.Section == ShellSection.Settings).IsSelected.Should().BeTrue();
     }
 
     [Fact]
@@ -74,15 +72,15 @@ public class ShellViewModelTests
     }
 
     [Fact]
-    public async Task NavigateToSection_ShouldLoadRecentPageOnDemand()
+    public async Task NavigateToSection_ShouldLoadHomePageOnDemand()
     {
         var shell = CreateShell();
 
-        shell.NavigateToSection(ShellSection.Recent);
+        shell.NavigateToSection(ShellSection.Home);
         await shell.LoadCurrentSectionAsync();
 
-        shell.RecentPage.FilteredEntries.Should().NotBeNull();
-        shell.CurrentContentViewModel.Should().BeSameAs(shell.RecentPage);
+        shell.HomeLanding.QuickOpenEntry.Should().BeNull();
+        shell.CurrentContentViewModel.Should().BeSameAs(shell.HomeLanding);
     }
 
     [Fact]
@@ -93,7 +91,6 @@ public class ShellViewModelTests
         await shell.OpenDatabaseAsync();
 
         shell.HomeLanding.QuickOpenEntry.Should().NotBeNull();
-        shell.RecentPage.Entries.Should().ContainSingle(entry => entry.FilePath == @"C:\data\demo.db");
     }
 
     private static ShellViewModel CreateShell(string? filePath = null, bool databaseExists = true)
@@ -104,8 +101,6 @@ public class ShellViewModelTests
         return new ShellViewModel(
             workspace,
             new HomeLandingViewModel(databaseEntryService, new FakeFileDialogService(filePath)),
-            new RecentDatabasesViewModel(databaseEntryService),
-            new PinnedDatabasesViewModel(databaseEntryService),
             new SettingsViewModel(),
             new AboutViewModel());
     }

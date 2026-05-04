@@ -6,14 +6,16 @@
              xmlns:pages="clr-namespace:Open.Db.Viewer.Shell.Views.Pages"
              mc:Ignorable="d">
     <UserControl.Resources>
+        <!--  Implicit style ensures TextBlocks adapt to dark/light theme  -->
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+        </Style>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
-
     <Grid>
         <Grid Visibility="{Binding Workspace.HasOpenDatabase, Converter={StaticResource BooleanToVisibilityConverter}}">
             <pages:DatabaseWorkspacePage DataContext="{Binding Workspace}" />
         </Grid>
-
         <Border Margin="24"
                 Padding="32"
                 CornerRadius="24"
@@ -30,7 +32,6 @@
                     </Style.Triggers>
                 </Style>
             </Border.Style>
-
             <StackPanel VerticalAlignment="Center">
                 <TextBlock FontSize="30"
                            FontWeight="SemiBold"

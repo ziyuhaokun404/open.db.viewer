@@ -13,6 +13,14 @@ public partial class DatabaseWorkspacePage : UserControl
         InitializeComponent();
     }
 
+    private void OnAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+    {
+        if (e.Column is DataGridTextColumn textColumn)
+        {
+            textColumn.ElementStyle = (Style)FindResource("DataGridTextCellStyle");
+        }
+    }
+
     private async void ObjectList_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (DataContext is not DatabaseWorkspaceViewModel viewModel ||

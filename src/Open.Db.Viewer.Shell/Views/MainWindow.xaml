@@ -20,15 +20,10 @@
     WindowBackdropType="Mica"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
+
     <ui:FluentWindow.Resources>
         <DataTemplate x:Key="HomeLandingTemplate">
             <navigation:HomeLandingPage />
-        </DataTemplate>
-        <DataTemplate x:Key="RecentTemplate">
-            <navigation:RecentDatabasesPage />
-        </DataTemplate>
-        <DataTemplate x:Key="PinnedTemplate">
-            <navigation:PinnedDatabasesPage />
         </DataTemplate>
         <DataTemplate x:Key="SettingsTemplate">
             <navigation:SettingsPage />
@@ -44,8 +39,6 @@
             x:Key="PageTemplateSelector"
             AboutTemplate="{StaticResource AboutTemplate}"
             HomeTemplate="{StaticResource HomeLandingTemplate}"
-            PinnedTemplate="{StaticResource PinnedTemplate}"
-            RecentTemplate="{StaticResource RecentTemplate}"
             SettingsTemplate="{StaticResource SettingsTemplate}"
             WorkspaceTemplate="{StaticResource WorkspaceTemplate}" />
 
@@ -101,7 +94,7 @@
                         VerticalAlignment="Center"
                         FontSize="13"
                         FontWeight="SemiBold"
-                        Text="Open.db.viewer" />
+                        Text="SQLITE VIEWER" />
                 </StackPanel>
             </ui:TitleBar.Header>
 
@@ -145,18 +138,6 @@
                         Content="首页"
                         Icon="{ui:SymbolIcon Home24}"
                         Tag="home" />
-                    <ui:NavigationViewItem
-                        x:Name="RecentNavItem"
-                        Click="NavItem_Click"
-                        Content="最近使用"
-                        Icon="{ui:SymbolIcon History24}"
-                        Tag="recent" />
-                    <ui:NavigationViewItem
-                        x:Name="PinnedNavItem"
-                        Click="NavItem_Click"
-                        Content="已固定"
-                        Icon="{ui:SymbolIcon Pin24}"
-                        Tag="pinned" />
                     <ui:NavigationViewItem
                         x:Name="WorkspaceNavItem"
                         Click="NavItem_Click"

@@ -58,8 +58,6 @@ public class MainWindowSmokeTests
                 var shell = new ShellViewModel(
                     workspace,
                     new HomeLandingViewModel(databaseEntryService, new FakeFileDialogService()),
-                    new RecentDatabasesViewModel(databaseEntryService),
-                    new PinnedDatabasesViewModel(databaseEntryService),
                     new SettingsViewModel(),
                     new AboutViewModel());
                 var themeService = new ThemeService();
@@ -96,17 +94,16 @@ public class MainWindowSmokeTests
 
                 var rootNavigation = window.FindName("RootNavigation").Should().BeOfType<WpfUiControls.NavigationView>().Subject;
                 var homeNavItem = window.FindName("HomeNavItem").Should().BeOfType<WpfUiControls.NavigationViewItem>().Subject;
-                var recentNavItem = window.FindName("RecentNavItem").Should().BeOfType<WpfUiControls.NavigationViewItem>().Subject;
                 var settingsNavItem = window.FindName("SettingsNavItem").Should().BeOfType<WpfUiControls.NavigationViewItem>().Subject;
 
                 rootNavigation.MenuItems.Should().NotBeNull();
                 homeNavItem.IsActive.Should().BeTrue();
                 settingsNavItem.Content.Should().Be("设置");
 
-                shell.NavigateToSection(ShellSection.Recent);
+                shell.NavigateToSection(ShellSection.Settings);
                 DoEvents();
                 homeNavItem.IsActive.Should().BeFalse();
-                recentNavItem.IsActive.Should().BeTrue();
+                settingsNavItem.IsActive.Should().BeTrue();
 
                 shell.NavigateToSection(ShellSection.Home);
                 DoEvents();
@@ -128,7 +125,6 @@ public class MainWindowSmokeTests
                 renderedTexts.Should().Contain("Open.db.viewer");
                 renderedTexts.Count(text => text == "Open.db.viewer").Should().Be(1);
                 renderedTexts.Should().Contain("首页");
-                renderedTexts.Should().Contain("最近使用");
                 renderedTexts.Should().Contain("数据库工作台");
                 renderedTexts.Should().Contain("设置");
                 renderedTexts.Should().Contain("关于");

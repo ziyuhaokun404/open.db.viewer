@@ -7,13 +7,15 @@
              mc:Ignorable="d">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-
+        <!--  Implicit style: all TextBlocks without explicit Foreground use themed primary text color  -->
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+        </Style>
         <DropShadowEffect x:Key="WorkspaceShadowEffect"
                           BlurRadius="16"
                           Color="#000000"
                           Opacity="0.12"
                           ShadowDepth="0" />
-
         <Style x:Key="WorkspaceSurfaceStyle" TargetType="Border">
             <Setter Property="Background" Value="{DynamicResource WorkspaceSurfaceBrush}" />
             <Setter Property="BorderBrush" Value="{DynamicResource WorkspaceSurfaceBorderBrush}" />
@@ -21,25 +23,21 @@
             <Setter Property="CornerRadius" Value="12" />
             <Setter Property="Effect" Value="{StaticResource WorkspaceShadowEffect}" />
         </Style>
-
         <Style x:Key="WorkspacePanelStyle" TargetType="Border">
             <Setter Property="Background" Value="{DynamicResource WorkspaceSurfaceBrush}" />
             <Setter Property="BorderBrush" Value="{DynamicResource WorkspaceSurfaceBorderBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="10" />
         </Style>
-
         <Style x:Key="WorkspaceSectionTitleStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="14" />
             <Setter Property="FontWeight" Value="SemiBold" />
             <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
         </Style>
-
         <Style x:Key="WorkspaceCaptionStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="12" />
             <Setter Property="Foreground" Value="{DynamicResource WorkspaceSubtleBrush}" />
         </Style>
-
         <Style x:Key="WorkspaceInputBorderStyle" TargetType="Border">
             <Setter Property="Background" Value="{DynamicResource WorkspaceInputBrush}" />
             <Setter Property="BorderBrush" Value="{DynamicResource WorkspaceSurfaceBorderBrush}" />
@@ -48,7 +46,6 @@
             <Setter Property="Padding" Value="10,0" />
             <Setter Property="Height" Value="38" />
         </Style>
-
         <Style x:Key="WorkspaceMetricCardStyle" TargetType="Border">
             <Setter Property="Background" Value="{DynamicResource WorkspaceMetricBrush}" />
             <Setter Property="BorderBrush" Value="{DynamicResource WorkspaceSurfaceBorderBrush}" />
@@ -57,7 +54,6 @@
             <Setter Property="Margin" Value="0,0,10,0" />
             <Setter Property="Padding" Value="12,10" />
         </Style>
-
         <Style x:Key="WorkspaceTabItemStyle" TargetType="TabItem">
             <Setter Property="Foreground" Value="{DynamicResource WorkspaceSubtleBrush}" />
             <Setter Property="Padding" Value="0" />
@@ -88,7 +84,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <Style x:Key="WorkspaceDataGridStyle" TargetType="DataGrid">
             <Setter Property="Background" Value="{DynamicResource WorkspacePanelBrush}" />
             <Setter Property="BorderBrush" Value="{DynamicResource WorkspaceSurfaceBorderBrush}" />
@@ -104,7 +99,6 @@
             <Setter Property="SelectionMode" Value="Extended" />
             <Setter Property="SelectionUnit" Value="FullRow" />
         </Style>
-
         <Style x:Key="WorkspaceDataGridColumnHeaderStyle" TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="{DynamicResource WorkspaceMetricBrush}" />
             <Setter Property="BorderBrush" Value="{DynamicResource WorkspaceSurfaceBorderBrush}" />
@@ -113,7 +107,6 @@
             <Setter Property="Padding" Value="12,10" />
             <Setter Property="FontWeight" Value="SemiBold" />
         </Style>
-
         <Style x:Key="WorkspaceDataGridCellStyle" TargetType="DataGridCell">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderBrush" Value="{DynamicResource WorkspaceSurfaceBorderBrush}" />
@@ -132,7 +125,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
         <Style x:Key="WorkspaceDataGridRowStyle" TargetType="DataGridRow">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
@@ -149,7 +141,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
         <Style x:Key="ObjectListBoxItemStyle" TargetType="ListBoxItem">
             <Setter Property="Padding" Value="0" />
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -180,7 +171,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <Style x:Key="HideWhenTableSelectedStyle" TargetType="StackPanel">
             <Setter Property="Visibility" Value="Visible" />
             <Style.Triggers>
@@ -189,7 +179,6 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-
         <Style x:Key="ShowWhenNoFilteredTablesStyle" TargetType="StackPanel">
             <Setter Property="Visibility" Value="Collapsed" />
             <Style.Triggers>
@@ -198,7 +187,9 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-
+        <Style x:Key="DataGridTextCellStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+        </Style>
         <Style x:Key="ShowWhenSearchEmptyStyle" TargetType="TextBlock">
             <Setter Property="Visibility" Value="Visible" />
             <Setter Property="Foreground" Value="{DynamicResource WorkspaceSubtleBrush}" />
@@ -215,7 +206,6 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-
     <Border Background="{DynamicResource WorkspacePageBackgroundBrush}">
         <Grid Margin="14">
             <Grid.RowDefinitions>
@@ -225,7 +215,6 @@
                 <RowDefinition Height="8" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-
             <Border Padding="16"
                     Style="{StaticResource WorkspaceSurfaceStyle}">
                 <Grid>
@@ -233,7 +222,6 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-
                     <StackPanel>
                         <TextBlock FontSize="22"
                                    FontWeight="SemiBold"
@@ -243,7 +231,6 @@
                                    Text="{Binding DatabasePath}"
                                    TextTrimming="CharacterEllipsis" />
                     </StackPanel>
-
                     <StackPanel Grid.Column="1"
                                 Orientation="Horizontal"
                                 VerticalAlignment="Top">
@@ -267,7 +254,6 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-
                                 <ui:SymbolIcon VerticalAlignment="Center"
                                                Foreground="{DynamicResource WorkspaceSubtleBrush}"
                                                Symbol="Search24" />
@@ -316,14 +302,12 @@
                     </StackPanel>
                 </Grid>
             </Border>
-
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="280" />
                     <ColumnDefinition Width="10" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-
                 <Border Padding="14"
                         Style="{StaticResource WorkspacePanelStyle}">
                     <Grid>
@@ -337,7 +321,6 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-
                         <StackPanel>
                             <TextBlock FontSize="17"
                                        FontWeight="SemiBold"
@@ -346,7 +329,6 @@
                                        Foreground="{DynamicResource WorkspaceSubtleBrush}"
                                        Text="浏览当前数据库中的数据表。" />
                         </StackPanel>
-
                         <Border Grid.Row="2"
                                 Style="{StaticResource WorkspaceInputBorderStyle}">
                             <Grid>
@@ -356,7 +338,6 @@
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-
                                 <ui:SymbolIcon VerticalAlignment="Center"
                                                Foreground="{DynamicResource WorkspaceSubtleBrush}"
                                                Symbol="Search24" />
@@ -404,7 +385,6 @@
                                            Icon="{ui:SymbolIcon Filter24}" />
                             </Grid>
                         </Border>
-
                         <DockPanel Grid.Row="4"
                                    LastChildFill="False">
                             <StackPanel Orientation="Horizontal">
@@ -427,7 +407,6 @@
                                            Text="{Binding ObjectExplorer.FilteredObjectCount}" />
                             </Border>
                         </DockPanel>
-
                         <Border Grid.Row="6"
                                 Padding="4"
                                 Background="{DynamicResource WorkspacePanelBrush}"
@@ -451,7 +430,6 @@
                                                     <ColumnDefinition Width="*" />
                                                     <ColumnDefinition Width="Auto" />
                                                 </Grid.ColumnDefinitions>
-
                                                 <ui:SymbolIcon Width="16"
                                                                Height="16"
                                                                Margin="0,1,0,0"
@@ -485,7 +463,6 @@
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
-
                                 <StackPanel HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             Style="{StaticResource ShowWhenNoFilteredTablesStyle}">
@@ -498,14 +475,12 @@
                                 </StackPanel>
                             </Grid>
                         </Border>
-
                         <TextBlock Grid.Row="7"
                                    Margin="0,8,0,0"
                                    Foreground="{DynamicResource WorkspaceSubtleBrush}"
                                    Text="{Binding ObjectExplorer.FooterSummary}" />
                     </Grid>
                 </Border>
-
                 <Border Grid.Column="2"
                         Padding="0"
                         Style="{StaticResource WorkspacePanelStyle}">
@@ -515,13 +490,11 @@
                             <RowDefinition Height="1" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-
                         <Grid Margin="16,14,16,12">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-
                             <StackPanel>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock FontSize="20"
@@ -542,7 +515,6 @@
                                            Foreground="{DynamicResource WorkspaceSubtleBrush}"
                                            Text="{Binding SelectedObjectSubtitle}" />
                             </StackPanel>
-
                             <Border Grid.Column="1"
                                     Padding="12,10"
                                     Background="{DynamicResource WorkspaceMetricBrush}"
@@ -558,10 +530,8 @@
                                 </StackPanel>
                             </Border>
                         </Grid>
-
                         <Border Grid.Row="1"
                                 Background="{DynamicResource WorkspaceSurfaceBorderBrush}" />
-
                         <Grid Grid.Row="2"
                               Visibility="{Binding HasTableSelection, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <TabControl Margin="16,8,16,14"
@@ -589,7 +559,6 @@
                                                 <RowDefinition Height="10" />
                                                 <RowDefinition Height="Auto" />
                                             </Grid.RowDefinitions>
-
                                             <Border Padding="10"
                                                     Background="{DynamicResource WorkspacePanelBrush}"
                                                     BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
@@ -751,7 +720,6 @@
                                                     </Border>
                                                 </Grid>
                                             </Border>
-
                                             <Border Grid.Row="2"
                                                     Padding="12"
                                                     Background="{DynamicResource WorkspacePanelBrush}"
@@ -764,10 +732,8 @@
                                                         <RowDefinition Height="12" />
                                                         <RowDefinition Height="*" />
                                                     </Grid.RowDefinitions>
-
                                                     <TextBlock Style="{StaticResource WorkspaceSectionTitleStyle}"
                                                                Text="{Binding Schema.ColumnCountSummary, StringFormat=列定义 ({0})}" />
-
                                                     <DataGrid Grid.Row="2"
                                                               AutoGenerateColumns="False"
                                                               CanUserAddRows="False"
@@ -779,18 +745,17 @@
                                                               RowStyle="{StaticResource WorkspaceDataGridRowStyle}"
                                                               Style="{StaticResource WorkspaceDataGridStyle}">
                                                         <DataGrid.Columns>
-                                                            <DataGridTextColumn Width="60" Binding="{Binding Ordinal}" Header="#" />
-                                                            <DataGridTextColumn Width="*" Binding="{Binding Name}" Header="列名" />
-                                                            <DataGridTextColumn Width="120" Binding="{Binding DataType}" Header="类型" />
-                                                            <DataGridTextColumn Width="100" Binding="{Binding Nullability}" Header="可为空" />
-                                                            <DataGridTextColumn Width="100" Binding="{Binding PrimaryKey}" Header="主键" />
-                                                            <DataGridTextColumn Width="120" Binding="{Binding DefaultValue}" Header="默认值" />
-                                                            <DataGridTextColumn Width="180" Binding="{Binding Description}" Header="说明" />
+                                                            <DataGridTextColumn Width="60" Binding="{Binding Ordinal}" Header="#" ElementStyle="{StaticResource DataGridTextCellStyle}" />
+                                                            <DataGridTextColumn Width="*" Binding="{Binding Name}" Header="列名" ElementStyle="{StaticResource DataGridTextCellStyle}" />
+                                                            <DataGridTextColumn Width="120" Binding="{Binding DataType}" Header="类型" ElementStyle="{StaticResource DataGridTextCellStyle}" />
+                                                            <DataGridTextColumn Width="100" Binding="{Binding Nullability}" Header="可为空" ElementStyle="{StaticResource DataGridTextCellStyle}" />
+                                                            <DataGridTextColumn Width="100" Binding="{Binding PrimaryKey}" Header="主键" ElementStyle="{StaticResource DataGridTextCellStyle}" />
+                                                            <DataGridTextColumn Width="120" Binding="{Binding DefaultValue}" Header="默认值" ElementStyle="{StaticResource DataGridTextCellStyle}" />
+                                                            <DataGridTextColumn Width="180" Binding="{Binding Description}" Header="说明" ElementStyle="{StaticResource DataGridTextCellStyle}" />
                                                         </DataGrid.Columns>
                                                     </DataGrid>
                                                 </Grid>
                                             </Border>
-
                                             <Border Grid.Row="4"
                                                     Padding="16"
                                                     Background="{DynamicResource WorkspacePanelBrush}"
@@ -807,7 +772,6 @@
                                                         <ColumnDefinition Width="20" />
                                                         <ColumnDefinition Width="0.9*" />
                                                     </Grid.ColumnDefinitions>
-
                                                     <StackPanel>
                                                         <TextBlock Style="{StaticResource WorkspaceSectionTitleStyle}" Text="表信息" />
                                                         <Grid Margin="0,12,0,0">
@@ -838,10 +802,8 @@
                                                             <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding Schema.TriggerSummary}" />
                                                         </Grid>
                                                     </StackPanel>
-
                                                     <Border Grid.Column="1"
                                                             Background="{DynamicResource WorkspaceSurfaceBorderBrush}" />
-
                                                     <StackPanel Grid.Column="3">
                                                         <TextBlock Style="{StaticResource WorkspaceSectionTitleStyle}" Text="数据库信息" />
                                                         <Grid Margin="0,12,0,0">
@@ -876,10 +838,8 @@
                                                             <TextBlock Grid.Row="10" Grid.Column="1" Text="{Binding Schema.PageSizeSummary}" />
                                                         </Grid>
                                                     </StackPanel>
-
                                                     <Border Grid.Column="4"
                                                             Background="{DynamicResource WorkspaceSurfaceBorderBrush}" />
-
                                                     <StackPanel Grid.Column="6"
                                                                 VerticalAlignment="Top">
                                                         <TextBlock Style="{StaticResource WorkspaceSectionTitleStyle}"
@@ -907,7 +867,6 @@
                                         </Grid>
                                     </ScrollViewer>
                                 </TabItem>
-
                                 <TabItem>
                                     <TabItem.Header>
                                         <StackPanel Orientation="Horizontal">
@@ -926,7 +885,6 @@
                                             <RowDefinition Height="12" />
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
-
                                         <Border Padding="12"
                                                 Background="{DynamicResource WorkspacePanelBrush}"
                                                 BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
@@ -966,7 +924,6 @@
                                                            Text="{Binding Data.SortSummary}" />
                                             </WrapPanel>
                                         </Border>
-
                                         <Border Grid.Row="2"
                                                 Padding="14"
                                                 Background="{DynamicResource WorkspacePanelBrush}"
@@ -984,6 +941,7 @@
                                                 <DataGrid Grid.Row="2"
                                                           x:Name="DataGridView"
                                                           AutoGenerateColumns="True"
+                                                          AutoGeneratingColumn="OnAutoGeneratingColumn"
                                                           CanUserAddRows="False"
                                                           CellStyle="{StaticResource WorkspaceDataGridCellStyle}"
                                                           ColumnHeaderStyle="{StaticResource WorkspaceDataGridColumnHeaderStyle}"
@@ -996,7 +954,6 @@
                                         </Border>
                                     </Grid>
                                 </TabItem>
-
                                 <TabItem>
                                     <TabItem.Header>
                                         <StackPanel Orientation="Horizontal">
@@ -1019,7 +976,6 @@
                                             <RowDefinition Height="12" />
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
-
                                         <Border Padding="12"
                                                 Background="{DynamicResource WorkspacePanelBrush}"
                                                 BorderBrush="{DynamicResource WorkspaceSurfaceBorderBrush}"
@@ -1039,7 +995,6 @@
                                                            Text="{Binding Query.CurrentTableName, StringFormat=当前数据表：{0}}" />
                                             </WrapPanel>
                                         </Border>
-
                                         <Border Grid.Row="2"
                                                 Padding="14"
                                                 Background="{DynamicResource WorkspacePanelBrush}"
@@ -1052,7 +1007,6 @@
                                                     <RowDefinition Height="10" />
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
-
                                                 <StackPanel Orientation="Horizontal">
                                                     <ui:Button Content="查询前 100 行"
                                                                Command="{Binding Query.UseSelectTemplateCommand}" />
@@ -1063,7 +1017,6 @@
                                                                Content="表结构"
                                                                Command="{Binding Query.UseSchemaTemplateCommand}" />
                                                 </StackPanel>
-
                                                 <TextBox Grid.Row="2"
                                                          AcceptsReturn="True"
                                                          Background="{DynamicResource WorkspaceInputBrush}"
@@ -1078,7 +1031,6 @@
                                                          VerticalScrollBarVisibility="Auto" />
                                             </Grid>
                                         </Border>
-
                                         <Border Grid.Row="4"
                                                 Padding="12"
                                                 Background="{DynamicResource WorkspacePanelBrush}"
@@ -1093,7 +1045,6 @@
                                                            Text="{Binding Query.StatusMessage}" />
                                             </StackPanel>
                                         </Border>
-
                                         <Border Grid.Row="6"
                                                 Padding="14"
                                                 Background="{DynamicResource WorkspacePanelBrush}"
@@ -1102,6 +1053,7 @@
                                                 CornerRadius="10">
                                             <Grid>
                                                 <DataGrid AutoGenerateColumns="True"
+                                                          AutoGeneratingColumn="OnAutoGeneratingColumn"
                                                           CanUserAddRows="False"
                                                           CellStyle="{StaticResource WorkspaceDataGridCellStyle}"
                                                           ColumnHeaderStyle="{StaticResource WorkspaceDataGridColumnHeaderStyle}"
@@ -1124,7 +1076,6 @@
                                         </Border>
                                     </Grid>
                                 </TabItem>
-
                                 <TabItem>
                                     <TabItem.Header>
                                         <StackPanel Orientation="Horizontal">
@@ -1168,7 +1119,6 @@
                                         </ScrollViewer>
                                     </Border>
                                 </TabItem>
-
                                 <TabItem>
                                     <TabItem.Header>
                                         <StackPanel Orientation="Horizontal">
@@ -1212,7 +1162,6 @@
                                         </ScrollViewer>
                                     </Border>
                                 </TabItem>
-
                                 <TabItem>
                                     <TabItem.Header>
                                         <StackPanel Orientation="Horizontal">
@@ -1247,7 +1196,6 @@
                                 </TabItem>
                             </TabControl>
                         </Grid>
-
                         <StackPanel Grid.Row="2"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
@@ -1266,7 +1214,6 @@
                     </Grid>
                 </Border>
             </Grid>
-
             <Border Grid.Row="4"
                     Padding="10,8"
                     Style="{StaticResource WorkspacePanelStyle}">
@@ -1275,7 +1222,6 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Foreground="{DynamicResource WorkspaceSubtleBrush}"
                                    Text="{Binding FooterStatusText}" />
@@ -1286,7 +1232,6 @@
                                    Foreground="{DynamicResource WorkspaceSubtleBrush}"
                                    Text="{Binding FooterAccessModeText}" />
                     </StackPanel>
-
                     <StackPanel Grid.Column="1"
                                 Orientation="Horizontal">
                         <TextBlock Foreground="{DynamicResource WorkspaceSubtleBrush}"

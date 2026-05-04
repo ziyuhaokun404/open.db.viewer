@@ -98,16 +98,18 @@ open.db.viewer
 ### 还原依赖
 
 ```powershell
-dotnet restore .\src\Open.Db.Viewer.slnx
+dotnet restore Open.Db.Viewer.slnx
 ```
 
 ### 构建
 
 ```powershell
-dotnet build .\src\Open.Db.Viewer.slnx
+dotnet build Open.Db.Viewer.slnx
 ```
 
 ### 运行桌面程序
+
+open.db.viewer
 
 ```powershell
 dotnet run --project .\src\Open.Db.Viewer.Shell\Open.Db.Viewer.Shell.csproj
@@ -127,7 +129,7 @@ dotnet run --project .\src\Open.Db.Viewer.Shell\Open.Db.Viewer.Shell.csproj
 运行全部测试：
 
 ```powershell
-dotnet test .\src\Open.Db.Viewer.slnx
+dotnet test Open.Db.Viewer.slnx
 ```
 
 当前测试项目覆盖：

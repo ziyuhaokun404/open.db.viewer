@@ -37,8 +37,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<ExportService>();
         services.AddSingleton<IFileDialogService, FileDialogService>();
         services.AddSingleton<HomeLandingViewModel>();
-        services.AddSingleton<RecentDatabasesViewModel>();
-        services.AddSingleton<PinnedDatabasesViewModel>();
         services.AddSingleton<SettingsViewModel>();
         services.AddSingleton<AboutViewModel>();
         services.AddSingleton<WorkspaceHostViewModel>();

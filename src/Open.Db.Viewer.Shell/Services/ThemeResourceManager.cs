@@ -5,9 +5,11 @@ namespace Open.Db.Viewer.ShellHost.Services;
 internal static class ThemeResourceManager
 {
     private const string ThemeDictionaryFolder = "/Resources/Themes/AppTheme.";
+    
     private static readonly Uri LightThemeUri = new(
         "/Open.Db.Viewer.Shell;component/Resources/Themes/AppTheme.Light.xaml",
         UriKind.Relative);
+
     private static readonly Uri DarkThemeUri = new(
         "/Open.Db.Viewer.Shell;component/Resources/Themes/AppTheme.Dark.xaml",
         UriKind.Relative);

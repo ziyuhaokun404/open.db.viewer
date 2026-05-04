@@ -50,8 +50,6 @@ public partial class MainWindow : FluentWindow
         var section = routeKey switch
         {
             "home" => ShellSection.Home,
-            "recent" => ShellSection.Recent,
-            "pinned" => ShellSection.Pinned,
             "workspace" => ShellSection.Workspace,
             "settings" => ShellSection.Settings,
             "about" => ShellSection.About,
@@ -174,8 +172,6 @@ public partial class MainWindow : FluentWindow
         }
 
         HomeNavItem.IsActive = shell.CurrentSection == ShellSection.Home;
-        RecentNavItem.IsActive = shell.CurrentSection == ShellSection.Recent;
-        PinnedNavItem.IsActive = shell.CurrentSection == ShellSection.Pinned;
         WorkspaceNavItem.IsActive = shell.CurrentSection == ShellSection.Workspace;
         SettingsNavItem.IsActive = shell.CurrentSection == ShellSection.Settings;
         AboutNavItem.IsActive = shell.CurrentSection == ShellSection.About;
@@ -186,10 +182,6 @@ public partial class MainWindow : FluentWindow
 public sealed class PageTemplateSelector : DataTemplateSelector
 {
     public DataTemplate? HomeTemplate { get; set; }
-
-    public DataTemplate? RecentTemplate { get; set; }
-
-    public DataTemplate? PinnedTemplate { get; set; }
 
     public DataTemplate? SettingsTemplate { get; set; }
 
@@ -202,8 +194,6 @@ public sealed class PageTemplateSelector : DataTemplateSelector
         return item switch
         {
             HomeLandingViewModel => HomeTemplate,
-            RecentDatabasesViewModel => RecentTemplate,
-            PinnedDatabasesViewModel => PinnedTemplate,
             SettingsViewModel => SettingsTemplate,
             AboutViewModel => AboutTemplate,
             WorkspaceHostViewModel => WorkspaceTemplate,
