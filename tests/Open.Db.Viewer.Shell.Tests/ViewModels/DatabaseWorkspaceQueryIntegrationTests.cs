@@ -2,6 +2,7 @@ using FluentAssertions;
 using Open.Db.Viewer.Infrastructure.Sqlite.Sqlite;
 using Open.Db.Viewer.Shell.ViewModels;
 using Open.Db.Viewer.Shell.Tests.Support;
+using Open.Db.Viewer.ShellHost.Services;
 
 namespace Open.Db.Viewer.Shell.Tests.ViewModels;
 
@@ -36,7 +37,7 @@ public class DatabaseWorkspaceQueryIntegrationTests
         viewModel.Query.StatusMessage.Should().Be(QueryViewModel.ReadyStatusMessage);
     }
 
-    private sealed class FakeFileDialogService : Open.Db.Viewer.Shell.Services.IFileDialogService
+    private sealed class FakeFileDialogService : IFileDialogService
     {
         public string? PickSqliteFile() => null;
 

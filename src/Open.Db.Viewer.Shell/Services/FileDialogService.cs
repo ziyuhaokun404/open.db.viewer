@@ -1,6 +1,6 @@
 using Microsoft.Win32;
 
-namespace Open.Db.Viewer.Shell.Services;
+namespace Open.Db.Viewer.ShellHost.Services;
 
 public interface IFileDialogService
 {

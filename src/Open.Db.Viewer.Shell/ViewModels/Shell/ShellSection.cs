@@ -1,4 +1,4 @@
-namespace Open.Db.Viewer.Shell.ViewModels.Shell;
+namespace Open.Db.Viewer.ShellHost.ViewModels.Shell;
 
 public enum ShellSection
 {

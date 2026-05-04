@@ -1,8 +1,12 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+
 using Open.Db.Viewer.Shell.ViewModels.Navigation;
 using Open.Db.Viewer.Shell.ViewModels.Shell;
-using Open.Db.Viewer.Shell.ViewModels.Workspace;
+using Open.Db.Viewer.ShellHost.ViewModels.Navigation;
+using Open.Db.Viewer.ShellHost.ViewModels.Shell;
+using Open.Db.Viewer.ShellHost.ViewModels.Workspace;
+
 using System.Collections.ObjectModel;
 
 namespace Open.Db.Viewer.Shell.ViewModels;

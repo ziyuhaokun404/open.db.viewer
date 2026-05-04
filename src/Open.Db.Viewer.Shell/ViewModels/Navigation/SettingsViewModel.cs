@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Open.Db.Viewer.Shell.Services;
+
+using Open.Db.Viewer.ShellHost.Services;
 
 namespace Open.Db.Viewer.Shell.ViewModels.Navigation;
 

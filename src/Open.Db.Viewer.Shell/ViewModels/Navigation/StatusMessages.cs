@@ -1,4 +1,4 @@
-namespace Open.Db.Viewer.Shell.ViewModels;
+namespace Open.Db.Viewer.ShellHost.ViewModels.Navigation;
 
 internal static class StatusMessages
 {

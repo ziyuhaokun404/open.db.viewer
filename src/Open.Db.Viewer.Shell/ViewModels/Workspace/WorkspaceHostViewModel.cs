@@ -1,4 +1,6 @@
-namespace Open.Db.Viewer.Shell.ViewModels.Workspace;
+using Open.Db.Viewer.Shell.ViewModels;
+
+namespace Open.Db.Viewer.ShellHost.ViewModels.Workspace;
 
 public sealed class WorkspaceHostViewModel
 {

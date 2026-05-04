@@ -2,15 +2,20 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
 using System.Windows.Media;
+
 using FluentAssertions;
+
 using Open.Db.Viewer.Application.Abstractions;
 using Open.Db.Viewer.Application.Services;
 using Open.Db.Viewer.Domain.Models;
-using Open.Db.Viewer.Shell.Services;
 using Open.Db.Viewer.Shell.ViewModels;
 using Open.Db.Viewer.Shell.ViewModels.Navigation;
 using Open.Db.Viewer.Shell.Views;
+using Open.Db.Viewer.ShellHost.Services;
+using Open.Db.Viewer.ShellHost.ViewModels.Shell;
+
 using Wpf.Ui.Appearance;
+
 using WpfUiControls = Wpf.Ui.Controls;
 
 namespace Open.Db.Viewer.Shell.Tests.Views;
@@ -98,12 +103,12 @@ public class MainWindowSmokeTests
                 homeNavItem.IsActive.Should().BeTrue();
                 settingsNavItem.Content.Should().Be("设置");
 
-                shell.NavigateToSection(Open.Db.Viewer.Shell.ViewModels.Shell.ShellSection.Recent);
+                shell.NavigateToSection(ShellSection.Recent);
                 DoEvents();
                 homeNavItem.IsActive.Should().BeFalse();
                 recentNavItem.IsActive.Should().BeTrue();
 
-                shell.NavigateToSection(Open.Db.Viewer.Shell.ViewModels.Shell.ShellSection.Home);
+                shell.NavigateToSection(ShellSection.Home);
                 DoEvents();
                 homeNavItem.IsActive.Should().BeTrue();
 

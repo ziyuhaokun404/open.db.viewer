@@ -1,5 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 
+using Open.Db.Viewer.ShellHost.ViewModels.Shell;
+
 namespace Open.Db.Viewer.Shell.ViewModels.Shell;
 
 public sealed partial class ShellNavigationItem : ObservableObject

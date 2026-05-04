@@ -1,7 +1,8 @@
 using Microsoft.Win32;
+
 using Wpf.Ui.Appearance;
 
-namespace Open.Db.Viewer.Shell.Services;
+namespace Open.Db.Viewer.ShellHost.Services;
 
 public enum ThemePreference
 {

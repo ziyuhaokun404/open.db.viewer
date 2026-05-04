@@ -1,8 +1,10 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+
 using Open.Db.Viewer.Application.Services;
 using Open.Db.Viewer.Domain.Models;
-using Open.Db.Viewer.Shell.Services;
+using Open.Db.Viewer.ShellHost.Services;
+
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Globalization;

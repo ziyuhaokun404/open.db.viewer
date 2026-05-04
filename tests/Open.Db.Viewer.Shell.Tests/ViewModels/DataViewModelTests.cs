@@ -1,10 +1,11 @@
 using FluentAssertions;
+
 using Open.Db.Viewer.Application.Abstractions;
 using Open.Db.Viewer.Application.Services;
-using Open.Db.Viewer.Shell.Services;
 using Open.Db.Viewer.Infrastructure.Sqlite.Sqlite;
 using Open.Db.Viewer.Shell.ViewModels;
 using Open.Db.Viewer.Shell.Tests.Support;
+using Open.Db.Viewer.ShellHost.Services;
 
 namespace Open.Db.Viewer.Shell.Tests.ViewModels;
 

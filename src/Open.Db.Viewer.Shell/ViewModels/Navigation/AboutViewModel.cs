@@ -1,4 +1,4 @@
-namespace Open.Db.Viewer.Shell.ViewModels.Navigation;
+namespace Open.Db.Viewer.ShellHost.ViewModels.Navigation;
 
 public sealed class AboutViewModel
 {

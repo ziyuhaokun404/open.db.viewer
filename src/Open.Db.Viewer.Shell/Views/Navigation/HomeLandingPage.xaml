@@ -204,14 +204,9 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel>
                             <TextBlock Style="{StaticResource HeroTitleStyle}" Text="SQLite 数据工作台" />
-                            <TextBlock
-                                MaxWidth="440"
-                                Margin="0,2,0,0"
-                                Style="{StaticResource SecondaryTextStyle}"
-                                Text="轻量打开 SQLite 数据库，快速进入表结构、数据浏览和 SQL 查询工作流。" />
+                            <TextBlock Style="{StaticResource SecondaryTextStyle}" Text="轻量打开 SQLite 数据库，快速进入表结构、数据浏览和 SQL 查询工作流。" />
                         </StackPanel>
                         <WrapPanel
-                            Width="180"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
                             Orientation="Horizontal">

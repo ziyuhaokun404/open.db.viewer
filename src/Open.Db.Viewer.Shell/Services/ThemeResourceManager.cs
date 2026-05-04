@@ -1,6 +1,6 @@
 using Wpf.Ui.Appearance;
 
-namespace Open.Db.Viewer.Shell.Services;
+namespace Open.Db.Viewer.ShellHost.Services;
 
 internal static class ThemeResourceManager
 {

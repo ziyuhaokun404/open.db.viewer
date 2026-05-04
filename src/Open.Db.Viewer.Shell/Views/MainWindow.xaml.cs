@@ -3,13 +3,17 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Open.Db.Viewer.Shell.Services;
+
 using Open.Db.Viewer.Shell.ViewModels;
 using Open.Db.Viewer.Shell.ViewModels.Navigation;
-using Open.Db.Viewer.Shell.ViewModels.Shell;
-using Open.Db.Viewer.Shell.ViewModels.Workspace;
+using Open.Db.Viewer.ShellHost.Services;
+using Open.Db.Viewer.ShellHost.ViewModels.Navigation;
+using Open.Db.Viewer.ShellHost.ViewModels.Shell;
+using Open.Db.Viewer.ShellHost.ViewModels.Workspace;
+
 using SharpVectors.Converters;
 using SharpVectors.Renderers.Wpf;
+
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
