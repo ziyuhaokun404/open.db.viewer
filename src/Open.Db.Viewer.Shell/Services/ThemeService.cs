@@ -67,7 +67,6 @@ public sealed class ThemeService : IDisposable
     {
         EffectiveTheme = applicationTheme;
         ApplicationThemeManager.Apply(applicationTheme);
-        ThemeResourceManager.Apply(applicationTheme);
         ThemeChanged?.Invoke(this, EventArgs.Empty);
     }
 

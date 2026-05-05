@@ -25,8 +25,8 @@
     <!--  Panel card: used for recent/pinned panels  -->
     <Style x:Key="PanelCardStyle" TargetType="Border">
       <Setter Property="Padding" Value="10" />
-      <Setter Property="Background" Value="{DynamicResource LandingDashboardPanelBrush}" />
-      <Setter Property="BorderBrush" Value="{DynamicResource LandingDashboardPanelBorderBrush}" />
+      <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
       <Setter Property="BorderThickness" Value="1" />
       <Setter Property="CornerRadius" Value="10" />
       <Setter Property="Effect" Value="{StaticResource SubtleShadow}" />
@@ -34,8 +34,8 @@
     <!--  Hero card  -->
     <Style x:Key="HeroCardStyle" TargetType="Border">
       <Setter Property="Padding" Value="12,8" />
-      <Setter Property="Background" Value="{DynamicResource LandingDashboardHeroGradientBrush}" />
-      <Setter Property="BorderBrush" Value="{DynamicResource LandingDashboardPanelBorderStrongBrush}" />
+      <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource SurfaceStrokeColorDefaultBrush}" />
       <Setter Property="BorderThickness" Value="1" />
       <Setter Property="CornerRadius" Value="12" />
       <Setter Property="Effect" Value="{StaticResource CardShadow}" />
@@ -43,8 +43,8 @@
     <!--  Side card: current entry  -->
     <Style x:Key="SideCardStyle" TargetType="Border">
       <Setter Property="Padding" Value="8" />
-      <Setter Property="Background" Value="{DynamicResource LandingDashboardPanelBrush}" />
-      <Setter Property="BorderBrush" Value="{DynamicResource LandingDashboardPanelBorderBrush}" />
+      <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
       <Setter Property="BorderThickness" Value="1" />
       <Setter Property="CornerRadius" Value="12" />
       <Setter Property="Effect" Value="{StaticResource SubtleShadow}" />
@@ -53,16 +53,16 @@
     <Style x:Key="ListItemCardStyle" TargetType="Border">
       <Setter Property="Margin" Value="0,0,0,2" />
       <Setter Property="Padding" Value="8" />
-      <Setter Property="Background" Value="{DynamicResource LandingDashboardListItemBrush}" />
-      <Setter Property="BorderBrush" Value="{DynamicResource LandingDashboardPanelBorderBrush}" />
+      <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
       <Setter Property="BorderThickness" Value="1" />
       <Setter Property="CornerRadius" Value="10" />
     </Style>
     <!--  Status bar  -->
     <Style x:Key="StatusBarStyle" TargetType="Border">
       <Setter Property="Padding" Value="8,4" />
-      <Setter Property="Background" Value="{DynamicResource LandingDashboardPanelBrush}" />
-      <Setter Property="BorderBrush" Value="{DynamicResource LandingDashboardPanelBorderBrush}" />
+      <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
       <Setter Property="BorderThickness" Value="1" />
       <Setter Property="CornerRadius" Value="10" />
     </Style>
@@ -70,35 +70,35 @@
     <Style x:Key="HeroTitleStyle" TargetType="TextBlock">
       <Setter Property="FontSize" Value="26" />
       <Setter Property="FontWeight" Value="Bold" />
-      <Setter Property="Foreground" Value="{DynamicResource LandingDashboardPrimaryTextBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
       <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
     <!--  Section title  -->
     <Style x:Key="SectionTitleStyle" TargetType="TextBlock">
       <Setter Property="FontSize" Value="13" />
       <Setter Property="FontWeight" Value="SemiBold" />
-      <Setter Property="Foreground" Value="{DynamicResource LandingDashboardPrimaryTextBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
     </Style>
     <!--  Secondary text  -->
     <Style x:Key="SecondaryTextStyle" TargetType="TextBlock">
       <Setter Property="FontSize" Value="12" />
       <Setter Property="LineHeight" Value="17" />
-      <Setter Property="Foreground" Value="{DynamicResource LandingDashboardSecondaryTextBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
       <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
     <!--  Muted text  -->
     <Style x:Key="MutedTextStyle" TargetType="TextBlock">
       <Setter Property="FontSize" Value="11" />
       <Setter Property="LineHeight" Value="15" />
-      <Setter Property="Foreground" Value="{DynamicResource LandingDashboardMutedTextBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource TextFillColorTertiaryBrush}" />
       <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
     <!--  Badge capsule  -->
     <Style x:Key="BadgeCapsuleStyle" TargetType="Border">
       <Setter Property="Margin" Value="0,0,6,4" />
       <Setter Property="Padding" Value="8,4" />
-      <Setter Property="Background" Value="{DynamicResource LandingDashboardBadgeBrush}" />
-      <Setter Property="BorderBrush" Value="{DynamicResource LandingDashboardBadgeBorderBrush}" />
+      <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
       <Setter Property="BorderThickness" Value="1" />
       <Setter Property="CornerRadius" Value="6" />
     </Style>
@@ -106,14 +106,14 @@
     <Style x:Key="IconShellStyle" TargetType="Border">
       <Setter Property="Width" Value="38" />
       <Setter Property="Height" Value="38" />
-      <Setter Property="Background" Value="{DynamicResource LandingDashboardIconShellBrush}" />
+      <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiaryBrush}" />
       <Setter Property="CornerRadius" Value="12" />
     </Style>
     <!--  Large icon shell (for side card)  -->
     <Style x:Key="LargeIconShellStyle" TargetType="Border">
       <Setter Property="Width" Value="40" />
       <Setter Property="Height" Value="40" />
-      <Setter Property="Background" Value="{DynamicResource LandingDashboardIconShellBrush}" />
+      <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiaryBrush}" />
       <Setter Property="CornerRadius" Value="14" />
     </Style>
     <!--  Primary action button (light fill)  -->
@@ -141,7 +141,7 @@
       <Setter Property="FontWeight" Value="SemiBold" />
       <Setter Property="FontSize" Value="13" />
       <Setter Property="Appearance" Value="Secondary" />
-      <Setter Property="BorderBrush" Value="{DynamicResource LandingDashboardPanelBorderStrongBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource SurfaceStrokeColorDefaultBrush}" />
       <Setter Property="BorderThickness" Value="1" />
     </Style>
     <!--  Icon action button (40x40)  -->
@@ -153,10 +153,10 @@
       <Setter Property="Height" Value="40" />
       <Setter Property="Padding" Value="0" />
       <Setter Property="Appearance" Value="Secondary" />
-      <Setter Property="BorderBrush" Value="{DynamicResource LandingDashboardPanelBorderBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
       <Setter Property="BorderThickness" Value="1" />
       <Setter Property="CornerRadius" Value="10" />
-      <Setter Property="Background" Value="{DynamicResource LandingDashboardIconShellBrush}" />
+      <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiaryBrush}" />
     </Style>
     <!--  Link button  -->
     <Style
@@ -167,7 +167,7 @@
       <Setter Property="BorderBrush" Value="Transparent" />
       <Setter Property="BorderThickness" Value="0" />
       <Setter Property="Padding" Value="0" />
-      <Setter Property="Foreground" Value="{DynamicResource LandingDashboardMutedTextBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource TextFillColorTertiaryBrush}" />
       <Setter Property="HorizontalContentAlignment" Value="Left" />
       <Setter Property="FontWeight" Value="SemiBold" />
       <Setter Property="FontSize" Value="12" />
@@ -245,15 +245,15 @@
             <TextBlock Style="{StaticResource SectionTitleStyle}" Text="当前入口" />
             <ui:SymbolIcon
                             Grid.Column="1"
-                            Foreground="{DynamicResource LandingDashboardMutedTextBrush}"
+                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                             Symbol="DataUsage24" />
           </Grid>
           <!--  Database info  -->
           <Border
                         Margin="0,6,0,0"
                         Padding="8"
-                        Background="{DynamicResource LandingDashboardListItemBrush}"
-                        BorderBrush="{DynamicResource LandingDashboardPanelBorderBrush}"
+                        Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                        BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
                         BorderThickness="1"
                         CornerRadius="12">
             <Grid>
@@ -265,7 +265,7 @@
                 <ui:SymbolIcon
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Foreground="{DynamicResource LandingDashboardMutedTextBrush}"
+                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                     Symbol="Database24" />
               </Border>
               <StackPanel
@@ -275,7 +275,7 @@
                 <TextBlock
                                     FontSize="13"
                                     FontWeight="SemiBold"
-                                    Foreground="{DynamicResource LandingDashboardPrimaryTextBrush}"
+                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                     Text="{Binding QuickOpenEntry.Name, FallbackValue=app, TargetNullValue=app}" />
                 <TextBlock
                                     Margin="0,4,0,0"
@@ -294,8 +294,8 @@
             </Grid.ColumnDefinitions>
             <Border
                             Padding="10"
-                            Background="{DynamicResource LandingDashboardListItemBrush}"
-                            BorderBrush="{DynamicResource LandingDashboardPanelBorderBrush}"
+                            Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                            BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
                             BorderThickness="1"
                             CornerRadius="10">
               <StackPanel>
@@ -304,15 +304,15 @@
                                     Margin="0,2,0,0"
                                     FontSize="20"
                                     FontWeight="Bold"
-                                    Foreground="{DynamicResource LandingDashboardPrimaryTextBrush}"
+                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                     Text="{Binding RecentSummary.Count}" />
               </StackPanel>
             </Border>
             <Border
                             Grid.Column="2"
                             Padding="10"
-                            Background="{DynamicResource LandingDashboardListItemBrush}"
-                            BorderBrush="{DynamicResource LandingDashboardPanelBorderBrush}"
+                            Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                            BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
                             BorderThickness="1"
                             CornerRadius="10">
               <StackPanel>
@@ -321,7 +321,7 @@
                                     Margin="0,2,0,0"
                                     FontSize="20"
                                     FontWeight="Bold"
-                                    Foreground="{DynamicResource LandingDashboardPrimaryTextBrush}"
+                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                     Text="{Binding PinnedSummary.Count}" />
               </StackPanel>
             </Border>
@@ -337,7 +337,7 @@
                             Height="8"
                             Margin="0,0,8,0"
                             VerticalAlignment="Center"
-                            Fill="{DynamicResource LandingDashboardPrimaryBrush}" />
+                            Fill="{DynamicResource SystemFillColorSuccessBrush}" />
             <TextBlock
                             Grid.Column="1"
                             VerticalAlignment="Center"
@@ -367,7 +367,7 @@
             <StackPanel Orientation="Horizontal">
               <ui:SymbolIcon
                                 Margin="0,1,6,0"
-                                Foreground="{DynamicResource LandingDashboardMutedTextBrush}"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                 Symbol="History24" />
               <TextBlock Style="{StaticResource SectionTitleStyle}" Text="最近使用" />
             </StackPanel>
@@ -391,7 +391,7 @@
                         <ui:SymbolIcon
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource LandingDashboardMutedTextBrush}"
+                                                    Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                     Symbol="Database24" />
                       </Border>
                       <StackPanel
@@ -401,7 +401,7 @@
                         <TextBlock
                                                     FontSize="13"
                                                     FontWeight="SemiBold"
-                                                    Foreground="{DynamicResource LandingDashboardPrimaryTextBrush}"
+                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                     Text="{Binding Name}" />
                         <TextBlock
                                                     Margin="0,2,0,0"
@@ -416,7 +416,7 @@
                                                 CommandParameter="{Binding}"
                                                 Style="{StaticResource IconActionButtonStyle}"
                                                 ToolTip="固定或取消固定">
-                        <ui:SymbolIcon Foreground="{DynamicResource LandingDashboardMutedTextBrush}" Symbol="Pin24" />
+                        <ui:SymbolIcon Foreground="{DynamicResource TextFillColorTertiaryBrush}" Symbol="Pin24" />
                       </ui:Button>
                       <ui:Button
                                                 Grid.Column="3"
@@ -424,7 +424,7 @@
                                                 CommandParameter="{Binding}"
                                                 Style="{StaticResource IconActionButtonStyle}"
                                                 ToolTip="打开此数据库">
-                        <ui:SymbolIcon Foreground="{DynamicResource LandingDashboardMutedTextBrush}" Symbol="ArrowEnterLeft24" />
+                        <ui:SymbolIcon Foreground="{DynamicResource TextFillColorTertiaryBrush}" Symbol="ArrowEnterLeft24" />
                       </ui:Button>
                     </Grid>
                   </Border>
@@ -452,7 +452,7 @@
             <StackPanel Orientation="Horizontal">
               <ui:SymbolIcon
                                 Margin="0,1,6,0"
-                                Foreground="{DynamicResource LandingDashboardMutedTextBrush}"
+                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                 Symbol="Pin24" />
               <TextBlock Style="{StaticResource SectionTitleStyle}" Text="已固定" />
             </StackPanel>
@@ -480,31 +480,31 @@
                                         Margin="-28,-24,0,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Fill="{DynamicResource LandingDashboardPreviewLineStrongBrush}" />
+                                        Fill="{DynamicResource TextFillColorTertiaryBrush}" />
                   <Ellipse
                                         Width="4"
                                         Height="4"
                                         Margin="22,-32,0,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Fill="{DynamicResource LandingDashboardPreviewLineBrush}" />
+                                        Fill="{DynamicResource ControlStrokeColorSecondaryBrush}" />
                   <Ellipse
                                         Width="5"
                                         Height="5"
                                         Margin="30,8,0,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Fill="{DynamicResource LandingDashboardPreviewLineStrongBrush}" />
+                                        Fill="{DynamicResource TextFillColorTertiaryBrush}" />
                   <!--  Circle background  -->
                   <Border
                                         Width="56"
                                         Height="56"
-                                        Background="{DynamicResource LandingDashboardIconShellBrush}"
+                                        Background="{DynamicResource ControlFillColorTertiaryBrush}"
                                         CornerRadius="28">
                     <ui:SymbolIcon
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
-                                            Foreground="{DynamicResource LandingDashboardMutedTextBrush}"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                             Symbol="Pin24" />
                   </Border>
                 </Grid>
@@ -513,7 +513,7 @@
                                     HorizontalAlignment="Center"
                                     FontSize="13"
                                     FontWeight="SemiBold"
-                                    Foreground="{DynamicResource LandingDashboardPrimaryTextBrush}"
+                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                     Text="您还没有固定的数据库" />
                 <TextBlock
                                     Margin="0,2,0,0"
@@ -549,7 +549,7 @@
                           <ui:SymbolIcon
                                                         HorizontalAlignment="Center"
                                                         VerticalAlignment="Center"
-                                                        Foreground="{DynamicResource LandingDashboardMutedTextBrush}"
+                                                        Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                         Symbol="Database24" />
                         </Border>
                         <StackPanel
@@ -559,7 +559,7 @@
                           <TextBlock
                                                         FontSize="13"
                                                         FontWeight="SemiBold"
-                                                        Foreground="{DynamicResource LandingDashboardPrimaryTextBrush}"
+                                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                         Text="{Binding Name}" />
                           <TextBlock
                                                         Margin="0,2,0,0"
@@ -574,7 +574,7 @@
                                                     CommandParameter="{Binding}"
                                                     Style="{StaticResource IconActionButtonStyle}"
                                                     ToolTip="取消固定">
-                          <ui:SymbolIcon Foreground="{DynamicResource LandingDashboardMutedTextBrush}" Symbol="Pin24" />
+                          <ui:SymbolIcon Foreground="{DynamicResource TextFillColorTertiaryBrush}" Symbol="Pin24" />
                         </ui:Button>
                         <ui:Button
                                                     Grid.Column="3"
@@ -582,7 +582,7 @@
                                                     CommandParameter="{Binding}"
                                                     Style="{StaticResource IconActionButtonStyle}"
                                                     ToolTip="打开此数据库">
-                          <ui:SymbolIcon Foreground="{DynamicResource LandingDashboardMutedTextBrush}" Symbol="ArrowEnterLeft24" />
+                          <ui:SymbolIcon Foreground="{DynamicResource TextFillColorTertiaryBrush}" Symbol="ArrowEnterLeft24" />
                         </ui:Button>
                       </Grid>
                     </Border>
@@ -603,7 +603,7 @@
           <ColumnDefinition Width="Auto" />
           <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ui:SymbolIcon Foreground="{DynamicResource LandingDashboardMutedTextBrush}" Symbol="Info24" />
+        <ui:SymbolIcon Foreground="{DynamicResource TextFillColorTertiaryBrush}" Symbol="Info24" />
         <TextBlock
                     Grid.Column="1"
                     Margin="8,0,0,0"

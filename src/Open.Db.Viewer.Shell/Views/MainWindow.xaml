@@ -53,9 +53,9 @@
             <Setter Property="Appearance" Value="Transparent" />
             <Setter Property="Foreground" Value="{Binding Path=ButtonsForeground, RelativeSource={RelativeSource AncestorType={x:Type ui:TitleBar}}}" />
             <Setter Property="PressedForeground" Value="{Binding Path=ButtonsForeground, RelativeSource={RelativeSource AncestorType={x:Type ui:TitleBar}}}" />
-            <Setter Property="MouseOverBackground" Value="{DynamicResource TitleBarActionHoverBrush}" />
+            <Setter Property="MouseOverBackground" Value="{DynamicResource SubtleFillColorSecondaryBrush}" />
             <Setter Property="MouseOverBorderBrush" Value="Transparent" />
-            <Setter Property="PressedBackground" Value="{DynamicResource TitleBarActionPressedBrush}" />
+            <Setter Property="PressedBackground" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
             <Setter Property="PressedBorderBrush" Value="Transparent" />
             <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
@@ -68,7 +68,7 @@
         </Style>
     </ui:FluentWindow.Resources>
 
-    <Grid Background="{DynamicResource ShellWindowBrush}">
+    <Grid Background="{DynamicResource ApplicationBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -78,7 +78,7 @@
             x:Name="MainTitleBar"
             Grid.Row="0"
             Height="46"
-            Background="{DynamicResource ShellWindowBrush}"
+            Background="{DynamicResource ApplicationBackgroundBrush}"
             CloseWindowByDoubleClickOnIcon="True">
             <ui:TitleBar.Header>
                 <StackPanel
@@ -164,8 +164,8 @@
 
             <Border
                 Grid.Column="1"
-                Background="{DynamicResource ShellContentBrush}"
-                BorderBrush="{DynamicResource ShellContentBorderBrush}"
+                Background="{DynamicResource ApplicationBackgroundBrush}"
+                BorderBrush="{DynamicResource SurfaceStrokeColorDefaultBrush}"
                 BorderThickness="0"
                 FocusVisualStyle="{x:Null}"
                 Focusable="False">
