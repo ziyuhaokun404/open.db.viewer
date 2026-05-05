@@ -78,7 +78,7 @@
             x:Key="WorkspaceStatusPillStyle"
             BasedOn="{StaticResource WorkspaceChipStyle}"
             TargetType="Border">
-            <Setter Property="Background" Value="{DynamicResource AccentFillColorSecondaryBrush}" />
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiaryBrush}" />
             <Setter Property="BorderBrush" Value="{DynamicResource SurfaceStrokeColorDefaultBrush}" />
             <Setter Property="CornerRadius" Value="8" />
         </Style>
@@ -87,12 +87,6 @@
             <Setter Property="Height" Value="30" />
             <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiaryBrush}" />
             <Setter Property="CornerRadius" Value="8" />
-        </Style>
-        <Style
-            x:Key="WorkspaceAccentIconTileStyle"
-            BasedOn="{StaticResource WorkspaceIconTileStyle}"
-            TargetType="Border">
-            <Setter Property="Background" Value="{DynamicResource AccentFillColorSecondaryBrush}" />
         </Style>
         <Style
             x:Key="WorkspaceToolbarButtonStyle"
@@ -206,7 +200,6 @@
         <Style x:Key="ObjectListBoxItemStyle" TargetType="ListBoxItem">
             <Setter Property="Padding" Value="0" />
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-            <Setter Property="Focusable" Value="False" />
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
             <Setter Property="Template">
                 <Setter.Value>
@@ -215,6 +208,7 @@
                             x:Name="ItemBorder"
                             Margin="0,0,0,3"
                             Padding="8,6"
+                            Background="Transparent"
                             BorderBrush="Transparent"
                             BorderThickness="1"
                             CornerRadius="7">
@@ -270,7 +264,7 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid Background="{DynamicResource ApplicationBackgroundBrush}">
+    <Grid>
         <Grid Visibility="{Binding HasOpenDatabase, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Border>
                 <Grid Margin="16">
@@ -292,11 +286,10 @@
                             <Border
                                 Width="44"
                                 Height="44"
-                                Style="{StaticResource WorkspaceAccentIconTileStyle}">
+                                Style="{StaticResource WorkspaceIconTileStyle}">
                                 <ui:SymbolIcon
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Foreground="{DynamicResource AccentFillColorDefaultBrush}"
                                     Symbol="Database24" />
                             </Border>
                             <StackPanel Grid.Column="1" Margin="12,0,24,0">
@@ -336,10 +329,7 @@
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <ui:SymbolIcon
-                                            VerticalAlignment="Center"
-                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
-                                            Symbol="Search24" />
+                                        <ui:SymbolIcon VerticalAlignment="Center" Symbol="Search24" />
                                         <TextBlock
                                             Grid.Column="1"
                                             Margin="10,0,0,0"
@@ -638,7 +628,7 @@
                                 <Border Grid.Row="1" Style="{StaticResource WorkspaceDividerStyle}" />
                                 <Grid Grid.Row="2" Visibility="{Binding HasTableSelection, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <TabControl
-                                        Margin="16,8,16,14"
+                                        Margin="8"
                                         Background="Transparent"
                                         BorderThickness="0"
                                         ItemContainerStyle="{StaticResource WorkspaceTabItemStyle}">
@@ -709,11 +699,11 @@
                                                                         <ColumnDefinition Width="34" />
                                                                         <ColumnDefinition Width="*" />
                                                                     </Grid.ColumnDefinitions>
-                                                                    <Border Style="{StaticResource WorkspaceAccentIconTileStyle}">
+                                                                    <Border Style="{StaticResource WorkspaceIconTileStyle}">
                                                                         <ui:SymbolIcon
                                                                             HorizontalAlignment="Center"
                                                                             VerticalAlignment="Center"
-                                                                            Foreground="{DynamicResource AccentFillColorDefaultBrush}"
+                                                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                                             Symbol="History24" />
                                                                     </Border>
                                                                     <StackPanel Grid.Column="1" Margin="8,0,0,0">
@@ -781,7 +771,7 @@
                                                                         <ColumnDefinition Width="34" />
                                                                         <ColumnDefinition Width="*" />
                                                                     </Grid.ColumnDefinitions>
-                                                                    <Border Style="{StaticResource WorkspaceAccentIconTileStyle}">
+                                                                    <Border Style="{StaticResource WorkspaceIconTileStyle}">
                                                                         <ui:SymbolIcon
                                                                             HorizontalAlignment="Center"
                                                                             VerticalAlignment="Center"
@@ -1010,7 +1000,7 @@
                                                                     Padding="16,9"
                                                                     Style="{StaticResource WorkspaceStatusPillStyle}">
                                                                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                                                        <ui:SymbolIcon Foreground="{DynamicResource AccentFillColorDefaultBrush}" Symbol="CheckmarkCircle24" />
+                                                                        <ui:SymbolIcon Foreground="{DynamicResource TextFillColorPrimaryBrush}" Symbol="CheckmarkCircle24" />
                                                                         <TextBlock
                                                                             Margin="10,0,0,0"
                                                                             d:Text="连接正常"
@@ -1277,7 +1267,6 @@
                                                     <ui:SymbolIcon
                                                         Width="16"
                                                         Height="16"
-                                                        Margin="0,0,6,0"
                                                         Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}"
                                                         Symbol="Flash24" />
                                                     <TextBlock Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}" Text="触发器" />
@@ -1435,7 +1424,7 @@
                     Width="52"
                     Height="52"
                     HorizontalAlignment="Center"
-                    Style="{StaticResource WorkspaceAccentIconTileStyle}">
+                    Style="{StaticResource WorkspaceIconTileStyle}">
                     <ui:SymbolIcon
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
