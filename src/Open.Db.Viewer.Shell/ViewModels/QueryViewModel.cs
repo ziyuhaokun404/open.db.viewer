@@ -20,6 +20,7 @@ public partial class QueryViewModel : ObservableObject
     private readonly QueryService _queryService;
     private readonly ExportService _exportService;
     private readonly IFileDialogService _fileDialogService;
+    private readonly IDialogService _dialogService;
 
     private string? _templateTableName;
 
@@ -48,15 +49,17 @@ public partial class QueryViewModel : ObservableObject
     [ObservableProperty]
     private DataView? resultView;
 
-    public QueryViewModel(QueryService queryService, ExportService exportService, IFileDialogService fileDialogService)
+    public QueryViewModel(QueryService queryService, ExportService exportService, IFileDialogService fileDialogService, IDialogService dialogService)
     {
         ArgumentNullException.ThrowIfNull(queryService);
         ArgumentNullException.ThrowIfNull(exportService);
         ArgumentNullException.ThrowIfNull(fileDialogService);
+        ArgumentNullException.ThrowIfNull(dialogService);
 
         _queryService = queryService;
         _exportService = exportService;
         _fileDialogService = fileDialogService;
+        _dialogService = dialogService;
     }
 
     public ObservableCollection<string> Columns { get; } = new();
@@ -78,6 +81,8 @@ public partial class QueryViewModel : ObservableObject
         : "当前 SQL 使用只读连接执行，写入和 DDL 会被拦截。";
 
     public string ToggleWriteModeText => AllowWriteMode ? "切回只读" : "启用可写";
+
+    public bool ShowWriteWarning => AllowWriteMode;
 
     public void Configure(string databasePath, string? tableName = null)
     {
@@ -114,6 +119,17 @@ public partial class QueryViewModel : ObservableObject
             ClearResults();
             StatusMessage = "当前查询模式为只读。请切换到可写模式后再执行会修改数据库的 SQL。";
             return;
+        }
+
+        if (AllowWriteMode && SqliteStatementClassifier.IsHighRisk(QueryText))
+        {
+            var category = SqliteStatementClassifier.Classify(QueryText);
+            var categoryLabel = category == SqlStatementCategory.Ddl ? "DDL（数据定义）" : "数据库维护";
+            if (!_dialogService.Confirm("确认执行高风险操作", $"即将执行 {categoryLabel} 语句：\n\n{QueryText}\n\n此操作可能不可逆。确认执行吗？"))
+            {
+                StatusMessage = "已取消执行。";
+                return;
+            }
         }
 
         IsBusy = true;
@@ -219,6 +235,7 @@ public partial class QueryViewModel : ObservableObject
         OnPropertyChanged(nameof(QueryAccessModeLabel));
         OnPropertyChanged(nameof(QueryAccessModeSummary));
         OnPropertyChanged(nameof(ToggleWriteModeText));
+        OnPropertyChanged(nameof(ShowWriteWarning));
     }
 
     private void ApplyResult(QueryExecutionResult result)

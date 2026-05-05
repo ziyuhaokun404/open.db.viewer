@@ -17,7 +17,8 @@ public class DatabaseWorkspaceQueryIntegrationTests
         var queryViewModel = new QueryViewModel(
             new Application.Services.QueryService(new SqliteQueryExecutor(connectionFactory)),
             new Application.Services.ExportService(new Infrastructure.Sqlite.Export.CsvExportWriter()),
-            new FakeFileDialogService());
+            new FakeFileDialogService(),
+            new Support.NoopDialogService());
         var viewModel = new DatabaseWorkspaceViewModel(
             new ObjectExplorerViewModel(inspector),
             new SchemaViewModel(inspector),

@@ -59,7 +59,8 @@ public class MainWindowSmokeTests
                     new QueryViewModel(
                         new QueryService(new NoopSqliteQueryExecutor()),
                         new ExportService(new NoopCsvExportWriter()),
-                        new FakeFileDialogService()));
+                        new FakeFileDialogService(),
+                        new Support.NoopDialogService()));
                 var shell = new ShellViewModel(
                     workspace,
                     new HomeLandingViewModel(databaseEntryService, new FakeFileDialogService()),

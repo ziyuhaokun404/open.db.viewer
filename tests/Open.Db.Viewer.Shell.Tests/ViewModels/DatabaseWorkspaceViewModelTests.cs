@@ -22,7 +22,8 @@ public class DatabaseWorkspaceViewModelTests
         var query = new QueryViewModel(
             new QueryService(new SqliteQueryExecutor(connectionFactory)),
             new ExportService(new Infrastructure.Sqlite.Export.CsvExportWriter()),
-            new FakeFileDialogService());
+            new FakeFileDialogService(),
+            new Support.NoopDialogService());
         var viewModel = new DatabaseWorkspaceViewModel(objectExplorer, schema, data, query);
 
         await viewModel.LoadAsync(db.FilePath);
@@ -58,7 +59,8 @@ public class DatabaseWorkspaceViewModelTests
             new QueryViewModel(
                 new QueryService(new SqliteQueryExecutor(connectionFactory)),
                 new ExportService(new Infrastructure.Sqlite.Export.CsvExportWriter()),
-                new FakeFileDialogService()));
+                new FakeFileDialogService(),
+                new Support.NoopDialogService()));
 
         await viewModel.LoadAsync(db.FilePath);
 
@@ -93,7 +95,8 @@ public class DatabaseWorkspaceViewModelTests
             new QueryViewModel(
                 new QueryService(new SqliteQueryExecutor(connectionFactory)),
                 new ExportService(new Infrastructure.Sqlite.Export.CsvExportWriter()),
-                new FakeFileDialogService()));
+                new FakeFileDialogService(),
+                new Support.NoopDialogService()));
 
         await viewModel.LoadAsync(db.FilePath);
         await viewModel.Data.LoadNextPageAsync();
@@ -122,7 +125,8 @@ public class DatabaseWorkspaceViewModelTests
             new QueryViewModel(
                 new QueryService(new SqliteQueryExecutor(connectionFactory)),
                 new ExportService(new Infrastructure.Sqlite.Export.CsvExportWriter()),
-                new FakeFileDialogService()));
+                new FakeFileDialogService(),
+                new Support.NoopDialogService()));
 
         await viewModel.LoadAsync(db.FilePath);
         var originalSelection = viewModel.ObjectExplorer.SelectedNode;
@@ -143,7 +147,8 @@ public class DatabaseWorkspaceViewModelTests
             new QueryViewModel(
                 new QueryService(new NoopSqliteQueryExecutor()),
                 new ExportService(new NoopCsvExportWriter()),
-                new FakeFileDialogService()));
+                new FakeFileDialogService(),
+                new Support.NoopDialogService()));
 
         viewModel.ObjectExplorer.SelectedNode = null;
         viewModel.Schema.Clear();
@@ -173,7 +178,8 @@ public class DatabaseWorkspaceViewModelTests
             new QueryViewModel(
                 new QueryService(new NoopSqliteQueryExecutor()),
                 new ExportService(new NoopCsvExportWriter()),
-                new FakeFileDialogService()));
+                new FakeFileDialogService(),
+                new Support.NoopDialogService()));
 
         viewModel.HasOpenDatabase.Should().BeFalse();
         viewModel.EmptyStateTitle.Should().Be("尚未打开数据库");

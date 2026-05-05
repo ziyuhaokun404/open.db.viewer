@@ -56,9 +56,22 @@ public sealed class SqliteQueryExecutor : ISqliteQueryExecutor
         stopwatch.Stop();
 
         var affectedRows = reader.FieldCount > 0 ? rows.Count : Math.Max(reader.RecordsAffected, 0);
+
+        var category = SqliteStatementClassifier.Classify(sql);
+        var operationLabel = allowWrite
+            ? category switch
+            {
+                SqlStatementCategory.Dml => "DML 写入",
+                SqlStatementCategory.Ddl => "DDL 变更",
+                SqlStatementCategory.Maintenance => "维护操作",
+                SqlStatementCategory.Transaction => "事务控制",
+                _ => "查询"
+            }
+            : "查询";
+
         var message = reader.FieldCount > 0
             ? $"查询返回了 {rows.Count} 行。"
-            : $"查询影响了 {affectedRows} 行。";
+            : $"[{operationLabel}] 影响了 {affectedRows} 行。";
 
         return new QueryExecutionResult(columns, rows, affectedRows, stopwatch.Elapsed, message);
     }

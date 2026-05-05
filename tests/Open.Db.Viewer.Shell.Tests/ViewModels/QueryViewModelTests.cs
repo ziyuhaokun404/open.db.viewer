@@ -24,10 +24,10 @@ public class QueryViewModelTests
                 AffectedRows: 2,
                 Duration: TimeSpan.FromMilliseconds(42),
                 Message: "查询返回了 2 行。"));
-        var viewModel = new QueryViewModel(
+        var viewModel = CreateViewModel(
             new QueryService(queryExecutor),
-            new ExportService(new FakeCsvExportWriter()),
-            new FakeFileDialogService(@"C:\exports\result.csv"));
+            exportService: new ExportService(new FakeCsvExportWriter()),
+            fileDialogService: new FakeFileDialogService(@"C:\exports\result.csv"));
 
         viewModel.Configure(@"C:\data\sample.db", "users");
 
@@ -47,7 +47,7 @@ public class QueryViewModelTests
     public async Task ExportResultsAsync_ShouldWriteCurrentQueryResultToSelectedPath()
     {
         var exportWriter = new FakeCsvExportWriter();
-        var viewModel = new QueryViewModel(
+        var viewModel = CreateViewModel(
             new QueryService(new FakeSqliteQueryExecutor(
                 new QueryExecutionResult(
                     Columns: ["id"],
@@ -73,7 +73,7 @@ public class QueryViewModelTests
     [Fact]
     public void TemplateCommands_ShouldReplaceQueryTextForCurrentTable()
     {
-        var viewModel = new QueryViewModel(
+        var viewModel = CreateViewModel(
             new QueryService(new FakeSqliteQueryExecutor(
                 new QueryExecutionResult(Array.Empty<string>(), Array.Empty<IReadOnlyList<object?>>(), 0, TimeSpan.Zero, string.Empty))),
             new ExportService(new FakeCsvExportWriter()),
@@ -94,7 +94,7 @@ public class QueryViewModelTests
     [Fact]
     public async Task ExecuteQueryAsync_ShouldSurfaceFailureMessageAndClearResults()
     {
-        var viewModel = new QueryViewModel(
+        var viewModel = CreateViewModel(
             new QueryService(new ThrowingSqliteQueryExecutor("SQL error near FROM")),
             new ExportService(new FakeCsvExportWriter()),
             new FakeFileDialogService(null));
@@ -111,7 +111,7 @@ public class QueryViewModelTests
     [Fact]
     public async Task ExecuteQueryAsync_ShouldExposeEmptyResultState_WhenQueryReturnsNoRows()
     {
-        var viewModel = new QueryViewModel(
+        var viewModel = CreateViewModel(
             new QueryService(new FakeSqliteQueryExecutor(
                 new QueryExecutionResult(
                     Columns: ["id"],
@@ -139,10 +139,10 @@ public class QueryViewModelTests
                 0,
                 TimeSpan.Zero,
                 "should not execute"));
-        var viewModel = new QueryViewModel(
+        var viewModel = CreateViewModel(
             new QueryService(queryExecutor),
-            new ExportService(new FakeCsvExportWriter()),
-            new FakeFileDialogService(null));
+            exportService: new ExportService(new FakeCsvExportWriter()),
+            fileDialogService: new FakeFileDialogService(null));
 
         viewModel.Configure(@"C:\data\sample.db", "users");
         viewModel.QueryText = "delete from users;";
@@ -163,11 +163,11 @@ public class QueryViewModelTests
                 Array.Empty<IReadOnlyList<object?>>(),
                 1,
                 TimeSpan.FromMilliseconds(3),
-                "查询影响了 1 行。"));
-        var viewModel = new QueryViewModel(
+                Message: "查询影响了 1 行。"));
+        var viewModel = CreateViewModel(
             new QueryService(queryExecutor),
-            new ExportService(new FakeCsvExportWriter()),
-            new FakeFileDialogService(null));
+            exportService: new ExportService(new FakeCsvExportWriter()),
+            fileDialogService: new FakeFileDialogService(null));
 
         viewModel.Configure(@"C:\data\sample.db", "users");
         viewModel.ToggleWriteMode();
@@ -183,7 +183,7 @@ public class QueryViewModelTests
     [Fact]
     public void TemplateCommands_ShouldQuoteTableNamesWithEmbeddedQuotes()
     {
-        var viewModel = new QueryViewModel(
+        var viewModel = CreateViewModel(
             new QueryService(new FakeSqliteQueryExecutor(
                 new QueryExecutionResult(Array.Empty<string>(), Array.Empty<IReadOnlyList<object?>>(), 0, TimeSpan.Zero, string.Empty))),
             new ExportService(new FakeCsvExportWriter()),
@@ -192,6 +192,132 @@ public class QueryViewModelTests
         viewModel.Configure(@"C:\data\sample.db", "weird\"table");
 
         viewModel.QueryText.Should().Be("select * from \"weird\"\"table\" limit 100;");
+    }
+
+    [Fact]
+    public async Task ExecuteQueryAsync_ShouldConfirmForDdlOperations()
+    {
+        var dialog = new TestDialogService(confirm: true);
+        var queryExecutor = new FakeSqliteQueryExecutor(
+            new QueryExecutionResult(
+                Array.Empty<string>(),
+                Array.Empty<IReadOnlyList<object?>>(),
+                0,
+                TimeSpan.FromMilliseconds(5),
+                Message: "[DDL 变更] 影响了 0 行。"));
+        var viewModel = CreateViewModel(
+            new QueryService(queryExecutor),
+            new ExportService(new FakeCsvExportWriter()),
+            new FakeFileDialogService(null),
+            dialog);
+
+        viewModel.Configure(@"C:\data\sample.db");
+        viewModel.ToggleWriteMode();
+        viewModel.QueryText = "create table test(x integer);";
+
+        await viewModel.ExecuteQueryAsync();
+
+        dialog.ConfirmCallCount.Should().Be(1);
+        queryExecutor.LastSql.Should().Be("create table test(x integer);");
+        queryExecutor.LastAllowWrite.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task ExecuteQueryAsync_ShouldNotConfirmForDmlOperations()
+    {
+        var dialog = new TestDialogService(confirm: true);
+        var queryExecutor = new FakeSqliteQueryExecutor(
+            new QueryExecutionResult(
+                Array.Empty<string>(),
+                Array.Empty<IReadOnlyList<object?>>(),
+                3,
+                TimeSpan.FromMilliseconds(2),
+                Message: "[DML 写入] 影响了 3 行。"));
+        var viewModel = CreateViewModel(
+            new QueryService(queryExecutor),
+            new ExportService(new FakeCsvExportWriter()),
+            new FakeFileDialogService(null),
+            dialog);
+
+        viewModel.Configure(@"C:\data\sample.db");
+        viewModel.ToggleWriteMode();
+        viewModel.QueryText = "update users set name = 'X';";
+
+        await viewModel.ExecuteQueryAsync();
+
+        dialog.ConfirmCallCount.Should().Be(0);
+        queryExecutor.LastSql.Should().Be("update users set name = 'X';");
+    }
+
+    [Fact]
+    public async Task ExecuteQueryAsync_ShouldCancelExecution_WhenConfirmationDenied()
+    {
+        var dialog = new TestDialogService(confirm: false);
+        var queryExecutor = new FakeSqliteQueryExecutor(
+            new QueryExecutionResult(Array.Empty<string>(), Array.Empty<IReadOnlyList<object?>>(), 0, TimeSpan.Zero, "should not execute"));
+        var viewModel = CreateViewModel(
+            new QueryService(queryExecutor),
+            new ExportService(new FakeCsvExportWriter()),
+            new FakeFileDialogService(null),
+            dialog);
+
+        viewModel.Configure(@"C:\data\sample.db");
+        viewModel.ToggleWriteMode();
+        viewModel.QueryText = "drop table users;";
+
+        await viewModel.ExecuteQueryAsync();
+
+        dialog.ConfirmCallCount.Should().Be(1);
+        queryExecutor.LastSql.Should().BeNull();
+        viewModel.StatusMessage.Should().Be("已取消执行。");
+    }
+
+    [Fact]
+    public void ToggleWriteMode_ShouldUpdateShowWriteWarning()
+    {
+        var viewModel = CreateViewModel(
+            new QueryService(new FakeSqliteQueryExecutor(
+                new QueryExecutionResult(Array.Empty<string>(), Array.Empty<IReadOnlyList<object?>>(), 0, TimeSpan.Zero, string.Empty))),
+            new ExportService(new FakeCsvExportWriter()),
+            new FakeFileDialogService(null));
+
+        viewModel.ShowWriteWarning.Should().BeFalse();
+
+        viewModel.ToggleWriteMode();
+
+        viewModel.ShowWriteWarning.Should().BeTrue();
+        viewModel.AllowWriteMode.Should().BeTrue();
+    }
+
+    private static QueryViewModel CreateViewModel(
+        QueryService queryService,
+        ExportService? exportService = null,
+        IFileDialogService? fileDialogService = null,
+        IDialogService? dialogService = null)
+    {
+        return new QueryViewModel(
+            queryService,
+            exportService ?? new ExportService(new FakeCsvExportWriter()),
+            fileDialogService ?? new FakeFileDialogService(null),
+            dialogService ?? new TestDialogService(confirm: true));
+    }
+
+    private sealed class TestDialogService : IDialogService
+    {
+        private readonly bool _confirm;
+
+        public TestDialogService(bool confirm)
+        {
+            _confirm = confirm;
+        }
+
+        public int ConfirmCallCount { get; private set; }
+
+        public bool Confirm(string title, string message)
+        {
+            ConfirmCallCount++;
+            return _confirm;
+        }
     }
 
     private sealed class FakeSqliteQueryExecutor : ISqliteQueryExecutor

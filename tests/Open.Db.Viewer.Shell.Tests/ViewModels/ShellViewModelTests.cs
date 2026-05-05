@@ -122,7 +122,8 @@ public class ShellViewModelTests
             : base(new ObjectExplorerViewModel(), new SchemaViewModel(), new DataViewModel(), new QueryViewModel(
                 new QueryService(new NoopSqliteQueryExecutor()),
                 new ExportService(new NoopCsvExportWriter()),
-                new FakeFileDialogService(null)))
+                new FakeFileDialogService(null),
+                new Support.NoopDialogService()))
         {
         }
 

@@ -36,6 +36,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<ICsvExportWriter, CsvExportWriter>();
         services.AddSingleton<QueryService>();
         services.AddSingleton<ExportService>();
+        services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<IFileDialogService, FileDialogService>();
         services.AddSingleton<HomeLandingViewModel>();
         services.AddSingleton<SettingsViewModel>();
