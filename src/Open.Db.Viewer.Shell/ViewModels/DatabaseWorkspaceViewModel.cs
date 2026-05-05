@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Open.Db.Viewer.Domain.Models;
+using System.ComponentModel;
 using System.IO;
 using System.Globalization;
 
@@ -47,6 +48,7 @@ public partial class DatabaseWorkspaceViewModel : ObservableObject
         Schema = schema;
         Data = data;
         Query = query;
+        Query.PropertyChanged += OnQueryPropertyChanged;
     }
 
     public ObjectExplorerViewModel ObjectExplorer { get; }
@@ -105,7 +107,7 @@ public partial class DatabaseWorkspaceViewModel : ObservableObject
 
     public string FooterEngineText => "SQLite";
 
-    public string FooterAccessModeText => "只读";
+    public string FooterAccessModeText => Query.AllowWriteMode ? "查询可写" : "只读";
 
     public string FooterRowCountText => HasTableSelection ? $"行: {Schema.RowCount:N0}" : "行: -";
 
@@ -236,6 +238,14 @@ public partial class DatabaseWorkspaceViewModel : ObservableObject
         OnPropertyChanged(nameof(FooterColumnCountText));
         OnPropertyChanged(nameof(EmptyStateTitle));
         OnPropertyChanged(nameof(EmptyStateDescription));
+    }
+
+    private void OnQueryPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName is nameof(QueryViewModel.AllowWriteMode) or null or "")
+        {
+            OnPropertyChanged(nameof(FooterAccessModeText));
+        }
     }
 
     private void UpdateDatabaseFileMetadata(string databasePath)

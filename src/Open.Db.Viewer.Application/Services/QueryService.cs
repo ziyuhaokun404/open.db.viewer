@@ -18,6 +18,6 @@ public sealed class QueryService
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
-        return _queryExecutor.ExecuteAsync(filePath, request.Sql, cancellationToken);
+        return _queryExecutor.ExecuteAsync(filePath, request.Sql, request.AllowWrite, cancellationToken);
     }
 }

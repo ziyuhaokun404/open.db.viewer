@@ -7,5 +7,6 @@ public interface ISqliteQueryExecutor
     Task<QueryExecutionResult> ExecuteAsync(
         string filePath,
         string sql,
+        bool allowWrite = false,
         CancellationToken cancellationToken = default);
 }

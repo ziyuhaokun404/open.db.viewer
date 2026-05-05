@@ -172,7 +172,7 @@ ThemeService
 |---|---|
 | 全部 Singleton | 桌面单窗口应用无需 Scoped/Transient 生命周期，全单例简化了对象图 |
 | 仅 SQLite | 整个检查/读取/查询管线硬编码 SQLite（`sqlite_master`、`PRAGMA`），非通用数据库客户端 |
-| 只读操作 | 连接使用 `ReadWriteCreate` 模式，但应用不提供写/DDL 功能 |
+| 只读优先 | 默认使用只读连接；查询页需要显式切换到可写模式后才允许执行写入或 DDL |
 | 无线导航服务 | 导航通过 `CurrentContentViewModel` 切换 + `DataTemplateSelector` 完成，无需抽象层 |
 | 无事件聚合器 | ViewModel 间通信使用 `ShellViewModel` 构造函数直接连接委托回调 |
 | 文件持久化 | 最近/固定数据库记录存储为本地 JSON（`%LocalAppData%\OpenDbViewer\database-entries.json`） |
@@ -207,7 +207,7 @@ Shell (WPF, MVVM, 组合根)
 
 - `SqliteDatabaseInspector`：读取表列表、表结构、行数、索引、触发器、建表 SQL
 - `SqliteTableDataReader`：按页读取表数据，并支持排序
-- `SqliteQueryExecutor`：执行任意 SQL，返回列信息、结果集、耗时和反馈消息
+- `SqliteQueryExecutor`：按只读/可写模式执行 SQL，返回列信息、结果集、耗时和反馈消息
 - `CsvExportWriter`：将结果集导出为 CSV
 
 ### 3. 桌面工作台
@@ -292,12 +292,12 @@ dotnet test Open.Db.Viewer.slnx
 
 ### 1. 明确只读与可写模式
 
-当前界面语义偏向“只读查看器”，但底层 SQLite 连接仍使用可写/可创建模式，查询页也会直接执行用户输入的任意 SQL。后续需要优先统一产品语义：
+当前已建立只读优先的基础语义：默认使用只读连接，查询页需要显式切换到可写模式后才允许执行写入或 DDL。后续仍可继续增强：
 
-- 默认以只读方式打开数据库，避免误写、误建空数据库文件
-- 将写入、删除、DDL、VACUUM 等操作放入明确的“可写模式”或“高级操作”入口
-- 对危险 SQL 增加确认、事务保护与结果提示
-- UI 上清楚标识当前连接是只读还是可写
+- 对危险 SQL 增加二次确认、事务保护与结果提示
+- 为可写模式增加更醒目的视觉状态和退出提醒
+- 将 `VACUUM`、`ANALYZE`、DDL 等高风险操作纳入更细的权限/确认策略
+- 增加写操作审计、变更摘要或回滚辅助
 
 ### 2. 完整对象浏览器
 

@@ -19,4 +19,36 @@ public class SqliteQueryExecutorTests
         result.Rows[0].Should().ContainInOrder(1L, "Alice");
         result.Rows[2].Should().ContainInOrder(3L, "Charlie");
     }
+
+    [Fact]
+    public async Task ExecuteAsync_ShouldRejectWriteSql_WhenAllowWriteIsFalse()
+    {
+        await using var db = await SqliteTestDb.CreateAsync();
+        var executor = new SqliteQueryExecutor(new SqliteConnectionFactory());
+
+        var act = () => executor.ExecuteAsync(db.FilePath, "delete from users where id = 1");
+
+        await act.Should().ThrowAsync<InvalidOperationException>()
+            .WithMessage("*只读*");
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_ShouldUseWritableConnection_WhenAllowWriteIsTrue()
+    {
+        await using var db = await SqliteTestDb.CreateAsync();
+        var executor = new SqliteQueryExecutor(new SqliteConnectionFactory());
+
+        var writeResult = await executor.ExecuteAsync(
+            db.FilePath,
+            "delete from users where id = 1",
+            allowWrite: true);
+        var readResult = await executor.ExecuteAsync(
+            db.FilePath,
+            "select count(*) from users");
+
+        writeResult.AffectedRows.Should().Be(1);
+        readResult.Rows.Should().ContainSingle()
+            .Which.Should().ContainSingle()
+            .Which.Should().Be(2L);
+    }
 }

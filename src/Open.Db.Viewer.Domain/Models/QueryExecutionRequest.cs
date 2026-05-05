@@ -1,3 +1,3 @@
 namespace Open.Db.Viewer.Domain.Models;
 
-public sealed record QueryExecutionRequest(string Sql);
+public sealed record QueryExecutionRequest(string Sql, bool AllowWrite = false);

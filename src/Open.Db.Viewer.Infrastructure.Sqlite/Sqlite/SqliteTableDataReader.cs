@@ -32,7 +32,7 @@ public sealed class SqliteTableDataReader
             throw new ArgumentOutOfRangeException(nameof(pageSize));
         }
 
-        await using var connection = await _connectionFactory.CreateAsync(filePath, cancellationToken);
+        await using var connection = await _connectionFactory.CreateAsync(filePath, cancellationToken: cancellationToken);
         await connection.OpenAsync(cancellationToken);
 
         await using var schemaCommand = connection.CreateCommand();

@@ -15,7 +15,7 @@ public sealed class SqliteDatabaseInspector
 
     public async Task<IReadOnlyList<string>> GetTablesAsync(string filePath, CancellationToken cancellationToken = default)
     {
-        await using var connection = await _connectionFactory.CreateAsync(filePath, cancellationToken);
+        await using var connection = await _connectionFactory.CreateAsync(filePath, cancellationToken: cancellationToken);
         await connection.OpenAsync(cancellationToken);
 
         await using var command = connection.CreateCommand();
@@ -39,7 +39,7 @@ public sealed class SqliteDatabaseInspector
 
     public async Task<TableSchema> GetSchemaAsync(string filePath, string tableName, CancellationToken cancellationToken = default)
     {
-        await using var connection = await _connectionFactory.CreateAsync(filePath, cancellationToken);
+        await using var connection = await _connectionFactory.CreateAsync(filePath, cancellationToken: cancellationToken);
         await connection.OpenAsync(cancellationToken);
 
         await using var command = connection.CreateCommand();
@@ -65,7 +65,7 @@ public sealed class SqliteDatabaseInspector
 
     public async Task<TableMetadata> GetTableMetadataAsync(string filePath, string tableName, CancellationToken cancellationToken = default)
     {
-        await using var connection = await _connectionFactory.CreateAsync(filePath, cancellationToken);
+        await using var connection = await _connectionFactory.CreateAsync(filePath, cancellationToken: cancellationToken);
         await connection.OpenAsync(cancellationToken);
 
         var rowCount = await ExecuteScalarAsync<long>(

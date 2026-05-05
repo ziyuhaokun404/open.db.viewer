@@ -1137,6 +1137,22 @@
                                                             Command="{Binding Query.ExportResultsCommand}"
                                                             Content="导出 CSV"
                                                             Icon="{ui:SymbolIcon ArrowExportLtr24}" />
+                                                        <ui:Button
+                                                            Margin="8,0,0,0"
+                                                            Command="{Binding Query.ToggleWriteModeCommand}"
+                                                            Content="{Binding Query.ToggleWriteModeText}" />
+                                                        <TextBlock
+                                                            Margin="16,0,0,0"
+                                                            VerticalAlignment="Center"
+                                                            FontWeight="SemiBold"
+                                                            Text="{Binding Query.QueryAccessModeLabel}" />
+                                                        <TextBlock
+                                                            Margin="8,0,0,0"
+                                                            VerticalAlignment="Center"
+                                                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                            MaxWidth="360"
+                                                            TextWrapping="Wrap"
+                                                            Text="{Binding Query.QueryAccessModeSummary}" />
                                                         <TextBlock
                                                             Margin="16,0,0,0"
                                                             VerticalAlignment="Center"

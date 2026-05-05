@@ -237,7 +237,11 @@ public class MainWindowSmokeTests
 
     private sealed class NoopSqliteQueryExecutor : ISqliteQueryExecutor
     {
-        public Task<QueryExecutionResult> ExecuteAsync(string filePath, string sql, CancellationToken cancellationToken = default) =>
+        public Task<QueryExecutionResult> ExecuteAsync(
+            string filePath,
+            string sql,
+            bool allowWrite = false,
+            CancellationToken cancellationToken = default) =>
             Task.FromResult(new QueryExecutionResult(Array.Empty<string>(), Array.Empty<IReadOnlyList<object?>>(), 0, TimeSpan.Zero, string.Empty));
     }
 

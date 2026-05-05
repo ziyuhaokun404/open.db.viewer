@@ -35,6 +35,7 @@ public class QueryViewModelTests
 
         queryExecutor.LastFilePath.Should().Be(@"C:\data\sample.db");
         queryExecutor.LastSql.Should().Be("select * from \"users\" limit 100;");
+        queryExecutor.LastAllowWrite.Should().BeFalse();
         viewModel.Columns.Should().Equal("id", "name");
         viewModel.Rows.Should().HaveCount(2);
         viewModel.Rows[0].Values.Should().Equal(1, "Alice");
@@ -128,6 +129,71 @@ public class QueryViewModelTests
         viewModel.ResultSummary.Should().Be("未返回任何数据行。");
     }
 
+    [Fact]
+    public async Task ExecuteQueryAsync_ShouldBlockWriteSql_WhenReadOnlyModeIsActive()
+    {
+        var queryExecutor = new FakeSqliteQueryExecutor(
+            new QueryExecutionResult(
+                Array.Empty<string>(),
+                Array.Empty<IReadOnlyList<object?>>(),
+                0,
+                TimeSpan.Zero,
+                "should not execute"));
+        var viewModel = new QueryViewModel(
+            new QueryService(queryExecutor),
+            new ExportService(new FakeCsvExportWriter()),
+            new FakeFileDialogService(null));
+
+        viewModel.Configure(@"C:\data\sample.db", "users");
+        viewModel.QueryText = "delete from users;";
+
+        await viewModel.ExecuteQueryAsync();
+
+        queryExecutor.LastSql.Should().BeNull();
+        viewModel.HasResults.Should().BeFalse();
+        viewModel.StatusMessage.Should().Contain("当前查询模式为只读");
+    }
+
+    [Fact]
+    public async Task ExecuteQueryAsync_ShouldPassAllowWrite_WhenWriteModeIsEnabled()
+    {
+        var queryExecutor = new FakeSqliteQueryExecutor(
+            new QueryExecutionResult(
+                Array.Empty<string>(),
+                Array.Empty<IReadOnlyList<object?>>(),
+                1,
+                TimeSpan.FromMilliseconds(3),
+                "查询影响了 1 行。"));
+        var viewModel = new QueryViewModel(
+            new QueryService(queryExecutor),
+            new ExportService(new FakeCsvExportWriter()),
+            new FakeFileDialogService(null));
+
+        viewModel.Configure(@"C:\data\sample.db", "users");
+        viewModel.ToggleWriteMode();
+        viewModel.QueryText = "delete from users where id = 1;";
+
+        await viewModel.ExecuteQueryAsync();
+
+        queryExecutor.LastSql.Should().Be("delete from users where id = 1;");
+        queryExecutor.LastAllowWrite.Should().BeTrue();
+        viewModel.QueryAccessModeLabel.Should().Be("可写模式");
+    }
+
+    [Fact]
+    public void TemplateCommands_ShouldQuoteTableNamesWithEmbeddedQuotes()
+    {
+        var viewModel = new QueryViewModel(
+            new QueryService(new FakeSqliteQueryExecutor(
+                new QueryExecutionResult(Array.Empty<string>(), Array.Empty<IReadOnlyList<object?>>(), 0, TimeSpan.Zero, string.Empty))),
+            new ExportService(new FakeCsvExportWriter()),
+            new FakeFileDialogService(null));
+
+        viewModel.Configure(@"C:\data\sample.db", "weird\"table");
+
+        viewModel.QueryText.Should().Be("select * from \"weird\"\"table\" limit 100;");
+    }
+
     private sealed class FakeSqliteQueryExecutor : ISqliteQueryExecutor
     {
         private readonly QueryExecutionResult _result;
@@ -140,11 +206,17 @@ public class QueryViewModelTests
         public string? LastFilePath { get; private set; }
 
         public string? LastSql { get; private set; }
+        public bool LastAllowWrite { get; private set; }
 
-        public Task<QueryExecutionResult> ExecuteAsync(string filePath, string sql, CancellationToken cancellationToken = default)
+        public Task<QueryExecutionResult> ExecuteAsync(
+            string filePath,
+            string sql,
+            bool allowWrite = false,
+            CancellationToken cancellationToken = default)
         {
             LastFilePath = filePath;
             LastSql = sql;
+            LastAllowWrite = allowWrite;
             return Task.FromResult(_result);
         }
     }
@@ -179,7 +251,11 @@ public class QueryViewModelTests
             _message = message;
         }
 
-        public Task<QueryExecutionResult> ExecuteAsync(string filePath, string sql, CancellationToken cancellationToken = default) =>
+        public Task<QueryExecutionResult> ExecuteAsync(
+            string filePath,
+            string sql,
+            bool allowWrite = false,
+            CancellationToken cancellationToken = default) =>
             throw new InvalidOperationException(_message);
     }
 

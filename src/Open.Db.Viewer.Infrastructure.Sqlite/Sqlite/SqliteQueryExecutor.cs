@@ -16,12 +16,21 @@ public sealed class SqliteQueryExecutor : ISqliteQueryExecutor
     public async Task<QueryExecutionResult> ExecuteAsync(
         string filePath,
         string sql,
+        bool allowWrite = false,
         CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
         ArgumentException.ThrowIfNullOrWhiteSpace(sql);
 
-        await using var connection = await _connectionFactory.CreateAsync(filePath, cancellationToken);
+        if (!allowWrite && !SqliteStatementClassifier.IsReadOnly(sql))
+        {
+            throw new InvalidOperationException("当前查询模式为只读。请切换到可写模式后再执行会修改数据库的 SQL。");
+        }
+
+        var accessMode = allowWrite
+            ? SqliteConnectionAccessMode.ReadWrite
+            : SqliteConnectionAccessMode.ReadOnly;
+        await using var connection = await _connectionFactory.CreateAsync(filePath, accessMode, cancellationToken);
         await connection.OpenAsync(cancellationToken);
 
         await using var command = connection.CreateCommand();

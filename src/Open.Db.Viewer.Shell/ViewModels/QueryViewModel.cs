@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
+using Open.Db.Viewer.Application.Abstractions;
 using Open.Db.Viewer.Application.Services;
 using Open.Db.Viewer.Domain.Models;
 using Open.Db.Viewer.ShellHost.Services;
@@ -38,6 +39,9 @@ public partial class QueryViewModel : ObservableObject
     private bool isBusy;
 
     [ObservableProperty]
+    private bool allowWriteMode;
+
+    [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ExportResultsCommand))]
     private bool hasResults;
 
@@ -66,6 +70,14 @@ public partial class QueryViewModel : ObservableObject
     public bool ShowEmptyResultState => !IsBusy && Columns.Count == 0 && Rows.Count == 0 && !string.IsNullOrWhiteSpace(DatabasePath);
 
     public bool ShowResultGrid => Columns.Count > 0 || Rows.Count > 0;
+
+    public string QueryAccessModeLabel => AllowWriteMode ? "可写模式" : "只读模式";
+
+    public string QueryAccessModeSummary => AllowWriteMode
+        ? "当前 SQL 将使用可写连接执行，请确认变更风险。"
+        : "当前 SQL 使用只读连接执行，写入和 DDL 会被拦截。";
+
+    public string ToggleWriteModeText => AllowWriteMode ? "切回只读" : "启用可写";
 
     public void Configure(string databasePath, string? tableName = null)
     {
@@ -97,13 +109,20 @@ public partial class QueryViewModel : ObservableObject
             return;
         }
 
+        if (!AllowWriteMode && !SqliteStatementClassifier.IsReadOnly(QueryText))
+        {
+            ClearResults();
+            StatusMessage = "当前查询模式为只读。请切换到可写模式后再执行会修改数据库的 SQL。";
+            return;
+        }
+
         IsBusy = true;
 
         try
         {
             var result = await _queryService.ExecuteAsync(
                 DatabasePath,
-                new QueryExecutionRequest(QueryText),
+                new QueryExecutionRequest(QueryText, AllowWriteMode),
                 cancellationToken);
 
             ApplyResult(result);
@@ -182,9 +201,25 @@ public partial class QueryViewModel : ObservableObject
         StatusMessage = ReadyStatusMessage;
     }
 
+    [RelayCommand]
+    public void ToggleWriteMode()
+    {
+        AllowWriteMode = !AllowWriteMode;
+        StatusMessage = AllowWriteMode
+            ? "已启用可写模式。执行写入或 DDL 前请确认 SQL。"
+            : ReadyStatusMessage;
+    }
+
     private bool CanExportResults() => HasResults && !IsBusy;
 
     partial void OnIsBusyChanged(bool value) => ExportResultsCommand.NotifyCanExecuteChanged();
+
+    partial void OnAllowWriteModeChanged(bool value)
+    {
+        OnPropertyChanged(nameof(QueryAccessModeLabel));
+        OnPropertyChanged(nameof(QueryAccessModeSummary));
+        OnPropertyChanged(nameof(ToggleWriteModeText));
+    }
 
     private void ApplyResult(QueryExecutionResult result)
     {
@@ -226,11 +261,13 @@ public partial class QueryViewModel : ObservableObject
         NotifyQueryStateChanged();
     }
 
-    private static string BuildSelectTemplate(string tableName) => $"select * from \"{tableName}\" limit 100;";
+    private static string BuildSelectTemplate(string tableName) => $"select * from {QuoteIdentifier(tableName)} limit 100;";
 
-    private static string BuildCountTemplate(string tableName) => $"select count(*) as total_rows from \"{tableName}\";";
+    private static string BuildCountTemplate(string tableName) => $"select count(*) as total_rows from {QuoteIdentifier(tableName)};";
 
-    private static string BuildSchemaTemplate(string tableName) => $"pragma table_info(\"{tableName}\");";
+    private static string BuildSchemaTemplate(string tableName) => $"pragma table_info({QuoteIdentifier(tableName)});";
+
+    private static string QuoteIdentifier(string identifier) => "\"" + identifier.Replace("\"", "\"\"") + "\"";
 
     private static object ToDisplayValue(object? value)
     {
