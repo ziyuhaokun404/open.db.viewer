@@ -10,36 +10,112 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <Style x:Key="WorkspaceSurfaceStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource SurfaceStrokeColorDefaultBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="12" />
         </Style>
         <Style x:Key="WorkspacePanelStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="10" />
+        </Style>
+        <Style x:Key="WorkspaceContentCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="10" />
+        </Style>
+        <Style x:Key="WorkspaceDividerStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource SurfaceStrokeColorDefaultBrush}" />
+        </Style>
+        <Style x:Key="WorkspacePageTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="22" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
         </Style>
         <Style x:Key="WorkspaceSectionTitleStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="14" />
             <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
         </Style>
         <Style x:Key="WorkspaceCaptionStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="WorkspaceMutedTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorTertiaryBrush}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
         <Style x:Key="WorkspaceInputBorderStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorInputActiveBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="8" />
             <Setter Property="Padding" Value="10,0" />
             <Setter Property="Height" Value="38" />
         </Style>
         <Style x:Key="WorkspaceMetricCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="10" />
             <Setter Property="Margin" Value="0,0,10,0" />
             <Setter Property="Padding" Value="12,10" />
         </Style>
+        <Style x:Key="WorkspaceChipStyle" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiaryBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="9,3" />
+        </Style>
+        <Style
+            x:Key="WorkspaceStatusPillStyle"
+            BasedOn="{StaticResource WorkspaceChipStyle}"
+            TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource AccentFillColorSecondaryBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource SurfaceStrokeColorDefaultBrush}" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+        <Style x:Key="WorkspaceIconTileStyle" TargetType="Border">
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiaryBrush}" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+        <Style
+            x:Key="WorkspaceAccentIconTileStyle"
+            BasedOn="{StaticResource WorkspaceIconTileStyle}"
+            TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource AccentFillColorSecondaryBrush}" />
+        </Style>
+        <Style
+            x:Key="WorkspaceToolbarButtonStyle"
+            BasedOn="{StaticResource {x:Type ui:Button}}"
+            TargetType="ui:Button">
+            <Setter Property="Height" Value="36" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="12,0" />
+        </Style>
+        <Style
+            x:Key="WorkspaceIconButtonStyle"
+            BasedOn="{StaticResource {x:Type ui:Button}}"
+            TargetType="ui:Button">
+            <Setter Property="Width" Value="38" />
+            <Setter Property="Height" Value="38" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
         <Style x:Key="WorkspaceTabItemStyle" TargetType="TabItem">
             <Setter Property="Padding" Value="0" />
             <Setter Property="Margin" Value="0,0,18,0" />
             <Setter Property="MinWidth" Value="72" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TabItem">
@@ -57,17 +133,28 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter TargetName="TabBorder" Property="BorderBrush" Value="{DynamicResource AccentFillColorDefaultBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
                             </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True" />
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
         <Style x:Key="WorkspaceDataGridStyle" TargetType="DataGrid">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="GridLinesVisibility" Value="Horizontal" />
             <Setter Property="HeadersVisibility" Value="Column" />
+            <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
+            <Setter Property="VerticalGridLinesBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+            <Setter Property="RowBackground" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+            <Setter Property="AlternatingRowBackground" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+            <Setter Property="AlternationCount" Value="2" />
             <Setter Property="RowHeaderWidth" Value="0" />
             <Setter Property="CanUserResizeRows" Value="False" />
             <Setter Property="CanUserReorderColumns" Value="False" />
@@ -76,34 +163,43 @@
             <Setter Property="SelectionUnit" Value="FullRow" />
         </Style>
         <Style x:Key="WorkspaceDataGridColumnHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiaryBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
             <Setter Property="BorderThickness" Value="0,0,1,1" />
             <Setter Property="Padding" Value="12,10" />
             <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
         </Style>
         <Style x:Key="WorkspaceDataGridCellStyle" TargetType="DataGridCell">
             <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
             <Setter Property="BorderThickness" Value="0,0,1,1" />
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
             <Setter Property="Padding" Value="12,10" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Background" Value="{DynamicResource AccentFillColorSecondaryBrush}" />
                 </Trigger>
                 <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Background" Value="{DynamicResource AccentFillColorSecondaryBrush}" />
                 </Trigger>
             </Style.Triggers>
         </Style>
         <Style x:Key="WorkspaceDataGridRowStyle" TargetType="DataGridRow">
             <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorSecondaryBrush}" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
             <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource SubtleFillColorSecondaryBrush}" />
+                </Trigger>
                 <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Background" Value="{DynamicResource AccentFillColorSecondaryBrush}" />
                 </Trigger>
                 <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Background" Value="{DynamicResource AccentFillColorSecondaryBrush}" />
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -153,7 +249,11 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        <Style x:Key="DataGridTextCellStyle" TargetType="TextBlock" />
+        <Style x:Key="DataGridTextCellStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
         <Style x:Key="ShowWhenSearchEmptyStyle" TargetType="TextBlock">
             <Setter Property="Visibility" Value="Visible" />
             <Style.Triggers>
@@ -170,54 +270,65 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="{DynamicResource ApplicationBackgroundBrush}">
         <Grid Visibility="{Binding HasOpenDatabase, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Border>
-                <Grid Margin="14">
+                <Grid Margin="16">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="10" />
+                        <RowDefinition Height="12" />
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="8" />
+                        <RowDefinition Height="10" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <Border Padding="16" Style="{StaticResource WorkspaceSurfaceStyle}">
                         <Grid>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <StackPanel>
+                            <Border
+                                Width="44"
+                                Height="44"
+                                Style="{StaticResource WorkspaceAccentIconTileStyle}">
+                                <ui:SymbolIcon
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource AccentFillColorDefaultBrush}"
+                                    Symbol="Database24" />
+                            </Border>
+                            <StackPanel Grid.Column="1" Margin="12,0,24,0">
                                 <TextBlock
                                     d:Text="示例数据库"
-                                    FontSize="22"
-                                    FontWeight="SemiBold"
+                                    Style="{StaticResource WorkspacePageTitleStyle}"
                                     Text="{Binding Title}" />
                                 <TextBlock
                                     Margin="0,4,0,0"
                                     d:Text="C:\Users\demo\app.db"
+                                    Style="{StaticResource WorkspaceMutedTextStyle}"
                                     Text="{Binding DatabasePath}"
                                     TextTrimming="CharacterEllipsis" />
                             </StackPanel>
                             <StackPanel
-                                Grid.Column="1"
-                                VerticalAlignment="Top"
+                                Grid.Column="2"
+                                VerticalAlignment="Center"
                                 Orientation="Horizontal">
                                 <ui:Button
                                     Margin="0,0,10,0"
                                     Appearance="Secondary"
                                     Command="{Binding ReturnHomeCommand}"
                                     Content="返回首页"
-                                    CornerRadius="8"
-                                    Icon="{ui:SymbolIcon ArrowReply24}" />
+                                    Icon="{ui:SymbolIcon ArrowReply24}"
+                                    Style="{StaticResource WorkspaceToolbarButtonStyle}" />
                                 <ui:Button
                                     Margin="0,0,10,0"
                                     Appearance="Secondary"
                                     Command="{Binding RefreshCommand}"
                                     Content="刷新"
-                                    CornerRadius="8"
-                                    Icon="{ui:SymbolIcon ArrowClockwise24}" />
+                                    Icon="{ui:SymbolIcon ArrowClockwise24}"
+                                    Style="{StaticResource WorkspaceToolbarButtonStyle}" />
                                 <Border Width="280" Style="{StaticResource WorkspaceInputBorderStyle}">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
@@ -225,7 +336,10 @@
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <ui:SymbolIcon VerticalAlignment="Center" Symbol="Search24" />
+                                        <ui:SymbolIcon
+                                            VerticalAlignment="Center"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                            Symbol="Search24" />
                                         <TextBlock
                                             Grid.Column="1"
                                             Margin="10,0,0,0"
@@ -252,6 +366,7 @@
                                             VerticalContentAlignment="Center"
                                             Background="Transparent"
                                             BorderThickness="0"
+                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                             Text="{Binding ObjectExplorer.SearchText, UpdateSourceTrigger=PropertyChanged}" />
                                         <ui:Button
                                             Grid.Column="2"
@@ -265,24 +380,22 @@
                                     </Grid>
                                 </Border>
                                 <ui:Button
-                                    Width="38"
-                                    Height="38"
                                     Margin="10,0,0,0"
                                     Appearance="Secondary"
-                                    CornerRadius="8"
-                                    Icon="{ui:SymbolIcon Filter24}" />
+                                    Icon="{ui:SymbolIcon Filter24}"
+                                    Style="{StaticResource WorkspaceIconButtonStyle}" />
                             </StackPanel>
                         </Grid>
                     </Border>
 
                     <Grid Grid.Row="2">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="300" />
+                            <ColumnDefinition Width="12" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <Border Padding="6" Style="{StaticResource WorkspacePanelStyle}">
+                        <Border Padding="12" Style="{StaticResource WorkspacePanelStyle}">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -297,9 +410,12 @@
                                 <StackPanel>
                                     <TextBlock
                                         FontSize="17"
-                                        FontWeight="SemiBold"
+                                        Style="{StaticResource WorkspaceSectionTitleStyle}"
                                         Text="对象" />
-                                    <TextBlock Margin="0,4,0,0" Text="浏览当前数据库中的数据表。" />
+                                    <TextBlock
+                                        Margin="0,4,0,0"
+                                        Style="{StaticResource WorkspaceMutedTextStyle}"
+                                        Text="浏览当前数据库中的数据表。" />
                                 </StackPanel>
                                 <Border Grid.Row="2" Style="{StaticResource WorkspaceInputBorderStyle}">
                                     <Grid>
@@ -309,7 +425,10 @@
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <ui:SymbolIcon VerticalAlignment="Center" Symbol="Search24" />
+                                        <ui:SymbolIcon
+                                            VerticalAlignment="Center"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                            Symbol="Search24" />
                                         <TextBlock
                                             Grid.Column="1"
                                             Margin="10,0,0,0"
@@ -336,6 +455,7 @@
                                             VerticalContentAlignment="Center"
                                             Background="Transparent"
                                             BorderThickness="0"
+                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                             Text="{Binding ObjectExplorer.SearchText, UpdateSourceTrigger=PropertyChanged}" />
                                         <ui:Button
                                             Grid.Column="2"
@@ -349,12 +469,10 @@
                                             Visibility="{Binding ObjectExplorer.HasSearchText, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                         <ui:Button
                                             Grid.Column="3"
-                                            Width="28"
-                                            Height="28"
                                             Margin="6,0,0,0"
-                                            Padding="0"
                                             Appearance="Transparent"
-                                            Icon="{ui:SymbolIcon Filter24}" />
+                                            Icon="{ui:SymbolIcon Filter24}"
+                                            Style="{StaticResource WorkspaceIconButtonStyle}" />
                                     </Grid>
                                 </Border>
                                 <DockPanel Grid.Row="4" LastChildFill="False">
@@ -363,6 +481,7 @@
                                             Width="13"
                                             Height="13"
                                             Margin="0,2,5,0"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                             Symbol="ChevronDown16" />
                                         <TextBlock
                                             d:Text="表"
@@ -372,8 +491,8 @@
                                     </StackPanel>
                                     <Border
                                         Padding="7,2"
-                                        CornerRadius="999"
-                                        DockPanel.Dock="Right">
+                                        DockPanel.Dock="Right"
+                                        Style="{StaticResource WorkspaceStatusPillStyle}">
                                         <TextBlock
                                             d:Text="3"
                                             FontSize="12"
@@ -385,8 +504,7 @@
                                 <Border
                                     Grid.Row="6"
                                     Padding="4"
-                                    BorderThickness="1"
-                                    CornerRadius="10">
+                                    Style="{StaticResource WorkspaceContentCardStyle}">
                                     <Grid>
                                         <ListBox
                                             x:Name="ObjectList"
@@ -409,13 +527,18 @@
                                                         <ui:SymbolIcon
                                                             Width="16"
                                                             Height="16"
+                                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                             Symbol="TableSimple24" />
                                                         <StackPanel Grid.Column="2">
                                                             <TextBlock
                                                                 FontSize="13"
                                                                 FontWeight="SemiBold"
+                                                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                                 Text="{Binding Name}" />
-                                                            <TextBlock FontSize="11" Text="SQLite 表" />
+                                                            <TextBlock
+                                                                FontSize="11"
+                                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                                Text="SQLite 表" />
                                                         </StackPanel>
                                                         <ui:SymbolIcon
                                                             x:Name="ItemStarIcon"
@@ -439,10 +562,14 @@
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             Style="{StaticResource ShowWhenNoFilteredTablesStyle}">
-                                            <ui:SymbolIcon HorizontalAlignment="Center" Symbol="Search24" />
+                                            <ui:SymbolIcon
+                                                HorizontalAlignment="Center"
+                                                Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                                Symbol="Search24" />
                                             <TextBlock
                                                 Margin="0,10,0,0"
                                                 FontWeight="SemiBold"
+                                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                 Text="没有匹配的表" />
                                         </StackPanel>
                                     </Grid>
@@ -451,6 +578,7 @@
                                     Grid.Row="7"
                                     Margin="0,8,0,0"
                                     d:Text="共 3 个对象"
+                                    Style="{StaticResource WorkspaceMutedTextStyle}"
                                     Text="{Binding ObjectExplorer.FooterSummary}" />
                             </Grid>
                         </Border>
@@ -474,33 +602,27 @@
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock
                                                 d:Text="users"
-                                                FontSize="20"
-                                                FontWeight="SemiBold"
+                                                Style="{StaticResource WorkspacePageTitleStyle}"
                                                 Text="{Binding SelectedObjectTitle}" />
-                                            <Border
-                                                Margin="10,3,0,0"
-                                                Padding="10,3"
-                                                Background="{DynamicResource ControlFillColorTertiaryBrush}"
-                                                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                                                BorderThickness="1"
-                                                CornerRadius="999">
+                                            <Border Margin="10,3,0,0" Style="{StaticResource WorkspaceChipStyle}">
                                                 <TextBlock
                                                     d:Text="表 (TABLE)"
+                                                    FontSize="12"
                                                     FontWeight="SemiBold"
+                                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                                                     Text="{Binding SelectedObjectKindLabel}" />
                                             </Border>
                                         </StackPanel>
                                         <TextBlock
                                             Margin="0,6,0,0"
                                             d:Text="5 列 · 1,234 行 · 2 索引"
+                                            Style="{StaticResource WorkspaceMutedTextStyle}"
                                             Text="{Binding SelectedObjectSubtitle}" />
                                     </StackPanel>
                                     <Border
                                         Grid.Column="1"
                                         Padding="12,10"
-                                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="10">
+                                        Style="{StaticResource WorkspaceMetricCardStyle}">
                                         <StackPanel>
                                             <TextBlock Style="{StaticResource WorkspaceCaptionStyle}" Text="数据库引擎" />
                                             <TextBlock
@@ -508,11 +630,12 @@
                                                 d:Text="SQLite 3.42.0"
                                                 FontSize="15"
                                                 FontWeight="SemiBold"
+                                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                 Text="{Binding Schema.SqliteVersion, StringFormat=SQLite {0}}" />
                                         </StackPanel>
                                     </Border>
                                 </Grid>
-                                <Border Grid.Row="1" />
+                                <Border Grid.Row="1" Style="{StaticResource WorkspaceDividerStyle}" />
                                 <Grid Grid.Row="2" Visibility="{Binding HasTableSelection, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <TabControl
                                         Margin="16,8,16,14"
@@ -540,10 +663,7 @@
                                                         <RowDefinition Height="10" />
                                                         <RowDefinition Height="Auto" />
                                                     </Grid.RowDefinitions>
-                                                    <Border
-                                                        Padding="10"
-                                                        BorderThickness="1"
-                                                        CornerRadius="10">
+                                                    <Border Padding="10" Style="{StaticResource WorkspaceContentCardStyle}">
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="*" />
@@ -564,13 +684,11 @@
                                                                         <ColumnDefinition Width="34" />
                                                                         <ColumnDefinition Width="*" />
                                                                     </Grid.ColumnDefinitions>
-                                                                    <Border
-                                                                        Width="28"
-                                                                        Height="28"
-                                                                        CornerRadius="7">
+                                                                    <Border Style="{StaticResource WorkspaceIconTileStyle}">
                                                                         <ui:SymbolIcon
                                                                             HorizontalAlignment="Center"
                                                                             VerticalAlignment="Center"
+                                                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                                             Symbol="TableSimple24" />
                                                                     </Border>
                                                                     <StackPanel Grid.Column="1" Margin="8,0,0,0">
@@ -591,10 +709,7 @@
                                                                         <ColumnDefinition Width="34" />
                                                                         <ColumnDefinition Width="*" />
                                                                     </Grid.ColumnDefinitions>
-                                                                    <Border
-                                                                        Width="28"
-                                                                        Height="28"
-                                                                        CornerRadius="7">
+                                                                    <Border Style="{StaticResource WorkspaceAccentIconTileStyle}">
                                                                         <ui:SymbolIcon
                                                                             HorizontalAlignment="Center"
                                                                             VerticalAlignment="Center"
@@ -618,13 +733,11 @@
                                                                         <ColumnDefinition Width="34" />
                                                                         <ColumnDefinition Width="*" />
                                                                     </Grid.ColumnDefinitions>
-                                                                    <Border
-                                                                        Width="28"
-                                                                        Height="28"
-                                                                        CornerRadius="7">
+                                                                    <Border Style="{StaticResource WorkspaceIconTileStyle}">
                                                                         <ui:SymbolIcon
                                                                             HorizontalAlignment="Center"
                                                                             VerticalAlignment="Center"
+                                                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                                             Symbol="AppsList24" />
                                                                     </Border>
                                                                     <StackPanel Grid.Column="1" Margin="8,0,0,0">
@@ -644,13 +757,11 @@
                                                                         <ColumnDefinition Width="34" />
                                                                         <ColumnDefinition Width="*" />
                                                                     </Grid.ColumnDefinitions>
-                                                                    <Border
-                                                                        Width="28"
-                                                                        Height="28"
-                                                                        CornerRadius="7">
+                                                                    <Border Style="{StaticResource WorkspaceIconTileStyle}">
                                                                         <ui:SymbolIcon
                                                                             HorizontalAlignment="Center"
                                                                             VerticalAlignment="Center"
+                                                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                                             Symbol="DocumentWidth24" />
                                                                     </Border>
                                                                     <StackPanel Grid.Column="1" Margin="8,0,0,0">
@@ -670,11 +781,7 @@
                                                                         <ColumnDefinition Width="34" />
                                                                         <ColumnDefinition Width="*" />
                                                                     </Grid.ColumnDefinitions>
-                                                                    <Border
-                                                                        Width="28"
-                                                                        Height="28"
-                                                                        Background="{DynamicResource AccentFillColorSecondaryBrush}"
-                                                                        CornerRadius="7">
+                                                                    <Border Style="{StaticResource WorkspaceAccentIconTileStyle}">
                                                                         <ui:SymbolIcon
                                                                             HorizontalAlignment="Center"
                                                                             VerticalAlignment="Center"
@@ -702,13 +809,11 @@
                                                                         <ColumnDefinition Width="34" />
                                                                         <ColumnDefinition Width="*" />
                                                                     </Grid.ColumnDefinitions>
-                                                                    <Border
-                                                                        Width="28"
-                                                                        Height="28"
-                                                                        CornerRadius="7">
+                                                                    <Border Style="{StaticResource WorkspaceIconTileStyle}">
                                                                         <ui:SymbolIcon
                                                                             HorizontalAlignment="Center"
                                                                             VerticalAlignment="Center"
+                                                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
                                                                             Symbol="ArrowClockwise24" />
                                                                     </Border>
                                                                     <StackPanel Grid.Column="1" Margin="8,0,0,0">
@@ -728,8 +833,7 @@
                                                     <Border
                                                         Grid.Row="2"
                                                         Padding="12"
-                                                        BorderThickness="1"
-                                                        CornerRadius="10">
+                                                        Style="{StaticResource WorkspaceContentCardStyle}">
                                                         <Grid>
                                                             <Grid.RowDefinitions>
                                                                 <RowDefinition Height="Auto" />
@@ -791,9 +895,7 @@
                                                     <Border
                                                         Grid.Row="4"
                                                         Padding="16"
-                                                        Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                                                        BorderThickness="1"
-                                                        CornerRadius="10">
+                                                        Style="{StaticResource WorkspaceContentCardStyle}">
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="1.1*" />
@@ -845,7 +947,7 @@
                                                                         Text="{Binding Schema.TriggerSummary}" />
                                                                 </Grid>
                                                             </StackPanel>
-                                                            <Border Grid.Column="1" Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+                                                            <Border Grid.Column="1" Style="{StaticResource WorkspaceDividerStyle}" />
                                                             <StackPanel Grid.Column="3">
                                                                 <TextBlock Style="{StaticResource WorkspaceSectionTitleStyle}" Text="数据库信息" />
                                                                 <Grid Margin="0,12,0,0">
@@ -897,7 +999,7 @@
                                                                         Text="{Binding Schema.PageSizeSummary}" />
                                                                 </Grid>
                                                             </StackPanel>
-                                                            <Border Grid.Column="4" />
+                                                            <Border Grid.Column="4" Style="{StaticResource WorkspaceDividerStyle}" />
                                                             <StackPanel Grid.Column="6" VerticalAlignment="Top">
                                                                 <TextBlock
                                                                     HorizontalAlignment="Center"
@@ -906,15 +1008,14 @@
                                                                 <Border
                                                                     Margin="0,12,0,0"
                                                                     Padding="16,9"
-                                                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                                                                    BorderThickness="1"
-                                                                    CornerRadius="10">
+                                                                    Style="{StaticResource WorkspaceStatusPillStyle}">
                                                                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                                                        <TextBlock FontSize="16" Text="✓" />
+                                                                        <ui:SymbolIcon Foreground="{DynamicResource AccentFillColorDefaultBrush}" Symbol="CheckmarkCircle24" />
                                                                         <TextBlock
                                                                             Margin="10,0,0,0"
                                                                             d:Text="连接正常"
                                                                             FontWeight="SemiBold"
+                                                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                                             Text="{Binding ConnectionStatusText}" />
                                                                     </StackPanel>
                                                                 </Border>
@@ -942,11 +1043,7 @@
                                                     <RowDefinition Height="12" />
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
-                                                <Border
-                                                    Padding="12"
-                                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                                                    BorderThickness="1"
-                                                    CornerRadius="10">
+                                                <Border Padding="12" Style="{StaticResource WorkspaceContentCardStyle}">
                                                     <WrapPanel>
                                                         <ui:Button
                                                             Command="{Binding Data.LoadPreviousPageCommand}"
@@ -992,9 +1089,7 @@
                                                 <Border
                                                     Grid.Row="2"
                                                     Padding="14"
-                                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                                                    BorderThickness="1"
-                                                    CornerRadius="10">
+                                                    Style="{StaticResource WorkspaceContentCardStyle}">
                                                     <Grid>
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition Height="Auto" />
@@ -1041,10 +1136,7 @@
                                                     <RowDefinition Height="12" />
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
-                                                <Border
-                                                    Padding="12"
-                                                    BorderThickness="1"
-                                                    CornerRadius="10">
+                                                <Border Padding="12" Style="{StaticResource WorkspaceContentCardStyle}">
                                                     <WrapPanel>
                                                         <ui:Button
                                                             Command="{Binding Query.ExecuteQueryCommand}"
@@ -1064,9 +1156,7 @@
                                                 <Border
                                                     Grid.Row="2"
                                                     Padding="14"
-                                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                                                    BorderThickness="1"
-                                                    CornerRadius="10">
+                                                    Style="{StaticResource WorkspaceContentCardStyle}">
                                                     <Grid>
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition Height="Auto" />
@@ -1086,10 +1176,15 @@
                                                         </StackPanel>
                                                         <TextBox
                                                             Grid.Row="2"
+                                                            Padding="10"
                                                             AcceptsReturn="True"
+                                                            Background="{DynamicResource ControlFillColorInputActiveBrush}"
+                                                            BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
                                                             BorderThickness="1"
+                                                            CaretBrush="{DynamicResource AccentFillColorDefaultBrush}"
                                                             FontFamily="Consolas"
                                                             FontSize="14"
+                                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                             HorizontalScrollBarVisibility="Auto"
                                                             Text="{Binding Query.QueryText, UpdateSourceTrigger=PropertyChanged}"
                                                             TextWrapping="NoWrap"
@@ -1099,8 +1194,7 @@
                                                 <Border
                                                     Grid.Row="4"
                                                     Padding="12"
-                                                    BorderThickness="1"
-                                                    CornerRadius="10">
+                                                    Style="{StaticResource WorkspaceContentCardStyle}">
                                                     <StackPanel>
                                                         <TextBlock
                                                             d:Text="返回 50 行"
@@ -1112,8 +1206,7 @@
                                                 <Border
                                                     Grid.Row="6"
                                                     Padding="14"
-                                                    BorderThickness="1"
-                                                    CornerRadius="10">
+                                                    Style="{StaticResource WorkspaceContentCardStyle}">
                                                     <Grid>
                                                         <DataGrid
                                                             AutoGenerateColumns="True"
@@ -1155,8 +1248,7 @@
                                             <Border
                                                 Margin="0,12,0,0"
                                                 Padding="14"
-                                                BorderThickness="1"
-                                                CornerRadius="10">
+                                                Style="{StaticResource WorkspaceContentCardStyle}">
                                                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                                                     <ItemsControl ItemsSource="{Binding Schema.Indexes}">
                                                         <ItemsControl.ItemTemplate>
@@ -1164,8 +1256,7 @@
                                                                 <Border
                                                                     Margin="0,0,0,10"
                                                                     Padding="12"
-                                                                    BorderThickness="1"
-                                                                    CornerRadius="8">
+                                                                    Style="{StaticResource WorkspaceContentCardStyle}">
                                                                     <StackPanel>
                                                                         <TextBlock FontWeight="SemiBold" Text="{Binding Name}" />
                                                                         <TextBlock
@@ -1195,8 +1286,7 @@
                                             <Border
                                                 Margin="0,12,0,0"
                                                 Padding="14"
-                                                BorderThickness="1"
-                                                CornerRadius="10">
+                                                Style="{StaticResource WorkspaceContentCardStyle}">
                                                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                                                     <ItemsControl ItemsSource="{Binding Schema.Triggers}">
                                                         <ItemsControl.ItemTemplate>
@@ -1204,8 +1294,7 @@
                                                                 <Border
                                                                     Margin="0,0,0,10"
                                                                     Padding="12"
-                                                                    BorderThickness="1"
-                                                                    CornerRadius="8">
+                                                                    Style="{StaticResource WorkspaceContentCardStyle}">
                                                                     <StackPanel>
                                                                         <TextBlock FontWeight="SemiBold" Text="{Binding Name}" />
                                                                         <TextBlock
@@ -1235,13 +1324,17 @@
                                             <Border
                                                 Margin="0,12,0,0"
                                                 Padding="14"
-                                                BorderThickness="1"
-                                                CornerRadius="10">
+                                                Style="{StaticResource WorkspaceContentCardStyle}">
                                                 <TextBox
+                                                    Padding="10"
                                                     AcceptsReturn="True"
+                                                    Background="{DynamicResource ControlFillColorInputActiveBrush}"
+                                                    BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
                                                     BorderThickness="1"
+                                                    CaretBrush="{DynamicResource AccentFillColorDefaultBrush}"
                                                     FontFamily="Consolas"
                                                     FontSize="13"
+                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                                     HorizontalScrollBarVisibility="Auto"
                                                     IsReadOnly="True"
                                                     Text="{Binding Schema.CreateSql}"
@@ -1257,13 +1350,23 @@
                                     VerticalAlignment="Center"
                                     d:Visibility="Hidden"
                                     Style="{StaticResource HideWhenTableSelectedStyle}">
-                                    <ui:SymbolIcon HorizontalAlignment="Center" Symbol="Database24" />
+                                    <Border Style="{StaticResource WorkspaceIconTileStyle}">
+                                        <ui:SymbolIcon
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                            Symbol="Database24" />
+                                    </Border>
                                     <TextBlock
                                         Margin="0,14,0,0"
                                         FontSize="20"
                                         FontWeight="SemiBold"
+                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                         Text="请先选择一个表" />
-                                    <TextBlock Margin="0,8,0,0" Text="左侧会列出当前数据库中的全部对象。" />
+                                    <TextBlock
+                                        Margin="0,8,0,0"
+                                        Style="{StaticResource WorkspaceMutedTextStyle}"
+                                        Text="左侧会列出当前数据库中的全部对象。" />
                                 </StackPanel>
                             </Grid>
                         </Border>
@@ -1279,21 +1382,30 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock d:Text="就绪" Text="{Binding FooterStatusText}" />
+                                <TextBlock
+                                    d:Text="就绪"
+                                    Style="{StaticResource WorkspaceCaptionStyle}"
+                                    Text="{Binding FooterStatusText}" />
                                 <TextBlock
                                     Margin="18,0,0,0"
                                     d:Text="SQLite"
+                                    Style="{StaticResource WorkspaceMutedTextStyle}"
                                     Text="{Binding FooterEngineText}" />
                                 <TextBlock
                                     Margin="18,0,0,0"
                                     d:Text="只读"
+                                    Style="{StaticResource WorkspaceMutedTextStyle}"
                                     Text="{Binding FooterAccessModeText}" />
                             </StackPanel>
                             <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                <TextBlock d:Text="行: 1,234" Text="{Binding FooterRowCountText}" />
+                                <TextBlock
+                                    d:Text="行: 1,234"
+                                    Style="{StaticResource WorkspaceMutedTextStyle}"
+                                    Text="{Binding FooterRowCountText}" />
                                 <TextBlock
                                     Margin="18,0,0,0"
                                     d:Text="列: 5"
+                                    Style="{StaticResource WorkspaceMutedTextStyle}"
                                     Text="{Binding FooterColumnCountText}" />
                             </StackPanel>
                         </Grid>
@@ -1309,7 +1421,7 @@
             BorderThickness="1"
             CornerRadius="24">
             <Border.Style>
-                <Style TargetType="Border">
+                <Style BasedOn="{StaticResource WorkspaceSurfaceStyle}" TargetType="Border">
                     <Setter Property="Visibility" Value="Visible" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding HasOpenDatabase}" Value="True">
@@ -1319,14 +1431,28 @@
                 </Style>
             </Border.Style>
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border
+                    Width="52"
+                    Height="52"
+                    HorizontalAlignment="Center"
+                    Style="{StaticResource WorkspaceAccentIconTileStyle}">
+                    <ui:SymbolIcon
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="{DynamicResource AccentFillColorDefaultBrush}"
+                        Symbol="Database24" />
+                </Border>
                 <TextBlock
+                    Margin="0,16,0,0"
+                    HorizontalAlignment="Center"
                     d:Text="尚未打开数据库"
-                    FontSize="30"
-                    FontWeight="SemiBold"
+                    Style="{StaticResource WorkspacePageTitleStyle}"
                     Text="{Binding EmptyStateTitle}" />
                 <TextBlock
                     Margin="0,12,0,0"
+                    HorizontalAlignment="Center"
                     d:Text="从左侧导航或首页动作中打开一个 SQLite 数据库。"
+                    Style="{StaticResource WorkspaceMutedTextStyle}"
                     Text="{Binding EmptyStateDescription}" />
             </StackPanel>
         </Border>
