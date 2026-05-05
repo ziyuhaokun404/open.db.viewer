@@ -1,13 +1,10 @@
 using System.ComponentModel;
 using System.Reflection;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 
 using Open.Db.Viewer.Shell.ViewModels;
-using Open.Db.Viewer.Shell.ViewModels.Navigation;
 using Open.Db.Viewer.ShellHost.Services;
-using Open.Db.Viewer.ShellHost.ViewModels.Navigation;
 using Open.Db.Viewer.ShellHost.ViewModels.Shell;
 
 
@@ -25,17 +22,23 @@ public partial class MainWindow : FluentWindow
     private static readonly MethodInfo? SvgGetImageMethod = typeof(SvgImageExtension)
         .BaseType?
         .GetMethod("GetImage", BindingFlags.Instance | BindingFlags.NonPublic);
+    private readonly IPageViewFactory _pageViewFactory;
     private readonly ThemeService _themeService;
 
-    public MainWindow(ShellViewModel viewModel, ThemeService themeService)
+    public MainWindow(
+        ShellViewModel viewModel,
+        ThemeService themeService,
+        IPageViewFactory pageViewFactory)
     {
         InitializeComponent();
         _themeService = themeService;
+        _pageViewFactory = pageViewFactory;
         DataContext = viewModel;
         viewModel.PropertyChanged += OnShellViewModelPropertyChanged;
         UpdateLogoVisual();
         UpdateThemeToggleVisual(_themeService.EffectiveTheme);
         UpdateNavigationSelection();
+        UpdateCurrentPage(viewModel.CurrentContentViewModel);
         _themeService.ThemeChanged += OnThemeChanged;
         Closed += OnClosed;
     }
@@ -89,6 +92,12 @@ public partial class MainWindow : FluentWindow
         if (e.PropertyName is nameof(ShellViewModel.CurrentSection) or null or "")
         {
             UpdateNavigationSelection();
+        }
+
+        if (sender is ShellViewModel shell &&
+            e.PropertyName is nameof(ShellViewModel.CurrentContentViewModel) or null or "")
+        {
+            UpdateCurrentPage(shell.CurrentContentViewModel);
         }
     }
 
@@ -177,27 +186,9 @@ public partial class MainWindow : FluentWindow
         AboutNavItem.IsActive = shell.CurrentSection == ShellSection.About;
 
     }
-}
 
-public sealed class PageTemplateSelector : DataTemplateSelector
-{
-    public DataTemplate? HomeTemplate { get; set; }
-
-    public DataTemplate? SettingsTemplate { get; set; }
-
-    public DataTemplate? AboutTemplate { get; set; }
-
-    public DataTemplate? WorkspaceTemplate { get; set; }
-
-    public override DataTemplate? SelectTemplate(object item, DependencyObject container)
+    private void UpdateCurrentPage(object viewModel)
     {
-        return item switch
-        {
-            HomeLandingViewModel => HomeTemplate,
-            SettingsViewModel => SettingsTemplate,
-            AboutViewModel => AboutTemplate,
-            DatabaseWorkspaceViewModel => WorkspaceTemplate,
-            _ => base.SelectTemplate(item, container)
-        };
+        PageContentHost.Content = _pageViewFactory.CreateView(viewModel);
     }
 }

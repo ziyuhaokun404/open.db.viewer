@@ -33,7 +33,8 @@ public class ShellViewModelTests
         shell.NavigateToSection(ShellSection.Settings);
 
         shell.CurrentSection.Should().Be(ShellSection.Settings);
-        shell.NavigationItems.Single(item => item.Section == ShellSection.Settings).IsSelected.Should().BeTrue();
+        shell.CurrentContentViewModel.Should().BeSameAs(shell.SettingsPage);
+        shell.NavigationItems.Should().OnlyContain(item => !item.IsSelected);
     }
 
     [Fact]

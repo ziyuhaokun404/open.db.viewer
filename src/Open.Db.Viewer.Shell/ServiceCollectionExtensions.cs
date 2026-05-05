@@ -7,6 +7,8 @@ using Open.Db.Viewer.Infrastructure.Sqlite.Sqlite;
 using Open.Db.Viewer.Infrastructure.Sqlite.Storage;
 using Open.Db.Viewer.Shell.ViewModels;
 using Open.Db.Viewer.Shell.ViewModels.Navigation;
+using Open.Db.Viewer.Shell.Views.Navigation;
+using Open.Db.Viewer.Shell.Views.Workspace;
 using Open.Db.Viewer.ShellHost.Services;
 using Open.Db.Viewer.ShellHost.ViewModels.Navigation;
 
@@ -48,6 +50,19 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<QueryViewModel>();
         services.AddSingleton<DatabaseWorkspaceViewModel>();
         services.AddSingleton<ShellViewModel>();
+        services.AddSingleton<IPageViewFactory>(provider => new PageViewFactory(
+            provider,
+            new Dictionary<Type, Type>
+            {
+                [typeof(HomeLandingViewModel)] = typeof(HomeLandingPage),
+                [typeof(SettingsViewModel)] = typeof(SettingsPage),
+                [typeof(AboutViewModel)] = typeof(AboutPage),
+                [typeof(DatabaseWorkspaceViewModel)] = typeof(WorkspaceHostPage)
+            }));
+        services.AddTransient<HomeLandingPage>();
+        services.AddTransient<SettingsPage>();
+        services.AddTransient<AboutPage>();
+        services.AddTransient<WorkspaceHostPage>();
         services.AddSingleton<Shell.Views.MainWindow>();
 
         return services;

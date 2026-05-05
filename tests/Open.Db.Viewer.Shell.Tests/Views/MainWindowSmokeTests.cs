@@ -5,12 +5,16 @@ using System.Windows.Media;
 
 using FluentAssertions;
 
+using Microsoft.Extensions.DependencyInjection;
+
 using Open.Db.Viewer.Application.Abstractions;
 using Open.Db.Viewer.Application.Services;
 using Open.Db.Viewer.Domain.Models;
 using Open.Db.Viewer.Shell.ViewModels;
 using Open.Db.Viewer.Shell.ViewModels.Navigation;
 using Open.Db.Viewer.Shell.Views;
+using Open.Db.Viewer.Shell.Views.Navigation;
+using Open.Db.Viewer.Shell.Views.Workspace;
 using Open.Db.Viewer.ShellHost.Services;
 using Open.Db.Viewer.ShellHost.ViewModels.Navigation;
 using Open.Db.Viewer.ShellHost.ViewModels.Shell;
@@ -63,7 +67,7 @@ public class MainWindowSmokeTests
                     new AboutViewModel());
                 var themeService = new ThemeService();
                 themeService.ApplyPreference(ThemePreference.Light);
-                var window = new MainWindow(shell, themeService);
+                var window = new MainWindow(shell, themeService, CreatePageViewFactory());
 
                 window.Show();
                 window.ApplyTemplate();
@@ -110,10 +114,9 @@ public class MainWindowSmokeTests
                 DoEvents();
                 homeNavItem.IsActive.Should().BeTrue();
 
-                var contentControl = EnumerateVisualTree(window)
-                    .OfType<ContentControl>()
-                    .Single(control => ReferenceEquals(control.Content, shell.CurrentContentViewModel));
-                contentControl.Content.Should().BeSameAs(shell.CurrentContentViewModel);
+                var contentControl = window.FindName("PageContentHost").Should().BeOfType<ContentControl>().Subject;
+                var currentPage = contentControl.Content.Should().BeAssignableTo<FrameworkElement>().Subject;
+                currentPage.DataContext.Should().BeSameAs(shell.CurrentContentViewModel);
                 contentControl.ActualWidth.Should().BeGreaterThan(0);
                 contentControl.ActualHeight.Should().BeGreaterThan(0);
 
@@ -123,14 +126,13 @@ public class MainWindowSmokeTests
                     .Where(text => !string.IsNullOrWhiteSpace(text))
                     .ToArray();
 
-                renderedTexts.Should().Contain("Open.db.viewer");
-                renderedTexts.Count(text => text == "Open.db.viewer").Should().Be(1);
+                renderedTexts.Should().Contain("SQLITE VIEWER");
+                renderedTexts.Count(text => text == "SQLITE VIEWER").Should().Be(1);
                 renderedTexts.Should().Contain("首页");
-                renderedTexts.Should().Contain("数据库工作台");
+                renderedTexts.Should().Contain("工作台");
                 renderedTexts.Should().Contain("设置");
                 renderedTexts.Should().Contain("关于");
                 renderedTexts.Should().Contain("快速打开");
-                renderedTexts.Should().Contain("查看全部");
                 renderedTexts.Should().Contain(@"C:\data\demo\app.db");
                 renderedTexts.Should().NotContain("轻量桌面工作台");
                 renderedTexts.Should().NotContain("HOME");
@@ -155,6 +157,26 @@ public class MainWindowSmokeTests
         {
             throw failure;
         }
+    }
+
+    private static IPageViewFactory CreatePageViewFactory()
+    {
+        var services = new ServiceCollection()
+            .AddTransient<HomeLandingPage>()
+            .AddTransient<SettingsPage>()
+            .AddTransient<AboutPage>()
+            .AddTransient<WorkspaceHostPage>()
+            .BuildServiceProvider();
+
+        return new PageViewFactory(
+            services,
+            new Dictionary<Type, Type>
+            {
+                [typeof(HomeLandingViewModel)] = typeof(HomeLandingPage),
+                [typeof(SettingsViewModel)] = typeof(SettingsPage),
+                [typeof(AboutViewModel)] = typeof(AboutPage),
+                [typeof(DatabaseWorkspaceViewModel)] = typeof(WorkspaceHostPage)
+            });
     }
 
     private static IEnumerable<DependencyObject> EnumerateVisualTree(DependencyObject root)

@@ -10,14 +10,10 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <Style x:Key="WorkspaceSurfaceStyle" TargetType="Border">
-            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="12" />
         </Style>
         <Style x:Key="WorkspacePanelStyle" TargetType="Border">
-            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="10" />
         </Style>
@@ -29,16 +25,12 @@
             <Setter Property="FontSize" Value="12" />
         </Style>
         <Style x:Key="WorkspaceInputBorderStyle" TargetType="Border">
-            <Setter Property="Background" Value="{DynamicResource ControlFillColorInputActiveBrush}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="8" />
             <Setter Property="Padding" Value="10,0" />
             <Setter Property="Height" Value="38" />
         </Style>
         <Style x:Key="WorkspaceMetricCardStyle" TargetType="Border">
-            <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiaryBrush}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="10" />
             <Setter Property="Margin" Value="0,0,10,0" />
@@ -73,14 +65,10 @@
             </Setter>
         </Style>
         <Style x:Key="WorkspaceDataGridStyle" TargetType="DataGrid">
-            <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="GridLinesVisibility" Value="Horizontal" />
             <Setter Property="HeadersVisibility" Value="Column" />
             <Setter Property="RowHeaderWidth" Value="0" />
-            <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
-            <Setter Property="VerticalGridLinesBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
             <Setter Property="CanUserResizeRows" Value="False" />
             <Setter Property="CanUserReorderColumns" Value="False" />
             <Setter Property="CanUserDeleteRows" Value="False" />
@@ -88,32 +76,26 @@
             <Setter Property="SelectionUnit" Value="FullRow" />
         </Style>
         <Style x:Key="WorkspaceDataGridColumnHeaderStyle" TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiaryBrush}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
             <Setter Property="BorderThickness" Value="0,0,1,1" />
             <Setter Property="Padding" Value="12,10" />
             <Setter Property="FontWeight" Value="SemiBold" />
         </Style>
         <Style x:Key="WorkspaceDataGridCellStyle" TargetType="DataGridCell">
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
             <Setter Property="BorderThickness" Value="0,0,1,1" />
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
             <Setter Property="Padding" Value="12,10" />
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
                 </Trigger>
                 <Trigger Property="IsKeyboardFocusWithin" Value="True">
                     <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
                 </Trigger>
             </Style.Triggers>
         </Style>
         <Style x:Key="WorkspaceDataGridRowStyle" TargetType="DataGridRow">
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
             <Style.Triggers>
@@ -137,7 +119,6 @@
                             x:Name="ItemBorder"
                             Margin="0,0,0,3"
                             Padding="8,6"
-                            Background="{DynamicResource SubtleFillColorTransparentBrush}"
                             BorderBrush="Transparent"
                             BorderThickness="1"
                             CornerRadius="7">
@@ -191,7 +172,7 @@
 
     <Grid>
         <Grid Visibility="{Binding HasOpenDatabase, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Border Background="{DynamicResource ApplicationBackgroundBrush}">
+            <Border>
                 <Grid Margin="14">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -391,7 +372,6 @@
                                     </StackPanel>
                                     <Border
                                         Padding="7,2"
-                                        Background="{DynamicResource AccentFillColorSecondaryBrush}"
                                         CornerRadius="999"
                                         DockPanel.Dock="Right">
                                         <TextBlock
@@ -405,8 +385,6 @@
                                 <Border
                                     Grid.Row="6"
                                     Padding="4"
-                                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                     BorderThickness="1"
                                     CornerRadius="10">
                                     <Grid>
@@ -520,7 +498,6 @@
                                     <Border
                                         Grid.Column="1"
                                         Padding="12,10"
-                                        Background="{DynamicResource ControlFillColorTertiaryBrush}"
                                         BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                         BorderThickness="1"
                                         CornerRadius="10">
@@ -535,7 +512,7 @@
                                         </StackPanel>
                                     </Border>
                                 </Grid>
-                                <Border Grid.Row="1" Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+                                <Border Grid.Row="1" />
                                 <Grid Grid.Row="2" Visibility="{Binding HasTableSelection, Converter={StaticResource BooleanToVisibilityConverter}}">
                                     <TabControl
                                         Margin="16,8,16,14"
@@ -565,8 +542,6 @@
                                                     </Grid.RowDefinitions>
                                                     <Border
                                                         Padding="10"
-                                                        Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                                                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                                         BorderThickness="1"
                                                         CornerRadius="10">
                                                         <Grid>
@@ -592,12 +567,10 @@
                                                                     <Border
                                                                         Width="28"
                                                                         Height="28"
-                                                                        Background="{DynamicResource AccentFillColorSecondaryBrush}"
                                                                         CornerRadius="7">
                                                                         <ui:SymbolIcon
                                                                             HorizontalAlignment="Center"
                                                                             VerticalAlignment="Center"
-                                                                            Foreground="{DynamicResource AccentFillColorDefaultBrush}"
                                                                             Symbol="TableSimple24" />
                                                                     </Border>
                                                                     <StackPanel Grid.Column="1" Margin="8,0,0,0">
@@ -621,7 +594,6 @@
                                                                     <Border
                                                                         Width="28"
                                                                         Height="28"
-                                                                        Background="{DynamicResource AccentFillColorSecondaryBrush}"
                                                                         CornerRadius="7">
                                                                         <ui:SymbolIcon
                                                                             HorizontalAlignment="Center"
@@ -649,12 +621,10 @@
                                                                     <Border
                                                                         Width="28"
                                                                         Height="28"
-                                                                        Background="{DynamicResource AccentFillColorSecondaryBrush}"
                                                                         CornerRadius="7">
                                                                         <ui:SymbolIcon
                                                                             HorizontalAlignment="Center"
                                                                             VerticalAlignment="Center"
-                                                                            Foreground="{DynamicResource AccentFillColorDefaultBrush}"
                                                                             Symbol="AppsList24" />
                                                                     </Border>
                                                                     <StackPanel Grid.Column="1" Margin="8,0,0,0">
@@ -677,12 +647,10 @@
                                                                     <Border
                                                                         Width="28"
                                                                         Height="28"
-                                                                        Background="{DynamicResource AccentFillColorSecondaryBrush}"
                                                                         CornerRadius="7">
                                                                         <ui:SymbolIcon
                                                                             HorizontalAlignment="Center"
                                                                             VerticalAlignment="Center"
-                                                                            Foreground="{DynamicResource AccentFillColorDefaultBrush}"
                                                                             Symbol="DocumentWidth24" />
                                                                     </Border>
                                                                     <StackPanel Grid.Column="1" Margin="8,0,0,0">
@@ -737,12 +705,10 @@
                                                                     <Border
                                                                         Width="28"
                                                                         Height="28"
-                                                                        Background="{DynamicResource AccentFillColorSecondaryBrush}"
                                                                         CornerRadius="7">
                                                                         <ui:SymbolIcon
                                                                             HorizontalAlignment="Center"
                                                                             VerticalAlignment="Center"
-                                                                            Foreground="{DynamicResource AccentFillColorDefaultBrush}"
                                                                             Symbol="ArrowClockwise24" />
                                                                     </Border>
                                                                     <StackPanel Grid.Column="1" Margin="8,0,0,0">
@@ -762,8 +728,6 @@
                                                     <Border
                                                         Grid.Row="2"
                                                         Padding="12"
-                                                        Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                                                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                                         BorderThickness="1"
                                                         CornerRadius="10">
                                                         <Grid>
@@ -828,7 +792,6 @@
                                                         Grid.Row="4"
                                                         Padding="16"
                                                         Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                                                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                                         BorderThickness="1"
                                                         CornerRadius="10">
                                                         <Grid>
@@ -934,7 +897,7 @@
                                                                         Text="{Binding Schema.PageSizeSummary}" />
                                                                 </Grid>
                                                             </StackPanel>
-                                                            <Border Grid.Column="4" Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+                                                            <Border Grid.Column="4" />
                                                             <StackPanel Grid.Column="6" VerticalAlignment="Top">
                                                                 <TextBlock
                                                                     HorizontalAlignment="Center"
@@ -943,15 +906,11 @@
                                                                 <Border
                                                                     Margin="0,12,0,0"
                                                                     Padding="16,9"
-                                                                    Background="{DynamicResource ControlFillColorTertiaryBrush}"
                                                                     BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                                                     BorderThickness="1"
                                                                     CornerRadius="10">
                                                                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                                                        <TextBlock
-                                                                            FontSize="16"
-                                                                            Foreground="{DynamicResource SystemFillColorSuccessBrush}"
-                                                                            Text="✓" />
+                                                                        <TextBlock FontSize="16" Text="✓" />
                                                                         <TextBlock
                                                                             Margin="10,0,0,0"
                                                                             d:Text="连接正常"
@@ -985,7 +944,6 @@
                                                 </Grid.RowDefinitions>
                                                 <Border
                                                     Padding="12"
-                                                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
                                                     BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                                     BorderThickness="1"
                                                     CornerRadius="10">
@@ -1034,7 +992,6 @@
                                                 <Border
                                                     Grid.Row="2"
                                                     Padding="14"
-                                                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
                                                     BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                                     BorderThickness="1"
                                                     CornerRadius="10">
@@ -1086,8 +1043,6 @@
                                                 </Grid.RowDefinitions>
                                                 <Border
                                                     Padding="12"
-                                                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                                     BorderThickness="1"
                                                     CornerRadius="10">
                                                     <WrapPanel>
@@ -1109,7 +1064,6 @@
                                                 <Border
                                                     Grid.Row="2"
                                                     Padding="14"
-                                                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
                                                     BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                                     BorderThickness="1"
                                                     CornerRadius="10">
@@ -1133,8 +1087,6 @@
                                                         <TextBox
                                                             Grid.Row="2"
                                                             AcceptsReturn="True"
-                                                            Background="{DynamicResource ControlFillColorInputActiveBrush}"
-                                                            BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                                             BorderThickness="1"
                                                             FontFamily="Consolas"
                                                             FontSize="14"
@@ -1147,8 +1099,6 @@
                                                 <Border
                                                     Grid.Row="4"
                                                     Padding="12"
-                                                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                                     BorderThickness="1"
                                                     CornerRadius="10">
                                                     <StackPanel>
@@ -1162,8 +1112,6 @@
                                                 <Border
                                                     Grid.Row="6"
                                                     Padding="14"
-                                                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                                     BorderThickness="1"
                                                     CornerRadius="10">
                                                     <Grid>
@@ -1207,8 +1155,6 @@
                                             <Border
                                                 Margin="0,12,0,0"
                                                 Padding="14"
-                                                Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                                                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                                 BorderThickness="1"
                                                 CornerRadius="10">
                                                 <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -1218,8 +1164,6 @@
                                                                 <Border
                                                                     Margin="0,0,0,10"
                                                                     Padding="12"
-                                                                    Background="{DynamicResource ControlFillColorTertiaryBrush}"
-                                                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                                                     BorderThickness="1"
                                                                     CornerRadius="8">
                                                                     <StackPanel>
@@ -1251,8 +1195,6 @@
                                             <Border
                                                 Margin="0,12,0,0"
                                                 Padding="14"
-                                                Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                                                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                                 BorderThickness="1"
                                                 CornerRadius="10">
                                                 <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -1262,8 +1204,6 @@
                                                                 <Border
                                                                     Margin="0,0,0,10"
                                                                     Padding="12"
-                                                                    Background="{DynamicResource ControlFillColorTertiaryBrush}"
-                                                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                                                     BorderThickness="1"
                                                                     CornerRadius="8">
                                                                     <StackPanel>
@@ -1295,14 +1235,10 @@
                                             <Border
                                                 Margin="0,12,0,0"
                                                 Padding="14"
-                                                Background="{DynamicResource ControlFillColorSecondaryBrush}"
-                                                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                                 BorderThickness="1"
                                                 CornerRadius="10">
                                                 <TextBox
                                                     AcceptsReturn="True"
-                                                    Background="{DynamicResource ControlFillColorInputActiveBrush}"
-                                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                                                     BorderThickness="1"
                                                     FontFamily="Consolas"
                                                     FontSize="13"
@@ -1370,8 +1306,6 @@
             Margin="24"
             Padding="32"
             d:Visibility="Hidden"
-            Background="{DynamicResource ControlFillColorSecondaryBrush}"
-            BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
             BorderThickness="1"
             CornerRadius="24">
             <Border.Style>
