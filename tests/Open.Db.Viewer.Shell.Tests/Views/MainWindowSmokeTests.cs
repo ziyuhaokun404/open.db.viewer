@@ -12,6 +12,7 @@ using Open.Db.Viewer.Shell.ViewModels;
 using Open.Db.Viewer.Shell.ViewModels.Navigation;
 using Open.Db.Viewer.Shell.Views;
 using Open.Db.Viewer.ShellHost.Services;
+using Open.Db.Viewer.ShellHost.ViewModels.Navigation;
 using Open.Db.Viewer.ShellHost.ViewModels.Shell;
 
 using Wpf.Ui.Appearance;
@@ -117,7 +118,7 @@ public class MainWindowSmokeTests
                 contentControl.ActualHeight.Should().BeGreaterThan(0);
 
                 var renderedTexts = EnumerateVisualTree(window)
-                    .OfType<System.Windows.Controls.TextBlock>()
+                    .OfType<TextBlock>()
                     .Select(node => node.Text)
                     .Where(text => !string.IsNullOrWhiteSpace(text))
                     .ToArray();

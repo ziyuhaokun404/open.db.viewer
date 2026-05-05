@@ -9,7 +9,7 @@ using Open.Db.Viewer.Shell.ViewModels.Navigation;
 using Open.Db.Viewer.ShellHost.Services;
 using Open.Db.Viewer.ShellHost.ViewModels.Navigation;
 using Open.Db.Viewer.ShellHost.ViewModels.Shell;
-using Open.Db.Viewer.ShellHost.ViewModels.Workspace;
+
 
 using SharpVectors.Converters;
 using SharpVectors.Renderers.Wpf;
@@ -27,7 +27,7 @@ public partial class MainWindow : FluentWindow
         .GetMethod("GetImage", BindingFlags.Instance | BindingFlags.NonPublic);
     private readonly ThemeService _themeService;
 
-    public MainWindow(ViewModels.ShellViewModel viewModel, ThemeService themeService)
+    public MainWindow(ShellViewModel viewModel, ThemeService themeService)
     {
         InitializeComponent();
         _themeService = themeService;
@@ -92,7 +92,7 @@ public partial class MainWindow : FluentWindow
         }
     }
 
-    private void UpdateThemeToggleVisual(Wpf.Ui.Appearance.ApplicationTheme applicationTheme)
+    private void UpdateThemeToggleVisual(ApplicationTheme applicationTheme)
     {
         if (ThemeToggleButton is null || ThemeToggleIcon is null)
         {
@@ -196,7 +196,7 @@ public sealed class PageTemplateSelector : DataTemplateSelector
             HomeLandingViewModel => HomeTemplate,
             SettingsViewModel => SettingsTemplate,
             AboutViewModel => AboutTemplate,
-            WorkspaceHostViewModel => WorkspaceTemplate,
+            DatabaseWorkspaceViewModel => WorkspaceTemplate,
             _ => base.SelectTemplate(item, container)
         };
     }

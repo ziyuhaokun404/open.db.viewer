@@ -15,8 +15,8 @@ public class DatabaseWorkspaceQueryIntegrationTests
         var connectionFactory = new SqliteConnectionFactory();
         var inspector = new SqliteDatabaseInspector(connectionFactory);
         var queryViewModel = new QueryViewModel(
-            new Open.Db.Viewer.Application.Services.QueryService(new SqliteQueryExecutor(connectionFactory)),
-            new Open.Db.Viewer.Application.Services.ExportService(new Open.Db.Viewer.Infrastructure.Sqlite.Export.CsvExportWriter()),
+            new Application.Services.QueryService(new SqliteQueryExecutor(connectionFactory)),
+            new Application.Services.ExportService(new Infrastructure.Sqlite.Export.CsvExportWriter()),
             new FakeFileDialogService());
         var viewModel = new DatabaseWorkspaceViewModel(
             new ObjectExplorerViewModel(inspector),
@@ -27,7 +27,7 @@ public class DatabaseWorkspaceQueryIntegrationTests
         await viewModel.LoadAsync(db.FilePath);
 
         var usersNode = viewModel.ObjectExplorer.RootNodes
-            .SelectMany(root => root.Children ?? Array.Empty<Open.Db.Viewer.Domain.Models.DatabaseObjectNode>())
+            .SelectMany(root => root.Children ?? Array.Empty<Domain.Models.DatabaseObjectNode>())
             .Single(node => node.Name == "users");
 
         await viewModel.SelectNodeAsync(usersNode);

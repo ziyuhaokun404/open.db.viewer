@@ -9,7 +9,6 @@ using Open.Db.Viewer.Shell.ViewModels;
 using Open.Db.Viewer.Shell.ViewModels.Navigation;
 using Open.Db.Viewer.ShellHost.Services;
 using Open.Db.Viewer.ShellHost.ViewModels.Navigation;
-using Open.Db.Viewer.ShellHost.ViewModels.Workspace;
 
 using System.IO;
 
@@ -39,10 +38,9 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<HomeLandingViewModel>();
         services.AddSingleton<SettingsViewModel>();
         services.AddSingleton<AboutViewModel>();
-        services.AddSingleton<WorkspaceHostViewModel>();
         services.AddSingleton<ObjectExplorerViewModel>();
         services.AddSingleton<SchemaViewModel>();
-        services.AddSingleton<DataViewModel>(provider =>
+        services.AddSingleton(provider =>
             new DataViewModel(
                 provider.GetRequiredService<SqliteTableDataReader>(),
                 provider.GetRequiredService<ExportService>(),
@@ -50,7 +48,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<QueryViewModel>();
         services.AddSingleton<DatabaseWorkspaceViewModel>();
         services.AddSingleton<ShellViewModel>();
-        services.AddSingleton<Open.Db.Viewer.Shell.Views.MainWindow>();
+        services.AddSingleton<Shell.Views.MainWindow>();
 
         return services;
     }

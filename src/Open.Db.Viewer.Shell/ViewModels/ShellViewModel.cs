@@ -5,7 +5,6 @@ using Open.Db.Viewer.Shell.ViewModels.Navigation;
 using Open.Db.Viewer.Shell.ViewModels.Shell;
 using Open.Db.Viewer.ShellHost.ViewModels.Navigation;
 using Open.Db.Viewer.ShellHost.ViewModels.Shell;
-using Open.Db.Viewer.ShellHost.ViewModels.Workspace;
 
 using System.Collections.ObjectModel;
 
@@ -32,7 +31,6 @@ public sealed partial class ShellViewModel : ObservableObject
         HomeLanding = homeLandingViewModel;
         SettingsPage = settingsViewModel;
         AboutPage = aboutViewModel;
-        WorkspaceHost = new WorkspaceHostViewModel(Workspace);
 
         NavigationItems =
         [
@@ -59,8 +57,6 @@ public sealed partial class ShellViewModel : ObservableObject
 
     public DatabaseWorkspaceViewModel Workspace { get; }
 
-    public WorkspaceHostViewModel WorkspaceHost { get; }
-
     [RelayCommand]
     public void NavigateToSection(ShellSection section)
     {
@@ -68,7 +64,7 @@ public sealed partial class ShellViewModel : ObservableObject
         CurrentContentViewModel = section switch
         {
             ShellSection.Home => HomeLanding,
-            ShellSection.Workspace => WorkspaceHost,
+            ShellSection.Workspace => Workspace,
             ShellSection.Settings => SettingsPage,
             ShellSection.About => AboutPage,
             _ => HomeLanding

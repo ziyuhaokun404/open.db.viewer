@@ -20,8 +20,8 @@ public class DatabaseWorkspaceViewModelTests
         var schema = new SchemaViewModel(new SqliteDatabaseInspector(connectionFactory));
         var data = new DataViewModel(new SqliteTableDataReader(connectionFactory));
         var query = new QueryViewModel(
-            new Open.Db.Viewer.Application.Services.QueryService(new SqliteQueryExecutor(connectionFactory)),
-            new Open.Db.Viewer.Application.Services.ExportService(new Open.Db.Viewer.Infrastructure.Sqlite.Export.CsvExportWriter()),
+            new QueryService(new SqliteQueryExecutor(connectionFactory)),
+            new ExportService(new Infrastructure.Sqlite.Export.CsvExportWriter()),
             new FakeFileDialogService());
         var viewModel = new DatabaseWorkspaceViewModel(objectExplorer, schema, data, query);
 
@@ -56,14 +56,14 @@ public class DatabaseWorkspaceViewModelTests
             new SchemaViewModel(inspector),
             new DataViewModel(new SqliteTableDataReader(connectionFactory)),
             new QueryViewModel(
-                new Open.Db.Viewer.Application.Services.QueryService(new SqliteQueryExecutor(connectionFactory)),
-                new Open.Db.Viewer.Application.Services.ExportService(new Open.Db.Viewer.Infrastructure.Sqlite.Export.CsvExportWriter()),
+                new QueryService(new SqliteQueryExecutor(connectionFactory)),
+                new ExportService(new Infrastructure.Sqlite.Export.CsvExportWriter()),
                 new FakeFileDialogService()));
 
         await viewModel.LoadAsync(db.FilePath);
 
         var usersNode = viewModel.ObjectExplorer.RootNodes
-            .SelectMany(root => root.Children ?? Array.Empty<Open.Db.Viewer.Domain.Models.DatabaseObjectNode>())
+            .SelectMany(root => root.Children ?? Array.Empty<DatabaseObjectNode>())
             .Single(node => node.Name == "users");
 
         await viewModel.SelectNodeAsync(usersNode);
@@ -91,15 +91,15 @@ public class DatabaseWorkspaceViewModelTests
             new SchemaViewModel(inspector),
             data,
             new QueryViewModel(
-                new Open.Db.Viewer.Application.Services.QueryService(new SqliteQueryExecutor(connectionFactory)),
-                new Open.Db.Viewer.Application.Services.ExportService(new Open.Db.Viewer.Infrastructure.Sqlite.Export.CsvExportWriter()),
+                new QueryService(new SqliteQueryExecutor(connectionFactory)),
+                new ExportService(new Infrastructure.Sqlite.Export.CsvExportWriter()),
                 new FakeFileDialogService()));
 
         await viewModel.LoadAsync(db.FilePath);
         await viewModel.Data.LoadNextPageAsync();
 
         var usersNode = viewModel.ObjectExplorer.RootNodes
-            .SelectMany(root => root.Children ?? Array.Empty<Open.Db.Viewer.Domain.Models.DatabaseObjectNode>())
+            .SelectMany(root => root.Children ?? Array.Empty<DatabaseObjectNode>())
             .Single(node => node.Name == "users");
 
         await viewModel.SelectNodeAsync(usersNode);
@@ -121,7 +121,7 @@ public class DatabaseWorkspaceViewModelTests
             new DataViewModel(new SqliteTableDataReader(connectionFactory)),
             new QueryViewModel(
                 new QueryService(new SqliteQueryExecutor(connectionFactory)),
-                new ExportService(new Open.Db.Viewer.Infrastructure.Sqlite.Export.CsvExportWriter()),
+                new ExportService(new Infrastructure.Sqlite.Export.CsvExportWriter()),
                 new FakeFileDialogService()));
 
         await viewModel.LoadAsync(db.FilePath);

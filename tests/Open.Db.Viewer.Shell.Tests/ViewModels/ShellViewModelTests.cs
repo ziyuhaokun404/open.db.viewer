@@ -6,6 +6,7 @@ using Open.Db.Viewer.Domain.Models;
 using Open.Db.Viewer.Shell.ViewModels;
 using Open.Db.Viewer.Shell.ViewModels.Navigation;
 using Open.Db.Viewer.ShellHost.Services;
+using Open.Db.Viewer.ShellHost.ViewModels.Navigation;
 using Open.Db.Viewer.ShellHost.ViewModels.Shell;
 
 namespace Open.Db.Viewer.Shell.Tests.ViewModels;
@@ -44,7 +45,7 @@ public class ShellViewModelTests
 
         shell.CurrentSection.Should().Be(ShellSection.Workspace);
         shell.CurrentDatabasePath.Should().Be(@"C:\data\demo.db");
-        shell.CurrentContentViewModel.Should().BeSameAs(shell.WorkspaceHost);
+        shell.CurrentContentViewModel.Should().BeSameAs(shell.Workspace);
     }
 
     [Fact]
