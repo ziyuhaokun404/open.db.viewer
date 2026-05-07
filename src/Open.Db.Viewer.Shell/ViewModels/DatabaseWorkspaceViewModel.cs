@@ -2,8 +2,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Open.Db.Viewer.Domain.Models;
 using System.ComponentModel;
-using System.IO;
 using System.Globalization;
+using System.IO;
 
 namespace Open.Db.Viewer.Shell.ViewModels;
 

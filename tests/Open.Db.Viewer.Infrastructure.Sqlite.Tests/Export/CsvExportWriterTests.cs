@@ -1,6 +1,6 @@
-using System.Text;
 using FluentAssertions;
 using Open.Db.Viewer.Infrastructure.Sqlite.Export;
+using System.Text;
 
 namespace Open.Db.Viewer.Infrastructure.Sqlite.Tests.Export;
 

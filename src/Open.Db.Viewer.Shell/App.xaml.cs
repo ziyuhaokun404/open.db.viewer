@@ -1,8 +1,6 @@
-using System.Windows;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using Open.Db.Viewer.ShellHost.Services;
+using System.Windows;
 
 namespace Open.Db.Viewer.ShellHost;
 

@@ -1,6 +1,6 @@
-using System.Data.Common;
 using Microsoft.Data.Sqlite;
 using Open.Db.Viewer.Application.Abstractions;
+using System.Data.Common;
 
 namespace Open.Db.Viewer.Infrastructure.Sqlite.Sqlite;
 

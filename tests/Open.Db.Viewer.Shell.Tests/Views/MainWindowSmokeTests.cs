@@ -1,12 +1,5 @@
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Markup;
-using System.Windows.Media;
-
 using FluentAssertions;
-
 using Microsoft.Extensions.DependencyInjection;
-
 using Open.Db.Viewer.Application.Abstractions;
 using Open.Db.Viewer.Application.Services;
 using Open.Db.Viewer.Domain.Models;
@@ -18,9 +11,11 @@ using Open.Db.Viewer.Shell.Views.Workspace;
 using Open.Db.Viewer.ShellHost.Services;
 using Open.Db.Viewer.ShellHost.ViewModels.Navigation;
 using Open.Db.Viewer.ShellHost.ViewModels.Shell;
-
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Markup;
+using System.Windows.Media;
 using Wpf.Ui.Appearance;
-
 using WpfUiControls = Wpf.Ui.Controls;
 
 namespace Open.Db.Viewer.Shell.Tests.Views;

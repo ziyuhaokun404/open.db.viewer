@@ -1,8 +1,8 @@
-using System.Windows;
-using System.Windows.Controls;
-using System.ComponentModel;
 using Open.Db.Viewer.Domain.Models;
 using Open.Db.Viewer.Shell.ViewModels;
+using System.ComponentModel;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Open.Db.Viewer.Shell.Views.Workspace;
 

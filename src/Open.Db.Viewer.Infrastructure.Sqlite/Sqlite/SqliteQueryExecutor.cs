@@ -1,6 +1,6 @@
-using System.Diagnostics;
 using Open.Db.Viewer.Application.Abstractions;
 using Open.Db.Viewer.Domain.Models;
+using System.Diagnostics;
 
 namespace Open.Db.Viewer.Infrastructure.Sqlite.Sqlite;
 
