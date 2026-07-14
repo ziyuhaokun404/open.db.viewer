@@ -5,4 +5,6 @@ public sealed record QueryExecutionResult(
     IReadOnlyList<IReadOnlyList<object?>> Rows,
     int AffectedRows,
     TimeSpan Duration,
-    string Message);
+    string Message,
+    bool IsTruncated = false,
+    int? MaxRowsLimit = null);

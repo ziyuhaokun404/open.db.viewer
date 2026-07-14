@@ -55,11 +55,11 @@ public class MainWindowSmokeTests
                         new QueryService(new NoopSqliteQueryExecutor()),
                         new ExportService(new NoopCsvExportWriter()),
                         new FakeFileDialogService(),
-                        new Support.NoopDialogService()));
+                        new Support.NoopDialogService(), new Support.InMemoryAppSettingsStore(), new Support.InMemoryQueryHistoryStore()));
                 var shell = new ShellViewModel(
                     workspace,
                     new HomeLandingViewModel(databaseEntryService, new FakeFileDialogService()),
-                    new SettingsViewModel(),
+                    new SettingsViewModel(new ThemeService(), new Support.InMemoryAppSettingsStore()),
                     new AboutViewModel());
                 var themeService = new ThemeService();
                 themeService.ApplyPreference(ThemePreference.Light);
@@ -237,6 +237,8 @@ public class MainWindowSmokeTests
             string filePath,
             string sql,
             bool allowWrite = false,
+            int? maxResultRows = null,
+            TimeSpan? timeout = null,
             CancellationToken cancellationToken = default) =>
             Task.FromResult(new QueryExecutionResult(Array.Empty<string>(), Array.Empty<IReadOnlyList<object?>>(), 0, TimeSpan.Zero, string.Empty));
     }
@@ -249,6 +251,18 @@ public class MainWindowSmokeTests
             IReadOnlyList<IReadOnlyList<object?>> rows,
             CancellationToken cancellationToken = default) =>
             Task.CompletedTask;
+
+        public async Task WriteStreamingAsync(
+            string filePath,
+            IReadOnlyList<string> columns,
+            IAsyncEnumerable<IReadOnlyList<object?>> rows,
+            IProgress<long>? rowsWrittenProgress = null,
+            CancellationToken cancellationToken = default)
+        {
+            await foreach (var _ in rows.WithCancellation(cancellationToken))
+            {
+            }
+        }
     }
 
     private sealed class InMemoryDatabaseEntryRepository : IDatabaseEntryRepository

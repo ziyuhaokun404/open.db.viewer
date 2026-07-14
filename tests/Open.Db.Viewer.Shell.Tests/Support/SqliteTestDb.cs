@@ -60,6 +60,9 @@ public sealed class SqliteTestDb : IAsyncDisposable
             BEGIN
                 SELECT NEW.id;
             END;
+
+            CREATE VIEW user_names AS
+            SELECT id, name FROM users;
             """;
         await command.ExecuteNonQueryAsync();
 

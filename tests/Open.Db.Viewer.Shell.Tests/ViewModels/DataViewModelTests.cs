@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Open.Db.Viewer.Application.Abstractions;
 using Open.Db.Viewer.Application.Services;
+using Open.Db.Viewer.Domain.Models;
 using Open.Db.Viewer.Infrastructure.Sqlite.Sqlite;
 using Open.Db.Viewer.Shell.Tests.Support;
 using Open.Db.Viewer.Shell.ViewModels;
@@ -138,6 +139,7 @@ public class DataViewModelTests
         exportWriter.FilePath.Should().Be(@"C:\exports\users-page.csv");
         exportWriter.Rows.Should().HaveCount(2);
         viewModel.StatusMessage.Should().Contain("users-page.csv");
+        viewModel.StatusMessage.Should().Contain("仅当前页");
     }
 
     [Fact]
@@ -149,7 +151,106 @@ public class DataViewModelTests
         await viewModel.LoadFirstPageAsync(db.FilePath, "users");
 
         viewModel.HasRows.Should().BeTrue();
-        viewModel.ResultSummary.Should().Be("第 1 页 · 3 列 · 当前显示 3 行");
+        viewModel.TotalRowCount.Should().Be(3);
+        viewModel.TotalPages.Should().Be(1);
+        viewModel.ResultSummary.Should().Be("第 1/1 页 · 1–3 / 共 3 行 · 3 列");
+    }
+
+    [Fact]
+    public async Task GoToPageAsync_ShouldJumpToTargetPage()
+    {
+        await using var db = await SqliteTestDb.CreateAsync();
+        var viewModel = new DataViewModel(new SqliteTableDataReader(new SqliteConnectionFactory()))
+        {
+            PageSize = 1
+        };
+
+        await viewModel.LoadFirstPageAsync(db.FilePath, "users");
+        viewModel.JumpToPageNumber = 3;
+        await viewModel.GoToPageAsync();
+
+        viewModel.PageNumber.Should().Be(3);
+        viewModel.Rows.Should().ContainSingle();
+        viewModel.Rows[0].Values[1].Should().Be("Charlie");
+    }
+
+    [Fact]
+    public async Task ApplyFilterAsync_ShouldFilterContainsAndReportTotal()
+    {
+        await using var db = await SqliteTestDb.CreateAsync();
+        var viewModel = new DataViewModel(new SqliteTableDataReader(new SqliteConnectionFactory()))
+        {
+            PageSize = 10
+        };
+
+        await viewModel.LoadFirstPageAsync(db.FilePath, "users");
+        viewModel.FilterColumn = "name";
+        viewModel.FilterOperator = TableFilterOperator.Contains;
+        viewModel.FilterValue = "li";
+        await viewModel.ApplyFilterAsync();
+
+        viewModel.HasActiveFilter.Should().BeTrue();
+        viewModel.TotalRowCount.Should().Be(2); // Alice, Charlie
+        viewModel.Rows.Select(r => r.Values[1]).Should().Equal("Alice", "Charlie");
+        viewModel.ResultSummary.Should().Contain("已筛选");
+    }
+
+    [Fact]
+    public async Task ApplyFilterAsync_IsNull_ShouldMatchNullEmails()
+    {
+        await using var db = await SqliteTestDb.CreateAsync();
+        var viewModel = new DataViewModel(new SqliteTableDataReader(new SqliteConnectionFactory()));
+
+        await viewModel.LoadFirstPageAsync(db.FilePath, "users");
+        viewModel.FilterColumn = "email";
+        viewModel.FilterOperator = TableFilterOperator.IsNull;
+        await viewModel.ApplyFilterAsync();
+
+        viewModel.TotalRowCount.Should().Be(1);
+        viewModel.Rows.Should().ContainSingle();
+        viewModel.Rows[0].Values[1].Should().Be("Charlie");
+        // Display grid uses (NULL) marker while raw values stay null.
+        viewModel.TableView.Should().NotBeNull();
+        viewModel.TableView![0]["email"].Should().Be("(NULL)");
+    }
+
+    [Fact]
+    public async Task ClearFilterAsync_ShouldRestoreAllRows()
+    {
+        await using var db = await SqliteTestDb.CreateAsync();
+        var viewModel = new DataViewModel(new SqliteTableDataReader(new SqliteConnectionFactory()));
+
+        await viewModel.LoadFirstPageAsync(db.FilePath, "users");
+        viewModel.FilterColumn = "name";
+        viewModel.FilterOperator = TableFilterOperator.Equals;
+        viewModel.FilterValue = "Bob";
+        await viewModel.ApplyFilterAsync();
+        await viewModel.ClearFilterAsync();
+
+        viewModel.HasActiveFilter.Should().BeFalse();
+        viewModel.TotalRowCount.Should().Be(3);
+        viewModel.Rows.Should().HaveCount(3);
+    }
+
+    [Fact]
+    public async Task ExportFullTableAsync_ShouldStreamAllRows()
+    {
+        await using var db = await SqliteTestDb.CreateAsync();
+        var exportWriter = new RecordingCsvExportWriter();
+        var viewModel = new DataViewModel(
+            new SqliteTableDataReader(new SqliteConnectionFactory()),
+            new ExportService(exportWriter),
+            new FakeFileDialogService(@"C:\exports\users-full.csv"))
+        {
+            PageSize = 1
+        };
+
+        await viewModel.LoadFirstPageAsync(db.FilePath, "users");
+        await viewModel.ExportFullTableAsync();
+
+        exportWriter.FilePath.Should().Be(@"C:\exports\users-full.csv");
+        exportWriter.Rows.Should().HaveCount(3);
+        viewModel.StatusMessage.Should().Contain("users-full.csv");
     }
 
     private sealed class RecordingCsvExportWriter : ICsvExportWriter
@@ -163,6 +264,23 @@ public class DataViewModelTests
             FilePath = filePath;
             Rows = rows.Select(row => (IReadOnlyList<object?>)row.ToArray()).ToArray();
             return Task.CompletedTask;
+        }
+
+        public async Task WriteStreamingAsync(
+            string filePath,
+            IReadOnlyList<string> columns,
+            IAsyncEnumerable<IReadOnlyList<object?>> rows,
+            IProgress<long>? rowsWrittenProgress = null,
+            CancellationToken cancellationToken = default)
+        {
+            var buffer = new List<IReadOnlyList<object?>>();
+            await foreach (var row in rows.WithCancellation(cancellationToken))
+            {
+                buffer.Add(row.ToArray());
+                rowsWrittenProgress?.Report(buffer.Count);
+            }
+
+            await WriteAsync(filePath, columns, buffer, cancellationToken);
         }
     }
 

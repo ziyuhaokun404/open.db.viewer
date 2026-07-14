@@ -1,0 +1,184 @@
+<UserControl
+    x:Class="Open.Db.Viewer.Shell.Views.Workspace.DataPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="WorkspaceStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+                                            <Grid Margin="0,12,0,0">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="8" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="12" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <Border Padding="12" Style="{StaticResource WorkspaceContentCardStyle}">
+                                                    <WrapPanel>
+                                                        <ui:Button
+                                                            Command="{Binding Data.LoadPreviousPageCommand}"
+                                                            Content="上一页"
+                                                            Icon="{ui:SymbolIcon ArrowLeft24}" />
+                                                        <ui:Button
+                                                            Margin="8,0,0,0"
+                                                            Command="{Binding Data.LoadNextPageCommand}"
+                                                            Content="下一页"
+                                                            Icon="{ui:SymbolIcon ArrowRight24}" />
+                                                        <TextBlock
+                                                            Margin="12,0,0,0"
+                                                            VerticalAlignment="Center"
+                                                            Text="跳到" />
+                                                        <TextBox
+                                                            Width="56"
+                                                            Margin="6,0,0,0"
+                                                            VerticalContentAlignment="Center"
+                                                            Text="{Binding Data.JumpToPageNumber, UpdateSourceTrigger=PropertyChanged}" />
+                                                        <ui:Button
+                                                            Margin="6,0,0,0"
+                                                            Appearance="Secondary"
+                                                            Command="{Binding Data.GoToPageCommand}"
+                                                            Content="前往" />
+                                                        <ui:Button
+                                                            Margin="8,0,0,0"
+                                                            Command="{Binding Data.RefreshCurrentPageCommand}"
+                                                            Content="刷新"
+                                                            Icon="{ui:SymbolIcon ArrowClockwise24}" />
+                                                        <ui:Button
+                                                            Margin="8,0,0,0"
+                                                            Command="{Binding Data.ExportCurrentPageCommand}"
+                                                            Content="导出当前页"
+                                                            Icon="{ui:SymbolIcon ArrowExportLtr24}" />
+                                                        <ui:Button
+                                                            Margin="8,0,0,0"
+                                                            Appearance="Secondary"
+                                                            Command="{Binding Data.ExportFullTableCommand}"
+                                                            Content="导出整表" />
+                                                        <ui:Button
+                                                            Margin="8,0,0,0"
+                                                            Appearance="Secondary"
+                                                            Command="{Binding Data.CancelExportCommand}"
+                                                            Content="取消导出" />
+                                                        <TextBlock
+                                                            Margin="18,0,0,0"
+                                                            VerticalAlignment="Center"
+                                                            Text="每页" />
+                                                        <ComboBox
+                                                            Width="96"
+                                                            Margin="8,0,0,0"
+                                                            ItemsSource="{Binding Data.PageSizeOptions}"
+                                                            SelectedItem="{Binding Data.PageSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            SelectionChanged="PageSizeComboBox_OnSelectionChanged" />
+                                                        <TextBlock
+                                                            Margin="18,0,0,0"
+                                                            VerticalAlignment="Center"
+                                                            d:Text="第 1-50 行 / 共 1,234 行"
+                                                            FontWeight="SemiBold"
+                                                            Text="{Binding Data.ResultSummary}" />
+                                                        <TextBlock
+                                                            Margin="18,0,0,0"
+                                                            VerticalAlignment="Center"
+                                                            Text="{Binding Data.SortSummary}" />
+                                                    </WrapPanel>
+                                                </Border>
+                                                <Border
+                                                    Grid.Row="2"
+                                                    Padding="12"
+                                                    Style="{StaticResource WorkspaceContentCardStyle}">
+                                                    <WrapPanel>
+                                                        <TextBlock
+                                                            VerticalAlignment="Center"
+                                                            Text="筛选列" />
+                                                        <ComboBox
+                                                            Width="140"
+                                                            Margin="8,0,0,0"
+                                                            ItemsSource="{Binding Data.Columns}"
+                                                            SelectedItem="{Binding Data.FilterColumn, Mode=TwoWay}" />
+                                                        <ComboBox
+                                                            Width="88"
+                                                            Margin="8,0,0,0"
+                                                            DisplayMemberPath="Label"
+                                                            ItemsSource="{Binding Data.FilterOperatorOptions}"
+                                                            SelectedValue="{Binding Data.FilterOperator, Mode=TwoWay}"
+                                                            SelectedValuePath="Operator" />
+                                                        <TextBox
+                                                            Width="160"
+                                                            Margin="8,0,0,0"
+                                                            VerticalContentAlignment="Center"
+                                                            IsEnabled="{Binding Data.FilterValueEnabled}"
+                                                            Text="{Binding Data.FilterValue, UpdateSourceTrigger=PropertyChanged}" />
+                                                        <ui:Button
+                                                            Margin="8,0,0,0"
+                                                            Command="{Binding Data.ApplyFilterCommand}"
+                                                            Content="应用筛选" />
+                                                        <ui:Button
+                                                            Margin="8,0,0,0"
+                                                            Appearance="Secondary"
+                                                            Command="{Binding Data.ClearFilterCommand}"
+                                                            Content="清除筛选" />
+                                                        <TextBlock
+                                                            Margin="16,0,0,0"
+                                                            VerticalAlignment="Center"
+                                                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                            Text="{Binding Data.ActiveFilterSummary}" />
+                                                        <ui:Button
+                                                            Margin="16,0,0,0"
+                                                            Appearance="Secondary"
+                                                            Command="{Binding Data.CopyColumnNamesCommand}"
+                                                            Content="复制列名" />
+                                                        <ui:Button
+                                                            Margin="8,0,0,0"
+                                                            Appearance="Secondary"
+                                                            Command="{Binding Data.CopySelectedCellCommand}"
+                                                            Content="复制单元格" />
+                                                        <ui:Button
+                                                            Margin="8,0,0,0"
+                                                            Appearance="Secondary"
+                                                            Command="{Binding Data.CopySelectedRowCommand}"
+                                                            Content="复制行" />
+                                                        <ui:Button
+                                                            Margin="8,0,0,0"
+                                                            Appearance="Secondary"
+                                                            Command="{Binding Data.CopyCurrentPageCommand}"
+                                                            Content="复制当前页" />
+                                                    </WrapPanel>
+                                                </Border>
+                                                <Border
+                                                    Grid.Row="4"
+                                                    Padding="14"
+                                                    Style="{StaticResource WorkspaceContentCardStyle}">
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="12" />
+                                                            <RowDefinition Height="*" />
+                                                        </Grid.RowDefinitions>
+                                                        <TextBlock d:Text="已加载" Text="{Binding Data.StatusMessage}" />
+                                                        <DataGrid
+                                                            x:Name="DataGridView"
+                                                            Grid.Row="2"
+                                                            AutoGenerateColumns="True"
+                                                            AutoGeneratingColumn="OnAutoGeneratingColumn"
+                                                            CanUserAddRows="False"
+                                                            CellStyle="{StaticResource WorkspaceDataGridCellStyle}"
+                                                            ColumnHeaderStyle="{StaticResource WorkspaceDataGridColumnHeaderStyle}"
+                                                            CurrentCellChanged="DataGridView_OnCurrentCellChanged"
+                                                            IsReadOnly="True"
+                                                            ItemsSource="{Binding Data.TableView}"
+                                                            RowStyle="{StaticResource WorkspaceDataGridRowStyle}"
+                                                            SelectedIndex="{Binding Data.SelectedRowIndex, Mode=TwoWay}"
+                                                            SelectionUnit="CellOrRowHeader"
+                                                            Sorting="DataGridView_OnSorting"
+                                                            Style="{StaticResource WorkspaceDataGridStyle}" />
+                                                    </Grid>
+                                                </Border>
+                                            </Grid>
+</UserControl>

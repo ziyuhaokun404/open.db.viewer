@@ -1,4 +1,5 @@
 using Open.Db.Viewer.Application.Abstractions;
+using Open.Db.Viewer.Domain.Display;
 using System.Globalization;
 using System.Text;
 
@@ -6,10 +7,26 @@ namespace Open.Db.Viewer.Infrastructure.Sqlite.Export;
 
 public sealed class CsvExportWriter : ICsvExportWriter
 {
-    public async Task WriteAsync(
+    public Task WriteAsync(
         string filePath,
         IReadOnlyList<string> columns,
         IReadOnlyList<IReadOnlyList<object?>> rows,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(rows);
+        return WriteStreamingAsync(
+            filePath,
+            columns,
+            ToAsyncEnumerable(rows),
+            rowsWrittenProgress: null,
+            cancellationToken);
+    }
+
+    public async Task WriteStreamingAsync(
+        string filePath,
+        IReadOnlyList<string> columns,
+        IAsyncEnumerable<IReadOnlyList<object?>> rows,
+        IProgress<long>? rowsWrittenProgress = null,
         CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
@@ -21,13 +38,31 @@ public sealed class CsvExportWriter : ICsvExportWriter
 
         await writer.WriteLineAsync(string.Join(",", columns.Select(Escape)));
 
-        foreach (var row in rows)
+        long written = 0;
+        await foreach (var row in rows.WithCancellation(cancellationToken))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await writer.WriteLineAsync(string.Join(",", row.Select(value => Escape(Convert.ToString(value, CultureInfo.InvariantCulture) ?? string.Empty))));
+            await writer.WriteLineAsync(string.Join(",", row.Select(value => Escape(CellDisplayFormatter.FormatForExport(value)))));
+            written++;
+            if (written % 100 == 0)
+            {
+                rowsWrittenProgress?.Report(written);
+            }
         }
 
-        await writer.FlushAsync();
+        rowsWrittenProgress?.Report(written);
+        await writer.FlushAsync(cancellationToken);
+    }
+
+    private static async IAsyncEnumerable<IReadOnlyList<object?>> ToAsyncEnumerable(
+        IReadOnlyList<IReadOnlyList<object?>> rows)
+    {
+        foreach (var row in rows)
+        {
+            yield return row;
+        }
+
+        await Task.CompletedTask;
     }
 
     private static string Escape(string value)

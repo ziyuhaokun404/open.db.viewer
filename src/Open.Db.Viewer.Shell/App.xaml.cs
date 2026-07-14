@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Open.Db.Viewer.Application.Abstractions;
 using Open.Db.Viewer.ShellHost.Services;
 using System.Windows;
 
@@ -16,6 +17,8 @@ public partial class App : System.Windows.Application
             .AddOpenDbViewerWpfServices()
             .BuildServiceProvider();
 
+        // Load settings before ThemeService.Initialize so theme preference is restored.
+        _serviceProvider.GetRequiredService<IAppSettingsStore>().LoadAsync().GetAwaiter().GetResult();
         _serviceProvider.GetRequiredService<ThemeService>().Initialize();
 
         var mainWindow = _serviceProvider.GetRequiredService<Shell.Views.MainWindow>();

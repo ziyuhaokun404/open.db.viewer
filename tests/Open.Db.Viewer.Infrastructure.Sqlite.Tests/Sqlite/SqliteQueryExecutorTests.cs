@@ -18,6 +18,7 @@ public class SqliteQueryExecutorTests
         result.Rows.Should().HaveCount(3);
         result.Rows[0].Should().ContainInOrder(1L, "Alice");
         result.Rows[2].Should().ContainInOrder(3L, "Charlie");
+        result.IsTruncated.Should().BeFalse();
     }
 
     [Fact]
@@ -50,5 +51,22 @@ public class SqliteQueryExecutorTests
         readResult.Rows.Should().ContainSingle()
             .Which.Should().ContainSingle()
             .Which.Should().Be(2L);
+    }
+
+    [Fact]
+    public async Task ExecuteAsync_ShouldTruncateResult_WhenMaxResultRowsIsExceeded()
+    {
+        await using var db = await SqliteTestDb.CreateAsync();
+        var executor = new SqliteQueryExecutor(new SqliteConnectionFactory());
+
+        var result = await executor.ExecuteAsync(
+            db.FilePath,
+            "select id, name from users order by id",
+            maxResultRows: 2);
+
+        result.Rows.Should().HaveCount(2);
+        result.IsTruncated.Should().BeTrue();
+        result.MaxRowsLimit.Should().Be(2);
+        result.Message.Should().Contain("截断");
     }
 }

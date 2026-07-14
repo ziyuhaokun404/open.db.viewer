@@ -1,22 +1,21 @@
 using Microsoft.Win32;
 
+using Open.Db.Viewer.Application.Abstractions;
+using Open.Db.Viewer.Domain.Models;
+
 using Wpf.Ui.Appearance;
 
 namespace Open.Db.Viewer.ShellHost.Services;
 
-public enum ThemePreference
-{
-    System,
-    Light,
-    Dark
-}
-
-public sealed class ThemeService : IDisposable
+public sealed class ThemeService : IThemeService, IDisposable
 {
     private const string PersonalizeKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize";
 
-    public ThemeService()
+    private readonly IAppSettingsStore? _settingsStore;
+
+    public ThemeService(IAppSettingsStore? settingsStore = null)
     {
+        _settingsStore = settingsStore;
         SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
     }
 
@@ -24,19 +23,24 @@ public sealed class ThemeService : IDisposable
 
     public ThemePreference CurrentPreference { get; private set; } = ThemePreference.System;
 
-    public ApplicationTheme EffectiveTheme { get; private set; } = ApplicationTheme.Light;
+    public ThemeVariant EffectiveTheme { get; private set; } = ThemeVariant.Light;
 
-    public void Initialize() => ApplyPreference(CurrentPreference);
-
-    public void ApplyPreference(ThemePreference preference)
+    public void Initialize()
     {
-        CurrentPreference = preference;
-        ApplyEffectiveTheme(ResolveTheme(preference));
+        if (_settingsStore is not null)
+        {
+            // Synchronous bootstrap: settings are loaded earlier in App.OnStartup.
+            CurrentPreference = ParseThemePreference(_settingsStore.Current.ThemePreference);
+        }
+
+        ApplyPreference(CurrentPreference, persist: false);
     }
+
+    public void ApplyPreference(ThemePreference preference) => ApplyPreference(preference, persist: true);
 
     public void ToggleTheme()
     {
-        var nextPreference = EffectiveTheme == ApplicationTheme.Dark
+        var nextPreference = EffectiveTheme == ThemeVariant.Dark
             ? ThemePreference.Light
             : ThemePreference.Dark;
 
@@ -46,6 +50,19 @@ public sealed class ThemeService : IDisposable
     public void Dispose()
     {
         SystemEvents.UserPreferenceChanged -= OnUserPreferenceChanged;
+    }
+
+    private void ApplyPreference(ThemePreference preference, bool persist)
+    {
+        CurrentPreference = preference;
+        ApplyEffectiveTheme(ResolveTheme(preference));
+
+        if (persist && _settingsStore is not null)
+        {
+            var settings = _settingsStore.Current;
+            settings.ThemePreference = preference.ToString();
+            _ = _settingsStore.SaveAsync(settings);
+        }
     }
 
     private void OnUserPreferenceChanged(object? sender, UserPreferenceChangedEventArgs e)
@@ -65,7 +82,9 @@ public sealed class ThemeService : IDisposable
 
     private void ApplyEffectiveTheme(ApplicationTheme applicationTheme)
     {
-        EffectiveTheme = applicationTheme;
+        EffectiveTheme = applicationTheme == ApplicationTheme.Dark
+            ? ThemeVariant.Dark
+            : ThemeVariant.Light;
         ApplicationThemeManager.Apply(applicationTheme);
         ThemeChanged?.Invoke(this, EventArgs.Empty);
     }
@@ -78,23 +97,27 @@ public sealed class ThemeService : IDisposable
             _ => GetSystemTheme()
         };
 
+    private static ThemePreference ParseThemePreference(string? value) =>
+        Enum.TryParse<ThemePreference>(value, ignoreCase: true, out var preference)
+            ? preference
+            : ThemePreference.System;
+
     private static ApplicationTheme GetSystemTheme()
     {
         try
         {
-            using var personalizeKey = Registry.CurrentUser.OpenSubKey(PersonalizeKeyPath);
-            var appsUseLightTheme = personalizeKey?.GetValue("AppsUseLightTheme");
-
-            return appsUseLightTheme switch
+            using var key = Registry.CurrentUser.OpenSubKey(PersonalizeKeyPath);
+            var value = key?.GetValue("AppsUseLightTheme");
+            if (value is int appsUseLightTheme)
             {
-                0 => ApplicationTheme.Dark,
-                int lightThemeFlag when lightThemeFlag > 0 => ApplicationTheme.Light,
-                _ => ApplicationTheme.Light
-            };
+                return appsUseLightTheme == 0 ? ApplicationTheme.Dark : ApplicationTheme.Light;
+            }
         }
         catch
         {
-            return ApplicationTheme.Light;
+            // Fall through to light.
         }
+
+        return ApplicationTheme.Light;
     }
 }

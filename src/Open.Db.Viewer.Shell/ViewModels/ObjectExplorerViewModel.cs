@@ -9,13 +9,17 @@ namespace Open.Db.Viewer.Shell.ViewModels;
 public partial class ObjectExplorerViewModel : ObservableObject
 {
     private readonly SqliteDatabaseInspector? _databaseInspector;
-    private IReadOnlyList<DatabaseObjectNode> _allTableNodes = Array.Empty<DatabaseObjectNode>();
+    private IReadOnlyList<DatabaseObjectNode> _allNodes = Array.Empty<DatabaseObjectNode>();
+    private string? _databasePath;
 
     [ObservableProperty]
     private DatabaseObjectNode? selectedNode;
 
     [ObservableProperty]
     private string searchText = string.Empty;
+
+    [ObservableProperty]
+    private bool showSystemObjects;
 
     public ObjectExplorerViewModel()
     {
@@ -32,17 +36,17 @@ public partial class ObjectExplorerViewModel : ObservableObject
 
     public bool HasFilteredTables => FilteredTables.Count > 0;
 
-    public int TotalObjectCount => _allTableNodes.Count;
+    public int TotalObjectCount => _allNodes.Count(node => !node.IsGroup);
 
     public int FilteredObjectCount => FilteredTables.Count;
 
     public bool HasSearchText => !string.IsNullOrWhiteSpace(SearchText);
 
     public string ObjectCountSummary => string.IsNullOrWhiteSpace(SearchText)
-        ? $"{TotalObjectCount} 个表"
-        : $"显示 {FilteredObjectCount} / {TotalObjectCount} 个表";
+        ? $"{TotalObjectCount} 个对象"
+        : $"显示 {FilteredObjectCount} / {TotalObjectCount} 个对象";
 
-    public string GroupTitle => $"表 ({FilteredObjectCount})";
+    public string GroupTitle => $"对象 ({FilteredObjectCount})";
 
     public string FooterSummary => string.IsNullOrWhiteSpace(SearchText)
         ? $"共 {TotalObjectCount} 个对象"
@@ -55,19 +59,10 @@ public partial class ObjectExplorerViewModel : ObservableObject
             throw new InvalidOperationException("A database inspector is required to load objects.");
         }
 
-        var tables = await _databaseInspector.GetTablesAsync(databasePath, cancellationToken);
-        var selectedTableName = SelectedNode?.Name;
-
-        _allTableNodes = tables
-            .Select(tableName => new DatabaseObjectNode(
-                Id: $"table:{tableName}",
-                Kind: "table",
-                Name: tableName,
-                ParentId: "group:tables",
-                Children: Array.Empty<DatabaseObjectNode>()))
-            .ToArray();
-
-        ApplyFilter(selectedTableName);
+        _databasePath = databasePath;
+        var selectedId = SelectedNode?.Id;
+        _allNodes = await _databaseInspector.GetObjectCatalogAsync(databasePath, ShowSystemObjects, cancellationToken);
+        ApplyFilter(selectedId);
     }
 
     [RelayCommand]
@@ -75,16 +70,29 @@ public partial class ObjectExplorerViewModel : ObservableObject
 
     partial void OnSearchTextChanged(string value)
     {
-        ApplyFilter(SelectedNode?.Name);
+        ApplyFilter(SelectedNode?.Id);
         OnPropertyChanged(nameof(HasSearchText));
     }
 
-    private void ApplyFilter(string? preferredSelectionName)
+    partial void OnShowSystemObjectsChanged(bool value)
+    {
+        if (string.IsNullOrWhiteSpace(_databasePath) || _databaseInspector is null)
+        {
+            return;
+        }
+
+        _ = LoadAsync(_databasePath);
+    }
+
+    private void ApplyFilter(string? preferredSelectionId)
     {
         var filteredNodes = string.IsNullOrWhiteSpace(SearchText)
-            ? _allTableNodes
-            : _allTableNodes
-                .Where(node => node.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase))
+            ? _allNodes
+            : _allNodes
+                .Where(node =>
+                    node.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
+                    node.KindLabel.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
+                    (node.ParentObjectName?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ?? false))
                 .ToArray();
 
         FilteredTables.Clear();
@@ -94,15 +102,15 @@ public partial class ObjectExplorerViewModel : ObservableObject
         }
 
         RootNodes.Clear();
-        RootNodes.Add(new DatabaseObjectNode(
-            Id: "group:tables",
-            Kind: "group",
-            Name: $"表 ({FilteredTables.Count})",
-            Children: filteredNodes));
+        foreach (var group in BuildGroups(filteredNodes))
+        {
+            RootNodes.Add(group);
+        }
 
         SelectedNode = filteredNodes.FirstOrDefault(node =>
-                !string.IsNullOrWhiteSpace(preferredSelectionName) &&
-                node.Name.Equals(preferredSelectionName, StringComparison.OrdinalIgnoreCase))
+                !string.IsNullOrWhiteSpace(preferredSelectionId) &&
+                node.Id.Equals(preferredSelectionId, StringComparison.OrdinalIgnoreCase))
+            ?? filteredNodes.FirstOrDefault(node => node.Kind.Equals(DatabaseObjectKinds.Table, StringComparison.OrdinalIgnoreCase))
             ?? filteredNodes.FirstOrDefault();
 
         OnPropertyChanged(nameof(HasFilteredTables));
@@ -112,5 +120,28 @@ public partial class ObjectExplorerViewModel : ObservableObject
         OnPropertyChanged(nameof(ObjectCountSummary));
         OnPropertyChanged(nameof(GroupTitle));
         OnPropertyChanged(nameof(FooterSummary));
+    }
+
+    private static IEnumerable<DatabaseObjectNode> BuildGroups(IReadOnlyList<DatabaseObjectNode> nodes)
+    {
+        yield return CreateGroup("tables", "表", DatabaseObjectKinds.Table, nodes);
+        yield return CreateGroup("views", "视图", DatabaseObjectKinds.View, nodes);
+        yield return CreateGroup("indexes", "索引", DatabaseObjectKinds.Index, nodes);
+        yield return CreateGroup("triggers", "触发器", DatabaseObjectKinds.Trigger, nodes);
+        yield return CreateGroup("system", "系统表", DatabaseObjectKinds.System, nodes);
+    }
+
+    private static DatabaseObjectNode CreateGroup(
+        string idSuffix,
+        string title,
+        string kind,
+        IReadOnlyList<DatabaseObjectNode> nodes)
+    {
+        var children = nodes.Where(node => node.Kind.Equals(kind, StringComparison.OrdinalIgnoreCase)).ToArray();
+        return new DatabaseObjectNode(
+            Id: $"group:{idSuffix}",
+            Kind: DatabaseObjectKinds.Group,
+            Name: $"{title} ({children.Length})",
+            Children: children);
     }
 }

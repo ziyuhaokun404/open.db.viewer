@@ -23,16 +23,19 @@ public class DatabaseWorkspaceViewModelTests
             new QueryService(new SqliteQueryExecutor(connectionFactory)),
             new ExportService(new Infrastructure.Sqlite.Export.CsvExportWriter()),
             new FakeFileDialogService(),
-            new Support.NoopDialogService());
+            new Support.NoopDialogService(), new Support.InMemoryAppSettingsStore(), new Support.InMemoryQueryHistoryStore());
         var viewModel = new DatabaseWorkspaceViewModel(objectExplorer, schema, data, query);
 
         await viewModel.LoadAsync(db.FilePath);
 
         viewModel.DatabasePath.Should().Be(db.FilePath);
         viewModel.Title.Should().Be("sample");
-        viewModel.ObjectExplorer.RootNodes.Should().ContainSingle();
+        viewModel.ObjectExplorer.RootNodes.Should().HaveCount(5);
+        viewModel.ObjectExplorer.RootNodes.Select(n => n.Id).Should().Equal(
+            "group:tables", "group:views", "group:indexes", "group:triggers", "group:system");
         viewModel.ObjectExplorer.SelectedNode.Should().NotBeNull();
         viewModel.ObjectExplorer.SelectedNode!.Name.Should().Be("orders");
+        viewModel.ObjectExplorer.FilteredTables.Should().Contain(node => node.Kind == "view" && node.Name == "user_names");
         viewModel.Schema.TableName.Should().Be("orders");
         viewModel.Schema.Columns.Should().HaveCount(3);
         viewModel.Schema.RowCount.Should().Be(2);
@@ -60,7 +63,7 @@ public class DatabaseWorkspaceViewModelTests
                 new QueryService(new SqliteQueryExecutor(connectionFactory)),
                 new ExportService(new Infrastructure.Sqlite.Export.CsvExportWriter()),
                 new FakeFileDialogService(),
-                new Support.NoopDialogService()));
+                new Support.NoopDialogService(), new Support.InMemoryAppSettingsStore(), new Support.InMemoryQueryHistoryStore()));
 
         await viewModel.LoadAsync(db.FilePath);
 
@@ -96,7 +99,7 @@ public class DatabaseWorkspaceViewModelTests
                 new QueryService(new SqliteQueryExecutor(connectionFactory)),
                 new ExportService(new Infrastructure.Sqlite.Export.CsvExportWriter()),
                 new FakeFileDialogService(),
-                new Support.NoopDialogService()));
+                new Support.NoopDialogService(), new Support.InMemoryAppSettingsStore(), new Support.InMemoryQueryHistoryStore()));
 
         await viewModel.LoadAsync(db.FilePath);
         await viewModel.Data.LoadNextPageAsync();
@@ -126,7 +129,7 @@ public class DatabaseWorkspaceViewModelTests
                 new QueryService(new SqliteQueryExecutor(connectionFactory)),
                 new ExportService(new Infrastructure.Sqlite.Export.CsvExportWriter()),
                 new FakeFileDialogService(),
-                new Support.NoopDialogService()));
+                new Support.NoopDialogService(), new Support.InMemoryAppSettingsStore(), new Support.InMemoryQueryHistoryStore()));
 
         await viewModel.LoadAsync(db.FilePath);
         var originalSelection = viewModel.ObjectExplorer.SelectedNode;
@@ -148,14 +151,14 @@ public class DatabaseWorkspaceViewModelTests
                 new QueryService(new NoopSqliteQueryExecutor()),
                 new ExportService(new NoopCsvExportWriter()),
                 new FakeFileDialogService(),
-                new Support.NoopDialogService()));
+                new Support.NoopDialogService(), new Support.InMemoryAppSettingsStore(), new Support.InMemoryQueryHistoryStore()));
 
         viewModel.ObjectExplorer.SelectedNode = null;
         viewModel.Schema.Clear();
         viewModel.Data.Clear();
 
         viewModel.HasTableSelection.Should().BeFalse();
-        viewModel.SelectedObjectTitle.Should().Be("未选择数据表");
+        viewModel.SelectedObjectTitle.Should().Be("未选择对象");
     }
 
     [Fact]
@@ -179,7 +182,7 @@ public class DatabaseWorkspaceViewModelTests
                 new QueryService(new NoopSqliteQueryExecutor()),
                 new ExportService(new NoopCsvExportWriter()),
                 new FakeFileDialogService(),
-                new Support.NoopDialogService()));
+                new Support.NoopDialogService(), new Support.InMemoryAppSettingsStore(), new Support.InMemoryQueryHistoryStore()));
 
         viewModel.HasOpenDatabase.Should().BeFalse();
         viewModel.EmptyStateTitle.Should().Be("尚未打开数据库");
@@ -194,11 +197,72 @@ public class DatabaseWorkspaceViewModelTests
         var viewModel = new ObjectExplorerViewModel(new SqliteDatabaseInspector(connectionFactory));
 
         await viewModel.LoadAsync(db.FilePath);
-        viewModel.SearchText = "user";
+        viewModel.SearchText = "user_names";
 
-        viewModel.FilteredTables.Should().ContainSingle(node => node.Name == "users");
-        viewModel.ObjectCountSummary.Should().Be("显示 1 / 2 个表");
-        viewModel.SelectedNode?.Name.Should().Be("users");
+        viewModel.FilteredTables.Should().ContainSingle(node => node.Name == "user_names");
+        viewModel.ObjectCountSummary.Should().Be("显示 1 / 5 个对象");
+        viewModel.SelectedNode?.Name.Should().Be("user_names");
+    }
+
+    [Fact]
+    public async Task SelectNodeAsync_ShouldLoadDdlForIndex()
+    {
+        await using var db = await SqliteTestDb.CreateAsync();
+        var connectionFactory = new SqliteConnectionFactory();
+        var inspector = new SqliteDatabaseInspector(connectionFactory);
+        var viewModel = new DatabaseWorkspaceViewModel(
+            new ObjectExplorerViewModel(inspector),
+            new SchemaViewModel(inspector),
+            new DataViewModel(new SqliteTableDataReader(connectionFactory)),
+            new QueryViewModel(
+                new QueryService(new SqliteQueryExecutor(connectionFactory)),
+                new ExportService(new Infrastructure.Sqlite.Export.CsvExportWriter()),
+                new FakeFileDialogService(),
+                new Support.NoopDialogService(), new Support.InMemoryAppSettingsStore(), new Support.InMemoryQueryHistoryStore()));
+
+        await viewModel.LoadAsync(db.FilePath);
+
+        var indexNode = viewModel.ObjectExplorer.FilteredTables
+            .Single(node => node.Kind == "index" && node.Name == "idx_orders_user_id");
+
+        await viewModel.SelectNodeAsync(indexNode);
+
+        viewModel.Schema.TableName.Should().Be("idx_orders_user_id");
+        viewModel.Schema.CreateSql.Should().Contain("CREATE INDEX");
+        viewModel.Schema.HasColumns.Should().BeFalse();
+        viewModel.Data.Rows.Should().BeEmpty();
+        viewModel.HasTableSelection.Should().BeFalse();
+        viewModel.HasObjectSelection.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task SelectNodeAsync_ShouldLoadViewSchemaAndData()
+    {
+        await using var db = await SqliteTestDb.CreateAsync();
+        var connectionFactory = new SqliteConnectionFactory();
+        var inspector = new SqliteDatabaseInspector(connectionFactory);
+        var viewModel = new DatabaseWorkspaceViewModel(
+            new ObjectExplorerViewModel(inspector),
+            new SchemaViewModel(inspector),
+            new DataViewModel(new SqliteTableDataReader(connectionFactory)),
+            new QueryViewModel(
+                new QueryService(new SqliteQueryExecutor(connectionFactory)),
+                new ExportService(new Infrastructure.Sqlite.Export.CsvExportWriter()),
+                new FakeFileDialogService(),
+                new Support.NoopDialogService(), new Support.InMemoryAppSettingsStore(), new Support.InMemoryQueryHistoryStore()));
+
+        await viewModel.LoadAsync(db.FilePath);
+
+        var viewNode = viewModel.ObjectExplorer.FilteredTables
+            .Single(node => node.Kind == "view" && node.Name == "user_names");
+
+        await viewModel.SelectNodeAsync(viewNode);
+
+        viewModel.Schema.TableName.Should().Be("user_names");
+        viewModel.Schema.CreateSql.Should().Contain("CREATE VIEW");
+        viewModel.Schema.Columns.Select(c => c.Name).Should().Equal("id", "name");
+        viewModel.Data.Rows.Should().HaveCount(3);
+        viewModel.HasTableSelection.Should().BeTrue();
     }
 
     private sealed class FakeFileDialogService : IFileDialogService
@@ -214,6 +278,8 @@ public class DatabaseWorkspaceViewModelTests
             string filePath,
             string sql,
             bool allowWrite = false,
+            int? maxResultRows = null,
+            TimeSpan? timeout = null,
             CancellationToken cancellationToken = default) =>
             Task.FromResult(new QueryExecutionResult(Array.Empty<string>(), Array.Empty<IReadOnlyList<object?>>(), 0, TimeSpan.Zero, string.Empty));
     }
@@ -222,5 +288,17 @@ public class DatabaseWorkspaceViewModelTests
     {
         public Task WriteAsync(string filePath, IReadOnlyList<string> columns, IReadOnlyList<IReadOnlyList<object?>> rows, CancellationToken cancellationToken = default) =>
             Task.CompletedTask;
+
+        public async Task WriteStreamingAsync(
+            string filePath,
+            IReadOnlyList<string> columns,
+            IAsyncEnumerable<IReadOnlyList<object?>> rows,
+            IProgress<long>? rowsWrittenProgress = null,
+            CancellationToken cancellationToken = default)
+        {
+            await foreach (var _ in rows.WithCancellation(cancellationToken))
+            {
+            }
+        }
     }
 }

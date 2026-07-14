@@ -1,42 +1,62 @@
 using Open.Db.Viewer.Domain.Models;
+using Open.Db.Viewer.Domain.Sqlite;
 
 namespace Open.Db.Viewer.Domain.Tests.Models;
 
 public class DomainModelsTests
 {
     [Fact]
-    public void DatabaseEntry_CreatePinned_MarksEntryPinnedAndPreservesIdentity()
+    public void QueryExecutionResult_DefaultsTruncationFlags()
     {
-        var entry = DatabaseEntry.CreatePinned("Demo", @"C:\data\demo.db");
+        var result = new QueryExecutionResult(
+            ["id"],
+            [new object?[] { 1 }],
+            1,
+            TimeSpan.FromMilliseconds(1),
+            "ok");
 
-        Assert.Equal("Demo", entry.Name);
-        Assert.Equal(@"C:\data\demo.db", entry.FilePath);
-        Assert.True(entry.IsPinned);
+        Assert.False(result.IsTruncated);
+        Assert.Null(result.MaxRowsLimit);
     }
 
     [Fact]
-    public void TablePageResult_ExposesRowsAndPaginationFields()
+    public void AppSettings_Normalize_ClampsAndFixesInvalidValues()
     {
-        var rows = new IReadOnlyList<object?>[]
+        var settings = new AppSettings
         {
-            new object?[] { 1, "Alice" }
+            ThemePreference = "neon",
+            DefaultPageSizeValue = 999,
+            QueryMaxResultRows = 1,
+            QueryTimeoutSeconds = 9999
         };
 
-        var result = new TablePageResult(
-            new[] { "Id", "Name" },
-            rows,
-            2,
-            100,
-            true,
-            "Id",
-            "ASC");
+        settings.Normalize();
 
-        Assert.Equal(new[] { "Id", "Name" }, result.Columns);
-        Assert.Equal(rows, result.Rows);
-        Assert.Equal(2, result.PageNumber);
-        Assert.Equal(100, result.PageSize);
-        Assert.True(result.HasNextPage);
-        Assert.Equal("Id", result.SortColumn);
-        Assert.Equal("ASC", result.SortDirection);
+        Assert.Equal("System", settings.ThemePreference);
+        Assert.Equal(AppSettings.DefaultPageSize, settings.DefaultPageSizeValue);
+        Assert.Equal(AppSettings.MinQueryMaxResultRows, settings.QueryMaxResultRows);
+        Assert.Equal(AppSettings.MaxQueryTimeoutSeconds, settings.QueryTimeoutSeconds);
+    }
+
+    [Fact]
+    public void SqliteIdentifier_Quote_EscapesEmbeddedQuotes()
+    {
+        Assert.Equal("\"weird\"\"table\"", SqliteIdentifier.Quote("weird\"table"));
+        Assert.Equal("\"users\"", SqliteIdentifier.Quote("users"));
+    }
+
+    [Fact]
+    public void DatabaseObjectNode_ExposesBrowseAndSchemaFlags()
+    {
+        var table = new DatabaseObjectNode("table:users", DatabaseObjectKinds.Table, "users");
+        var index = new DatabaseObjectNode("index:idx", DatabaseObjectKinds.Index, "idx", ParentObjectName: "users");
+        var group = new DatabaseObjectNode("group:tables", DatabaseObjectKinds.Group, "表");
+
+        Assert.True(table.SupportsDataBrowse);
+        Assert.True(DatabaseObjectKinds.IsSchemaLoadable(table.Kind));
+        Assert.False(index.SupportsDataBrowse);
+        Assert.True(DatabaseObjectKinds.IsSchemaLoadable(index.Kind));
+        Assert.Equal("索引 · users", index.Subtitle);
+        Assert.True(group.IsGroup);
     }
 }

@@ -31,9 +31,10 @@ public class SqliteStatementClassifierTests
     [InlineData("pragma journal_mode = WAL")]
     [InlineData("PRAGMA user_version = 5")]
     [InlineData("pragma busy_timeout=3000")]
-    public void Classify_ShouldReturnDml_ForPragmasWithAssignment(string sql)
+    public void Classify_ShouldReturnPragmaWrite_ForPragmasWithAssignment(string sql)
     {
-        SqliteStatementClassifier.Classify(sql).Should().Be(SqlStatementCategory.Dml);
+        SqliteStatementClassifier.Classify(sql).Should().Be(SqlStatementCategory.PragmaWrite);
+        SqliteStatementClassifier.IsHighRisk(sql).Should().BeTrue();
     }
 
     [Theory]
@@ -112,13 +113,24 @@ public class SqliteStatementClassifierTests
     [InlineData("analyze", true)]
     [InlineData("drop table test", true)]
     [InlineData("alter table users add column x int", true)]
+    [InlineData("pragma journal_mode=WAL", true)]
     [InlineData("insert into users values (1)", false)]
     [InlineData("update users set x = 1", false)]
     [InlineData("delete from users", false)]
     [InlineData("select * from users", false)]
-    public void IsHighRisk_ShouldReturnTrue_ForDdlAndMaintenance(string sql, bool expected)
+    [InlineData("pragma table_info(users)", false)]
+    public void IsHighRisk_ShouldReturnTrue_ForDdlMaintenanceAndPragmaWrite(string sql, bool expected)
     {
         SqliteStatementClassifier.IsHighRisk(sql).Should().Be(expected);
+    }
+
+    [Fact]
+    public void GetCategoryDisplayName_ShouldLocalizeKnownCategories()
+    {
+        SqliteStatementClassifier.GetCategoryDisplayName(SqlStatementCategory.Ddl)
+            .Should().Contain("DDL");
+        SqliteStatementClassifier.GetCategoryDisplayName(SqlStatementCategory.PragmaWrite)
+            .Should().Contain("PRAGMA");
     }
 
     [Fact]

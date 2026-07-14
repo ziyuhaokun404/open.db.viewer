@@ -8,5 +8,7 @@ public interface ISqliteQueryExecutor
         string filePath,
         string sql,
         bool allowWrite = false,
+        int? maxResultRows = null,
+        TimeSpan? timeout = null,
         CancellationToken cancellationToken = default);
 }

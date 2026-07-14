@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
-using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
 namespace Open.Db.Viewer.Shell.Views;
@@ -97,14 +96,14 @@ public partial class MainWindow : FluentWindow
         }
     }
 
-    private void UpdateThemeToggleVisual(ApplicationTheme applicationTheme)
+    private void UpdateThemeToggleVisual(ThemeVariant theme)
     {
         if (ThemeToggleButton is null || ThemeToggleIcon is null)
         {
             return;
         }
 
-        var isDarkTheme = applicationTheme == ApplicationTheme.Dark;
+        var isDarkTheme = theme == ThemeVariant.Dark;
         ThemeToggleIcon.Symbol = isDarkTheme ? SymbolRegular.WeatherSunny24 : SymbolRegular.WeatherMoon24;
         ThemeToggleButton.ToolTip = isDarkTheme ? "切换到浅色模式" : "切换到深色模式";
     }
@@ -112,7 +111,7 @@ public partial class MainWindow : FluentWindow
     private void UpdateLogoVisual()
     {
         var logoPath = TryFindResource("AppLogoSvgPath") as string
-            ?? (_themeService.EffectiveTheme == ApplicationTheme.Dark
+            ?? (_themeService.EffectiveTheme == ThemeVariant.Dark
                 ? "/Assets/Icons/open_db_viewer_logo_light.svg"
                 : "/Assets/Icons/open_db_viewer_logo_transparent.svg");
 

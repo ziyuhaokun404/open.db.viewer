@@ -87,45 +87,87 @@ public partial class SchemaViewModel : ObservableObject
 
     public async Task LoadAsync(string databasePath, string tableName, CancellationToken cancellationToken = default)
     {
+        await LoadObjectAsync(
+            databasePath,
+            new DatabaseObjectNode($"table:{tableName}", DatabaseObjectKinds.Table, tableName),
+            cancellationToken);
+    }
+
+    public async Task LoadObjectAsync(
+        string databasePath,
+        DatabaseObjectNode node,
+        CancellationToken cancellationToken = default)
+    {
         if (_databaseInspector is null)
         {
             throw new InvalidOperationException("A database inspector is required to load schema.");
         }
 
-        var schemaTask = _databaseInspector.GetSchemaAsync(databasePath, tableName, cancellationToken);
-        var metadataTask = _databaseInspector.GetTableMetadataAsync(databasePath, tableName, cancellationToken);
+        ArgumentNullException.ThrowIfNull(node);
 
-        await Task.WhenAll(schemaTask, metadataTask);
-
-        var schema = await schemaTask;
-        var metadata = await metadataTask;
-
-        TableName = schema.TableName;
-        RowCount = metadata.RowCount;
-        PageSizeBytes = metadata.PageSizeBytes;
-        SqliteVersion = metadata.SqliteVersion;
-        Encoding = metadata.Encoding;
-        UserVersion = metadata.UserVersion;
-        CreateSql = metadata.CreateSql ?? string.Empty;
-
-        Columns.Clear();
-        ColumnItems.Clear();
-        foreach (var column in schema.Columns)
+        if (DatabaseObjectKinds.IsBrowsableDataSource(node.Kind))
         {
-            Columns.Add(column);
-            ColumnItems.Add(SchemaColumnItemViewModel.From(column, ColumnItems.Count + 1));
+            var schemaTask = _databaseInspector.GetSchemaAsync(databasePath, node.Name, cancellationToken);
+            var metadataTask = _databaseInspector.GetTableMetadataAsync(databasePath, node.Name, cancellationToken);
+            await Task.WhenAll(schemaTask, metadataTask);
+
+            var schema = await schemaTask;
+            var metadata = await metadataTask;
+
+            TableName = schema.TableName;
+            RowCount = metadata.RowCount;
+            PageSizeBytes = metadata.PageSizeBytes;
+            SqliteVersion = metadata.SqliteVersion;
+            Encoding = metadata.Encoding;
+            UserVersion = metadata.UserVersion;
+            CreateSql = metadata.CreateSql ?? string.Empty;
+
+            Columns.Clear();
+            ColumnItems.Clear();
+            foreach (var column in schema.Columns)
+            {
+                Columns.Add(column);
+                ColumnItems.Add(SchemaColumnItemViewModel.From(column, ColumnItems.Count + 1));
+            }
+
+            Indexes.Clear();
+            foreach (var script in metadata.Indexes)
+            {
+                Indexes.Add(script);
+            }
+
+            Triggers.Clear();
+            foreach (var script in metadata.Triggers)
+            {
+                Triggers.Add(script);
+            }
         }
-
-        Indexes.Clear();
-        foreach (var script in metadata.Indexes)
+        else
         {
-            Indexes.Add(script);
-        }
+            // Index / trigger: show DDL only.
+            var sql = node.Sql
+                ?? await _databaseInspector.GetObjectSqlAsync(databasePath, node.Kind, node.Name, cancellationToken);
 
-        Triggers.Clear();
-        foreach (var script in metadata.Triggers)
-        {
-            Triggers.Add(script);
+            TableName = node.Name;
+            RowCount = 0;
+            PageSizeBytes = 0;
+            SqliteVersion = string.Empty;
+            Encoding = string.Empty;
+            UserVersion = 0;
+            CreateSql = sql ?? string.Empty;
+            Columns.Clear();
+            ColumnItems.Clear();
+            Indexes.Clear();
+            Triggers.Clear();
+
+            if (node.Kind.Equals(DatabaseObjectKinds.Index, StringComparison.OrdinalIgnoreCase))
+            {
+                Indexes.Add(new DatabaseScriptItem(node.Name, DatabaseObjectKinds.Index, sql));
+            }
+            else if (node.Kind.Equals(DatabaseObjectKinds.Trigger, StringComparison.OrdinalIgnoreCase))
+            {
+                Triggers.Add(new DatabaseScriptItem(node.Name, DatabaseObjectKinds.Trigger, sql));
+            }
         }
 
         NotifyStateChanged();

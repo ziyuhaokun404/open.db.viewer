@@ -41,5 +41,21 @@ public class ExportServiceTests
 
             return Task.CompletedTask;
         }
+
+        public async Task WriteStreamingAsync(
+            string filePath,
+            IReadOnlyList<string> columns,
+            IAsyncEnumerable<IReadOnlyList<object?>> rows,
+            IProgress<long>? rowsWrittenProgress = null,
+            CancellationToken cancellationToken = default)
+        {
+            var buffer = new List<IReadOnlyList<object?>>();
+            await foreach (var row in rows.WithCancellation(cancellationToken))
+            {
+                buffer.Add(row);
+            }
+
+            await WriteAsync(filePath, columns, buffer, cancellationToken);
+        }
     }
 }

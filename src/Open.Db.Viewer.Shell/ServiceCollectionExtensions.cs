@@ -27,7 +27,12 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<Func<string, Task<bool>>>(_ => path => Task.FromResult(File.Exists(path)));
 
         services.AddSingleton<IDatabaseEntryRepository>(_ => new FileDatabaseEntryRepository(appDataPath));
-        services.AddSingleton<ThemeService>();
+        services.AddSingleton<IAppSettingsStore>(_ => new FileAppSettingsStore(appDataPath));
+        services.AddSingleton<IQueryHistoryStore>(_ => new FileQueryHistoryStore(appDataPath));
+        services.AddSingleton<IClipboardService, ClipboardService>();
+        services.AddSingleton<ThemeService>(provider =>
+            new ThemeService(provider.GetRequiredService<IAppSettingsStore>()));
+        services.AddSingleton<IThemeService>(provider => provider.GetRequiredService<ThemeService>());
         services.AddSingleton<DatabaseEntryService>();
         services.AddSingleton<ISqliteConnectionFactory, SqliteConnectionFactory>();
         services.AddSingleton<SqliteDatabaseInspector>();
@@ -46,8 +51,10 @@ public static class ServiceCollectionExtensions
         services.AddSingleton(provider =>
             new DataViewModel(
                 provider.GetRequiredService<SqliteTableDataReader>(),
+                provider.GetRequiredService<IClipboardService>(),
                 provider.GetRequiredService<ExportService>(),
-                provider.GetRequiredService<IFileDialogService>()));
+                provider.GetRequiredService<IFileDialogService>(),
+                provider.GetRequiredService<IAppSettingsStore>()));
         services.AddSingleton<QueryViewModel>();
         services.AddSingleton<DatabaseWorkspaceViewModel>();
         services.AddSingleton<ShellViewModel>();

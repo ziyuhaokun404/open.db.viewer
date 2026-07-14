@@ -5,6 +5,8 @@ public enum SqlStatementCategory
     ReadOnly,
     Dml,
     Ddl,
+    /// <summary>PRAGMA 赋值类写操作（如 journal_mode=WAL）。</summary>
+    PragmaWrite,
     Maintenance,
     Transaction
 }
@@ -68,8 +70,8 @@ public static class SqliteStatementClassifier
 
         if (string.Equals(keyword, "PRAGMA", StringComparison.OrdinalIgnoreCase))
         {
-            return sql.Contains('=', StringComparison.Ordinal)
-                ? SqlStatementCategory.Dml
+            return IsPragmaAssignment(sql)
+                ? SqlStatementCategory.PragmaWrite
                 : SqlStatementCategory.ReadOnly;
         }
 
@@ -93,11 +95,67 @@ public static class SqliteStatementClassifier
             return SqlStatementCategory.Transaction;
         }
 
+        // 未知关键字默认按写操作对待，避免误放行。
         return SqlStatementCategory.Dml;
     }
 
+    /// <summary>
+    /// 高风险：DDL / 维护 / 写 PRAGMA。可写模式下默认需确认。
+    /// </summary>
     public static bool IsHighRisk(string sql) =>
-        Classify(sql) is SqlStatementCategory.Ddl or SqlStatementCategory.Maintenance;
+        Classify(sql) is SqlStatementCategory.Ddl
+            or SqlStatementCategory.Maintenance
+            or SqlStatementCategory.PragmaWrite;
+
+    public static string GetCategoryDisplayName(SqlStatementCategory category) => category switch
+    {
+        SqlStatementCategory.ReadOnly => "只读查询",
+        SqlStatementCategory.Dml => "DML（数据修改）",
+        SqlStatementCategory.Ddl => "DDL（数据定义）",
+        SqlStatementCategory.PragmaWrite => "PRAGMA 写操作",
+        SqlStatementCategory.Maintenance => "数据库维护",
+        SqlStatementCategory.Transaction => "事务控制",
+        _ => category.ToString()
+    };
+
+    /// <summary>
+    /// 粗略判断 PRAGMA 是否为赋值语句（含 '='）。
+    /// 忽略注释后的主体；字符串内的 '=' 极少用于 PRAGMA 赋值名，可接受误判为写。
+    /// </summary>
+    private static bool IsPragmaAssignment(string sql)
+    {
+        var index = SkipTrivia(sql, 0);
+        // 跳过 PRAGMA 关键字
+        while (index < sql.Length && (char.IsLetter(sql[index]) || sql[index] == '_'))
+        {
+            index++;
+        }
+
+        index = SkipTrivia(sql, index);
+        var inSingleQuote = false;
+        for (; index < sql.Length; index++)
+        {
+            var ch = sql[index];
+            if (ch == '\'')
+            {
+                if (inSingleQuote && index + 1 < sql.Length && sql[index + 1] == '\'')
+                {
+                    index++;
+                    continue;
+                }
+
+                inSingleQuote = !inSingleQuote;
+                continue;
+            }
+
+            if (ch == '=' && !inSingleQuote)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     private static string ReadFirstKeyword(string sql)
     {

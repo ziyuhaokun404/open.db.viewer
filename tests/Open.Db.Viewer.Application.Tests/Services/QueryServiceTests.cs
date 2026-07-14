@@ -12,13 +12,15 @@ public class QueryServiceTests
     {
         var executor = new RecordingQueryExecutor();
         var service = new QueryService(executor);
-        var request = new QueryExecutionRequest("select 1", AllowWrite: true);
+        var request = new QueryExecutionRequest("select 1", AllowWrite: true, MaxResultRows: 100, Timeout: TimeSpan.FromSeconds(15));
 
         var result = await service.ExecuteAsync(@"C:\data\sample.db", request);
 
         executor.FilePath.Should().Be(@"C:\data\sample.db");
         executor.Sql.Should().Be("select 1");
         executor.AllowWrite.Should().BeTrue();
+        executor.MaxResultRows.Should().Be(100);
+        executor.Timeout.Should().Be(TimeSpan.FromSeconds(15));
         result.Columns.Should().ContainSingle().Which.Should().Be("value");
     }
 
@@ -27,16 +29,22 @@ public class QueryServiceTests
         public string? FilePath { get; private set; }
         public string? Sql { get; private set; }
         public bool AllowWrite { get; private set; }
+        public int? MaxResultRows { get; private set; }
+        public TimeSpan? Timeout { get; private set; }
 
         public Task<QueryExecutionResult> ExecuteAsync(
             string filePath,
             string sql,
             bool allowWrite = false,
+            int? maxResultRows = null,
+            TimeSpan? timeout = null,
             CancellationToken cancellationToken = default)
         {
             FilePath = filePath;
             Sql = sql;
             AllowWrite = allowWrite;
+            MaxResultRows = maxResultRows;
+            Timeout = timeout;
 
             return Task.FromResult(new QueryExecutionResult(
                 new[] { "value" },

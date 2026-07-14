@@ -20,4 +20,16 @@ public sealed class ExportService
         ArgumentNullException.ThrowIfNull(data);
         return _csvExportWriter.WriteAsync(filePath, data.Columns, data.Rows, cancellationToken);
     }
+
+    public Task ExportStreamingAsync(
+        string filePath,
+        IReadOnlyList<string> columns,
+        IAsyncEnumerable<IReadOnlyList<object?>> rows,
+        IProgress<long>? rowsWrittenProgress = null,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(columns);
+        ArgumentNullException.ThrowIfNull(rows);
+        return _csvExportWriter.WriteStreamingAsync(filePath, columns, rows, rowsWrittenProgress, cancellationToken);
+    }
 }
