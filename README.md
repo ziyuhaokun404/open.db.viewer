@@ -1,15 +1,17 @@
-# Open.Db.Viewer
+# SQLite Viewer
 
 基于 .NET 10 + WPF 的 **安全优先 SQLite 桌面查看器**（Windows）。定位为日常排查与分析：只读打开、对象浏览、分页数据、SQL 查询与导出；不做网格单元格编辑，也不做多数据库客户端。
+
+技术标识：仓库目录 `sqlite.viewer`，程序集根命名空间 `Sqlite.Viewer.*`，发布/AppData 名 `SqliteViewer`。
 
 ## 分层结构
 
 | 项目 | 职责 |
 |------|------|
-| `Open.Db.Viewer.Domain` | 领域模型、展示格式化、标识符工具 |
-| `Open.Db.Viewer.Application` | 应用服务、抽象接口、SQL 分类与语句拆分 |
-| `Open.Db.Viewer.Infrastructure.Sqlite` | SQLite 访问、流式 CSV、本地 JSON 存储 |
-| `Open.Db.Viewer.Shell` | WPF 界面、MVVM、主题与 DI 组合根 |
+| `Sqlite.Viewer.Domain` | 领域模型、展示格式化、标识符工具 |
+| `Sqlite.Viewer.Application` | 应用服务、抽象接口、SQL 分类与语句拆分 |
+| `Sqlite.Viewer.Infrastructure.Sqlite` | SQLite 访问、流式 CSV、本地 JSON 存储 |
+| `Sqlite.Viewer.Shell` | WPF 界面、MVVM、主题与 DI 组合根 |
 | `tests/*` | 按层划分的单元测试与烟雾测试 |
 
 ## 功能概览
@@ -22,7 +24,7 @@
 - 主题：浅色 / 深色 / 跟随系统（持久化）
 - 设置：默认页大小、查询行数上限、超时
 
-设置与历史存储于：`%LocalAppData%\OpenDbViewer\`
+设置与历史存储于：`%LocalAppData%\SqliteViewer\`
 
 ## 技术栈
 
@@ -32,15 +34,15 @@
 ## 快速开始
 
 ```powershell
-dotnet restore Open.Db.Viewer.slnx
-dotnet build Open.Db.Viewer.slnx -c Debug
-dotnet run --project .\src\Open.Db.Viewer.Shell\Open.Db.Viewer.Shell.csproj
+dotnet restore Sqlite.Viewer.slnx
+dotnet build Sqlite.Viewer.slnx -c Debug
+dotnet run --project .\src\Sqlite.Viewer.Shell\Sqlite.Viewer.Shell.csproj
 ```
 
 运行全部测试：
 
 ```powershell
-dotnet test Open.Db.Viewer.slnx -c Debug
+dotnet test Sqlite.Viewer.slnx -c Debug
 ```
 
 ## 发布打包
@@ -48,29 +50,29 @@ dotnet test Open.Db.Viewer.slnx -c Debug
 ### 自包含单目录（推荐分发 zip）
 
 ```powershell
-dotnet publish .\src\Open.Db.Viewer.Shell\Open.Db.Viewer.Shell.csproj `
+dotnet publish .\src\Sqlite.Viewer.Shell\Sqlite.Viewer.Shell.csproj `
   -c Release `
   -r win-x64 `
   --self-contained true `
   -p:PublishSingleFile=false `
-  -o .\artifacts\OpenDbViewer-win-x64
+  -o .\artifacts\SqliteViewer-win-x64
 ```
 
-将 `artifacts\OpenDbViewer-win-x64` 目录压缩为 zip 即可分发。入口为 `Open.Db.Viewer.Shell.exe`。
+将 `artifacts\SqliteViewer-win-x64` 目录压缩为 zip 即可分发。入口为 `SqliteViewer.exe`。
 
 ### 框架依赖（需目标机已装 .NET 10 桌面运行时）
 
 ```powershell
-dotnet publish .\src\Open.Db.Viewer.Shell\Open.Db.Viewer.Shell.csproj `
+dotnet publish .\src\Sqlite.Viewer.Shell\Sqlite.Viewer.Shell.csproj `
   -c Release `
   -r win-x64 `
   --self-contained false `
-  -o .\artifacts\OpenDbViewer-fd
+  -o .\artifacts\SqliteViewer-fd
 ```
 
 ### 版本
 
-当前程序集版本见 `Open.Db.Viewer.Shell.csproj` 的 `<Version>`（关于页会显示）。
+当前程序集版本见 `Sqlite.Viewer.Shell.csproj` 的 `<Version>`（关于页会显示）。
 
 ## 可写模式说明
 
@@ -91,20 +93,20 @@ dotnet publish .\src\Open.Db.Viewer.Shell\Open.Db.Viewer.Shell.csproj `
 ## 目录结构
 
 ```text
-open.db.viewer
-├─ Open.Db.Viewer.slnx
+sqlite.viewer
+├─ Sqlite.Viewer.slnx
 ├─ .github/workflows/ci.yml
 ├─ src
-│  ├─ Open.Db.Viewer.Domain
-│  ├─ Open.Db.Viewer.Application
-│  ├─ Open.Db.Viewer.Infrastructure.Sqlite
-│  └─ Open.Db.Viewer.Shell
+│  ├─ Sqlite.Viewer.Domain
+│  ├─ Sqlite.Viewer.Application
+│  ├─ Sqlite.Viewer.Infrastructure.Sqlite
+│  └─ Sqlite.Viewer.Shell
 │       └─ Views/Workspace/   # ObjectExplorer / Schema / Data / Query 面板
 └─ tests
-   ├─ Open.Db.Viewer.Domain.Tests
-   ├─ Open.Db.Viewer.Application.Tests
-   ├─ Open.Db.Viewer.Infrastructure.Sqlite.Tests
-   └─ Open.Db.Viewer.Shell.Tests
+   ├─ Sqlite.Viewer.Domain.Tests
+   ├─ Sqlite.Viewer.Application.Tests
+   ├─ Sqlite.Viewer.Infrastructure.Sqlite.Tests
+   └─ Sqlite.Viewer.Shell.Tests
 ```
 
 ## 架构要点
@@ -112,7 +114,7 @@ open.db.viewer
 - **整洁架构**：依赖向内（Shell → Infrastructure → Application → Domain）
 - **MVVM**：业务在 ViewModel，View code-behind 仅处理选择/排序等 UI 事件
 - **只读优先**：可写显式 opt-in + 危险 SQL 策略
-- **DI 组合根**：`ServiceCollectionExtensions.AddOpenDbViewerWpfServices()`
+- **DI 组合根**：`ServiceCollectionExtensions.AddSqliteViewerWpfServices()`
 
 ### 工作台视图拆分
 
@@ -130,7 +132,7 @@ open.db.viewer
 GitHub Actions（`windows-latest`）在 push/PR 到 `main`/`master` 时执行：
 
 ```text
-dotnet restore / build / test Open.Db.Viewer.slnx -c Release
+dotnet restore / build / test Sqlite.Viewer.slnx -c Release
 ```
 
 ## 开发约定

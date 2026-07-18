@@ -20,10 +20,10 @@ jobs:
           dotnet-version: "10.0.x"
 
       - name: Restore
-        run: dotnet restore Open.Db.Viewer.slnx
+        run: dotnet restore Sqlite.Viewer.slnx
 
       - name: Build
-        run: dotnet build Open.Db.Viewer.slnx -c Release --no-restore
+        run: dotnet build Sqlite.Viewer.slnx -c Release --no-restore
 
       - name: Test
-        run: dotnet test Open.Db.Viewer.slnx -c Release --no-build --verbosity normal
+        run: dotnet test Sqlite.Viewer.slnx -c Release --no-build --verbosity normal

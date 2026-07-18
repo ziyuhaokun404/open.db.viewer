@@ -1,0 +1,467 @@
+<UserControl
+    x:Class="Sqlite.Viewer.Shell.Views.Workspace.WorkspaceHostPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:local="clr-namespace:Sqlite.Viewer.Shell.Views.Workspace"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="WorkspaceStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid Visibility="{Binding HasOpenDatabase, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Border>
+                <Grid Margin="16">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="12" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="10" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Border Padding="16" Style="{StaticResource WorkspaceSurfaceStyle}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Border
+                                Width="44"
+                                Height="44"
+                                Style="{StaticResource WorkspaceIconTileStyle}">
+                                <ui:SymbolIcon
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Symbol="Database24" />
+                            </Border>
+                            <StackPanel Grid.Column="1" Margin="12,0,24,0">
+                                <TextBlock
+                                    d:Text="示例数据库"
+                                    Style="{StaticResource WorkspacePageTitleStyle}"
+                                    Text="{Binding Title}" />
+                                <TextBlock
+                                    Margin="0,4,0,0"
+                                    d:Text="C:\Users\demo\app.db"
+                                    Style="{StaticResource WorkspaceMutedTextStyle}"
+                                    Text="{Binding DatabasePath}"
+                                    TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Column="2"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal">
+                                <ui:Button
+                                    Margin="0,0,10,0"
+                                    Appearance="Secondary"
+                                    Command="{Binding ReturnHomeCommand}"
+                                    Content="返回首页"
+                                    Icon="{ui:SymbolIcon ArrowReply24}"
+                                    Style="{StaticResource WorkspaceToolbarButtonStyle}" />
+                                <ui:Button
+                                    Margin="0,0,10,0"
+                                    Appearance="Secondary"
+                                    Command="{Binding RefreshCommand}"
+                                    Content="刷新"
+                                    Icon="{ui:SymbolIcon ArrowClockwise24}"
+                                    Style="{StaticResource WorkspaceToolbarButtonStyle}" />
+                                <Border Width="280" Style="{StaticResource WorkspaceInputBorderStyle}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <ui:SymbolIcon VerticalAlignment="Center" Symbol="Search24" />
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Margin="10,0,0,0"
+                                            VerticalAlignment="Center"
+                                            IsHitTestVisible="False"
+                                            Text="搜索对象 (Ctrl+F)">
+                                            <TextBlock.Style>
+                                                <Style BasedOn="{StaticResource WorkspaceCaptionStyle}" TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ObjectExplorer.SearchText}" Value="">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding ObjectExplorer.SearchText}" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <TextBox
+                                            Grid.Column="1"
+                                            Margin="10,0"
+                                            VerticalContentAlignment="Center"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                            Text="{Binding ObjectExplorer.SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                                        <ui:Button
+                                            Grid.Column="2"
+                                            Width="28"
+                                            Height="28"
+                                            Padding="0"
+                                            Appearance="Transparent"
+                                            Command="{Binding ObjectExplorer.ClearSearchCommand}"
+                                            Icon="{ui:SymbolIcon Dismiss24}"
+                                            Visibility="{Binding ObjectExplorer.HasSearchText, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    </Grid>
+                                </Border>
+                                <ui:Button
+                                    Margin="10,0,0,0"
+                                    Appearance="Secondary"
+                                    Icon="{ui:SymbolIcon Filter24}"
+                                    Style="{StaticResource WorkspaceIconButtonStyle}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="300" />
+                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <local:ObjectExplorerPanel />
+
+                        <Border
+                            Grid.Column="2"
+                            Padding="0"
+                            Style="{StaticResource WorkspacePanelStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="1" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid Margin="16,14,16,12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock
+                                                d:Text="users"
+                                                Style="{StaticResource WorkspacePageTitleStyle}"
+                                                Text="{Binding SelectedObjectTitle}" />
+                                            <Border Margin="10,3,0,0" Style="{StaticResource WorkspaceChipStyle}">
+                                                <TextBlock
+                                                    d:Text="表 (TABLE)"
+                                                    FontSize="12"
+                                                    FontWeight="SemiBold"
+                                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                                                    Text="{Binding SelectedObjectKindLabel}" />
+                                            </Border>
+                                        </StackPanel>
+                                        <TextBlock
+                                            Margin="0,6,0,0"
+                                            d:Text="5 列 · 1,234 行 · 2 索引"
+                                            Style="{StaticResource WorkspaceMutedTextStyle}"
+                                            Text="{Binding SelectedObjectSubtitle}" />
+                                    </StackPanel>
+                                    <Border
+                                        Grid.Column="1"
+                                        Padding="12,10"
+                                        Style="{StaticResource WorkspaceMetricCardStyle}">
+                                        <StackPanel>
+                                            <TextBlock Style="{StaticResource WorkspaceCaptionStyle}" Text="数据库引擎" />
+                                            <TextBlock
+                                                Margin="0,4,0,0"
+                                                d:Text="SQLite 3.42.0"
+                                                FontSize="15"
+                                                FontWeight="SemiBold"
+                                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                Text="{Binding Schema.SqliteVersion, StringFormat=SQLite {0}}" />
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+                                <Border Grid.Row="1" Style="{StaticResource WorkspaceDividerStyle}" />
+                                <Grid Grid.Row="2" Visibility="{Binding HasObjectSelection, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <TabControl
+                                        Margin="8"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        ItemContainerStyle="{StaticResource WorkspaceTabItemStyle}">
+                                        <TabItem>
+                                            <TabItem.Header>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <ui:SymbolIcon
+                                                        Width="16"
+                                                        Height="16"
+                                                        Margin="0,0,6,0"
+                                                        Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}"
+                                                        Symbol="Document24" />
+                                                    <TextBlock Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}" Text="结构" />
+                                                </StackPanel>
+                                            </TabItem.Header>
+                                            <local:SchemaPanel />
+                                        </TabItem>
+                                        <TabItem>
+                                            <TabItem.Header>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <ui:SymbolIcon
+                                                        Width="16"
+                                                        Height="16"
+                                                        Margin="0,0,6,0"
+                                                        Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}"
+                                                        Symbol="Database24" />
+                                                    <TextBlock Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}" Text="数据" />
+                                                </StackPanel>
+                                            </TabItem.Header>
+                                            <local:DataPanel />
+                                        </TabItem>
+                                        <TabItem>
+                                            <TabItem.Header>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <ui:SymbolIcon
+                                                        Width="16"
+                                                        Height="16"
+                                                        Margin="0,0,6,0"
+                                                        Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}"
+                                                        Symbol="Search24" />
+                                                    <TextBlock Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}" Text="查询" />
+                                                </StackPanel>
+                                            </TabItem.Header>
+                                            <local:QueryPanel />
+                                        </TabItem>
+                                        <TabItem>
+                                            <TabItem.Header>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <ui:SymbolIcon
+                                                        Width="16"
+                                                        Height="16"
+                                                        Margin="0,0,6,0"
+                                                        Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}"
+                                                        Symbol="Pin24" />
+                                                    <TextBlock Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}" Text="索引" />
+                                                </StackPanel>
+                                            </TabItem.Header>
+                                            <Border
+                                                Margin="0,12,0,0"
+                                                Padding="14"
+                                                Style="{StaticResource WorkspaceContentCardStyle}">
+                                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                                    <ItemsControl ItemsSource="{Binding Schema.Indexes}">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Border
+                                                                    Margin="0,0,0,10"
+                                                                    Padding="12"
+                                                                    Style="{StaticResource WorkspaceContentCardStyle}">
+                                                                    <StackPanel>
+                                                                        <TextBlock FontWeight="SemiBold" Text="{Binding Name}" />
+                                                                        <TextBlock
+                                                                            Margin="0,6,0,0"
+                                                                            Text="{Binding Sql}"
+                                                                            TextWrapping="Wrap" />
+                                                                    </StackPanel>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </ScrollViewer>
+                                            </Border>
+                                        </TabItem>
+                                        <TabItem>
+                                            <TabItem.Header>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <ui:SymbolIcon
+                                                        Width="16"
+                                                        Height="16"
+                                                        Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}"
+                                                        Symbol="Flash24" />
+                                                    <TextBlock Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}" Text="触发器" />
+                                                </StackPanel>
+                                            </TabItem.Header>
+                                            <Border
+                                                Margin="0,12,0,0"
+                                                Padding="14"
+                                                Style="{StaticResource WorkspaceContentCardStyle}">
+                                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                                    <ItemsControl ItemsSource="{Binding Schema.Triggers}">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Border
+                                                                    Margin="0,0,0,10"
+                                                                    Padding="12"
+                                                                    Style="{StaticResource WorkspaceContentCardStyle}">
+                                                                    <StackPanel>
+                                                                        <TextBlock FontWeight="SemiBold" Text="{Binding Name}" />
+                                                                        <TextBlock
+                                                                            Margin="0,6,0,0"
+                                                                            Text="{Binding Sql}"
+                                                                            TextWrapping="Wrap" />
+                                                                    </StackPanel>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </ScrollViewer>
+                                            </Border>
+                                        </TabItem>
+                                        <TabItem>
+                                            <TabItem.Header>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <ui:SymbolIcon
+                                                        Width="16"
+                                                        Height="16"
+                                                        Margin="0,0,6,0"
+                                                        Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}"
+                                                        Symbol="Document24" />
+                                                    <TextBlock Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}" Text="DDL" />
+                                                </StackPanel>
+                                            </TabItem.Header>
+                                            <Border
+                                                Margin="0,12,0,0"
+                                                Padding="14"
+                                                Style="{StaticResource WorkspaceContentCardStyle}">
+                                                <TextBox
+                                                    Padding="10"
+                                                    AcceptsReturn="True"
+                                                    Background="{DynamicResource ControlFillColorInputActiveBrush}"
+                                                    BorderBrush="{DynamicResource ControlStrokeColorSecondaryBrush}"
+                                                    BorderThickness="1"
+                                                    CaretBrush="{DynamicResource AccentFillColorDefaultBrush}"
+                                                    FontFamily="Consolas"
+                                                    FontSize="13"
+                                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                                    HorizontalScrollBarVisibility="Auto"
+                                                    IsReadOnly="True"
+                                                    Text="{Binding Schema.CreateSql}"
+                                                    TextWrapping="NoWrap"
+                                                    VerticalScrollBarVisibility="Auto" />
+                                            </Border>
+                                        </TabItem>
+                                    </TabControl>
+                                </Grid>
+                                <StackPanel
+                                    Grid.Row="2"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    d:Visibility="Hidden"
+                                    Style="{StaticResource HideWhenTableSelectedStyle}">
+                                    <Border Style="{StaticResource WorkspaceIconTileStyle}">
+                                        <ui:SymbolIcon
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                                            Symbol="Database24" />
+                                    </Border>
+                                    <TextBlock
+                                        Margin="0,14,0,0"
+                                        FontSize="20"
+                                        FontWeight="SemiBold"
+                                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                        Text="请先选择一个表" />
+                                    <TextBlock
+                                        Margin="0,8,0,0"
+                                        Style="{StaticResource WorkspaceMutedTextStyle}"
+                                        Text="左侧会列出当前数据库中的全部对象。" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <Border
+                        Grid.Row="4"
+                        Padding="10,8"
+                        Style="{StaticResource WorkspacePanelStyle}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    d:Text="就绪"
+                                    Style="{StaticResource WorkspaceCaptionStyle}"
+                                    Text="{Binding FooterStatusText}" />
+                                <TextBlock
+                                    Margin="18,0,0,0"
+                                    d:Text="SQLite"
+                                    Style="{StaticResource WorkspaceMutedTextStyle}"
+                                    Text="{Binding FooterEngineText}" />
+                                <TextBlock
+                                    Margin="18,0,0,0"
+                                    d:Text="只读"
+                                    Style="{StaticResource WorkspaceMutedTextStyle}"
+                                    Text="{Binding FooterAccessModeText}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock
+                                    d:Text="行: 1,234"
+                                    Style="{StaticResource WorkspaceMutedTextStyle}"
+                                    Text="{Binding FooterRowCountText}" />
+                                <TextBlock
+                                    Margin="18,0,0,0"
+                                    d:Text="列: 5"
+                                    Style="{StaticResource WorkspaceMutedTextStyle}"
+                                    Text="{Binding FooterColumnCountText}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Border
+            Margin="24"
+            Padding="32"
+            d:Visibility="Hidden"
+            BorderThickness="1"
+            CornerRadius="24">
+            <Border.Style>
+                <Style BasedOn="{StaticResource WorkspaceSurfaceStyle}" TargetType="Border">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasOpenDatabase}" Value="True">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border
+                    Width="52"
+                    Height="52"
+                    HorizontalAlignment="Center"
+                    Style="{StaticResource WorkspaceIconTileStyle}">
+                    <ui:SymbolIcon
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="{DynamicResource AccentFillColorDefaultBrush}"
+                        Symbol="Database24" />
+                </Border>
+                <TextBlock
+                    Margin="0,16,0,0"
+                    HorizontalAlignment="Center"
+                    d:Text="尚未打开数据库"
+                    Style="{StaticResource WorkspacePageTitleStyle}"
+                    Text="{Binding EmptyStateTitle}" />
+                <TextBlock
+                    Margin="0,12,0,0"
+                    HorizontalAlignment="Center"
+                    d:Text="从左侧导航或首页动作中打开一个 SQLite 数据库。"
+                    Style="{StaticResource WorkspaceMutedTextStyle}"
+                    Text="{Binding EmptyStateDescription}" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>
